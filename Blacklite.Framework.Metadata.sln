@@ -1,0 +1,71 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22310.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blacklite.Framework.Metadata", "src\Blacklite.Framework.Metadata\Blacklite.Framework.Metadata.kproj", "{1D606537-BE56-4DA3-860A-D8FEE93B4A0C}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blacklite.Framework.Metadata.Storage", "src\Blacklite.Framework.Metadata.Storage\Blacklite.Framework.Metadata.Storage.kproj", "{364096F9-4B5A-4F5C-8D77-31289A628AFB}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Metadata.Tests", "tests\Metadata.Tests\Metadata.Tests.kproj", "{1B8A297B-921B-4D93-A113-666E56B61C0C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7DF82F0F-D917-48A6-A922-52C4E4E4CFB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EB6026D6-1AB1-45E5-8473-25A6376C1005}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Metadata.Storage.Tests", "tests\Metadata.Storage.Tests\Metadata.Storage.Tests.kproj", "{64BCD801-5EC0-43BA-A583-0E6176C7120B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{5715AEF9-51EF-46C6-ADD1-5443DF69C8F6}"
+	ProjectSection(SolutionItems) = preProject
+		build.cmd = build.cmd
+		build.sh = build.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{97701507-CC03-416C-B9FB-C4AF5E3DEC6B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		appveyor.yml = appveyor.yml
+		global.json = global.json
+		NuGet.config = NuGet.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{383767EE-63BA-460C-92D5-B75916A50EDE}"
+	ProjectSection(SolutionItems) = preProject
+		makefile.shade = makefile.shade
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1D606537-BE56-4DA3-860A-D8FEE93B4A0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D606537-BE56-4DA3-860A-D8FEE93B4A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D606537-BE56-4DA3-860A-D8FEE93B4A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D606537-BE56-4DA3-860A-D8FEE93B4A0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{364096F9-4B5A-4F5C-8D77-31289A628AFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{364096F9-4B5A-4F5C-8D77-31289A628AFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{364096F9-4B5A-4F5C-8D77-31289A628AFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{364096F9-4B5A-4F5C-8D77-31289A628AFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B8A297B-921B-4D93-A113-666E56B61C0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B8A297B-921B-4D93-A113-666E56B61C0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B8A297B-921B-4D93-A113-666E56B61C0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B8A297B-921B-4D93-A113-666E56B61C0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64BCD801-5EC0-43BA-A583-0E6176C7120B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64BCD801-5EC0-43BA-A583-0E6176C7120B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64BCD801-5EC0-43BA-A583-0E6176C7120B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64BCD801-5EC0-43BA-A583-0E6176C7120B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1D606537-BE56-4DA3-860A-D8FEE93B4A0C} = {EB6026D6-1AB1-45E5-8473-25A6376C1005}
+		{364096F9-4B5A-4F5C-8D77-31289A628AFB} = {EB6026D6-1AB1-45E5-8473-25A6376C1005}
+		{1B8A297B-921B-4D93-A113-666E56B61C0C} = {7DF82F0F-D917-48A6-A922-52C4E4E4CFB6}
+		{64BCD801-5EC0-43BA-A583-0E6176C7120B} = {7DF82F0F-D917-48A6-A922-52C4E4E4CFB6}
+	EndGlobalSection
+EndGlobal

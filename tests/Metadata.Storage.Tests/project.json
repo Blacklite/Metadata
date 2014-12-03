@@ -1,0 +1,21 @@
+﻿{
+    "dependencies": {
+        "Blacklite.Framework.Metadata": "",
+        "Xunit.KRunner": "1.0.0-beta1-*"
+    },
+
+    "commands": {
+        "test": "Xunit.KRunner"
+    },
+
+    "frameworks": {
+        "aspnet50": {
+            "dependencies": {
+            }
+        },
+        "aspnetcore50": {
+            "dependencies": {
+            }
+        }
+    }
+}
