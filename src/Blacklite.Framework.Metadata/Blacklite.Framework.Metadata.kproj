@@ -8,10 +8,15 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>1d606537-be56-4da3-860a-d8fee93b4a0c</ProjectGuid>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AssemblyName>Blacklite.Framework.Metadata</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <RootNamespace>Blacklite.Framework.Metadata</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>

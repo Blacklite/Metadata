@@ -8,10 +8,15 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>364096f9-4b5a-4f5c-8d77-31289a628afb</ProjectGuid>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AssemblyName>Blacklite.Framework.Metadata.Storage</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <RootNamespace>Blacklite.Framework.Metadata.Storage</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>

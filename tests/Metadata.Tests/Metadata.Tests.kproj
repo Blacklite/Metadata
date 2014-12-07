@@ -8,10 +8,15 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>1b8a297b-921b-4d93-a113-666e56b61c0c</ProjectGuid>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AssemblyName>Metadata.Tests</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <RootNamespace>Metadata.Tests</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
