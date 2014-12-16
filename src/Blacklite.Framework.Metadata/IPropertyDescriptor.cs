@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Blacklite.Framework.Metadata.MetadataProperties
+namespace Blacklite.Framework.Metadata
 {
     public interface IPropertyDescriptor
     {

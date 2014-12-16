@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Blacklite.Framework.Metadata.MetadataProperties;
+using Blacklite.Framework.Metadata.Metadatums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -16,7 +18,8 @@ namespace Blacklite.Framework.Metadata
 
     class TypeMetadata : ITypeMetadata
     {
-        public TypeMetadata(Type type, IPropertyMetadataProvider metadataPropertyProvider)
+        private readonly IReadOnlyDictionary<Type, ITypeMetadatumResolver> _metadatumResolvers;
+        public TypeMetadata(Type type, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
         {
             // how does this work??
             // All values are resolved from a caching interface of some sort
@@ -26,6 +29,8 @@ namespace Blacklite.Framework.Metadata
             Name = type.Name;
 
             Properties = metadataPropertyProvider.GetProperties(this);
+
+            _metadatumResolvers = metadatumResolverProvider.GetTypeResolvers();
 
             Type = type;
 
@@ -42,7 +47,13 @@ namespace Blacklite.Framework.Metadata
 
         public T Get<T>() where T : IMetadatum
         {
-            throw new NotImplementedException();
+            ITypeMetadatumResolver value;
+            if (_metadatumResolvers.TryGetValue(typeof(T), out value))
+            {
+                return value.Resolve<T>(this);
+            }
+
+            throw new ArgumentOutOfRangeException("T", "Metadatum type '{0}' must have at least one resolver registered.");
         }
     }
 }

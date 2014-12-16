@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blacklite.Framework.Metadata.MetadataProperties;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 

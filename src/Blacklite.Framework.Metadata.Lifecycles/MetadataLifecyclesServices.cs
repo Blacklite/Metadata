@@ -1,4 +1,5 @@
-﻿using Microsoft.Framework.ConfigurationModel;
+﻿using Blacklite.Framework.Metadata.MetadataProperties;
+using Microsoft.Framework.ConfigurationModel;
 using Microsoft.Framework.DependencyInjection;
 using System;
 using System.Collections.Generic;

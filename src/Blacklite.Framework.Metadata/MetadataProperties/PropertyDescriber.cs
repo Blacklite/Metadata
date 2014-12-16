@@ -3,21 +3,6 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata.MetadataProperties
 {
-    public interface IPropertyDescriber
-    {
-        int Order { get; }
-
-        string Name { get; }
-
-        Type PropertyType { get; }
-
-        TypeInfo PropertyInfo { get; }
-
-        Func<object, object> GetValue { get; }
-
-        Action<object, object> SetValue { get; }
-    }
-
     class PropertyDescriber : IPropertyDescriber
     {
         public string Name { get; set; }

@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Blacklite.Framework.Metadata
+namespace Blacklite.Framework.Metadata.MetadataProperties
 {
     public interface IPropertyMetadataProvider
     {
