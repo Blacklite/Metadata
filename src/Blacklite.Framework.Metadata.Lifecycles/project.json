@@ -1,0 +1,22 @@
+﻿{
+    "version": "1.0.0-*",
+    "dependencies": {
+        "Blacklite.Framework.Interfaces": { "version": "1.0.0-beta-*", "type": "build" },
+        "Blacklite.Framework.Metadata": "1.0.0-beta-*",
+        "Blacklite.Framework.GlobalEvents": "1.0.0-beta-*",
+        "Rx-Core": "2.2.5",
+        "Rx-Linq": "2.2.5"
+    },
+
+    "frameworks": {
+        "aspnet50": {
+            "dependencies": {
+            }
+        },
+        "aspnetcore50": {
+            "dependencies": {
+                "System.Runtime": "4.0.20-beta-*"
+            }
+        }
+    }
+}

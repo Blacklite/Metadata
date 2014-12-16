@@ -1,6 +1,6 @@
 ﻿{
     "dependencies": {
-        "Blacklite.Framework.Metadata": "",
+        "Blacklite.Framework.Metadata.Storage": "",
         "Xunit.KRunner": "1.0.0-beta2-*"
     },
 
