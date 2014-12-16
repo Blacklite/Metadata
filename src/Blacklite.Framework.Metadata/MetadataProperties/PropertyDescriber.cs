@@ -18,7 +18,7 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
         Action<object, object> SetValue { get; }
     }
 
-    public class PropertyDescriber : IPropertyDescriber
+    class PropertyDescriber : IPropertyDescriber
     {
         public string Name { get; set; }
 

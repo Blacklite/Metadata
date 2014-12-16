@@ -1,14 +1,15 @@
 ﻿using Blacklite.Framework.Metadata.MetadataProperties;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 
 namespace Blacklite.Framework.Metadata.Lifecycles
 {
-    public class LifecycleMetadataPropertyProvider : IMetadataPropertyProvider, IDisposable
+    public class LifecycleMetadataPropertyProvider : IPropertyMetadataProvider, IDisposable
     {
-        //private readonly ConcurrentDictionary<Type, IEnumerable<IPropertyMetadata>>
+        private readonly ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>> _describerCache = new ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>>();
         private readonly Func<IEnumerable<IPropertyDescriptor>> _propertyDescriptorsFunc;
         private IEnumerable<IPropertyDescriptor> _propertyDescriptors;
         private readonly IDisposable _disposable;
@@ -20,21 +21,25 @@ namespace Blacklite.Framework.Metadata.Lifecycles
             _propertyDescriptorsFunc = propertyDescriptorsFunc;
 
             _disposable = eventObservable
-                .Where(x => x.Type == EventType.ResetMetadata.ToString())
+                .Where(x => x.Type == EventType.ResetMetadata.ToString() || x.Type == EventType.ResetCache.ToString())
                 .Subscribe(x => ClearPropertyDescriptors());
         }
 
         public IEnumerable<IPropertyMetadata> GetProperties(ITypeMetadata parentMetadata) =>
-            (_propertyDescriptors ?? (_propertyDescriptors = _propertyDescriptorsFunc()))
-                .SelectMany(x => x.Describe(parentMetadata.Type))
-                .GroupBy(x => x.Name)
-                .Select(x => new PropertyMetadata(parentMetadata, x.OrderByDescending(z => z.Order).AsEnumerable()));
+            _describerCache.GetOrAdd(parentMetadata.Type, type =>
+                (_propertyDescriptors ?? (_propertyDescriptors = _propertyDescriptorsFunc()))
+                    .SelectMany(x => x.Describe(type))
+                    .GroupBy(x => x.Name)
+                    .Select(x => x.OrderByDescending(z => z.Order).First())
+                )
+                .Select(x => new PropertyMetadata(parentMetadata, x));
 
         public void ClearPropertyDescriptors()
         {
             // If property descriptors are runtime based, this lets us clear them
             // this prepares us for the possibility of multitenancy
             _propertyDescriptors = null;
+            _describerCache.Clear();
         }
 
         #region IDisposable Support

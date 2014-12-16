@@ -23,23 +23,23 @@ namespace Blacklite.Framework.Metadata
 
     public class PropertyMetadata : IPropertyMetadata
     {
-        private readonly IEnumerable<IPropertyDescriber> _propertyDescribers;
+        private readonly IPropertyDescriber _propertyDescriber;
         private readonly Func<object, object> _getValue;
         private readonly Action<object, object> _setValue;
 
-        public PropertyMetadata(ITypeMetadata parentMetadata, IEnumerable<IPropertyDescriber> propertyDescribers)
+        public PropertyMetadata(ITypeMetadata parentMetadata, IPropertyDescriber propertyDescriber)
         {
-            Name = propertyDescribers.First(x => !string.IsNullOrWhiteSpace(x.Name))?.Name;
+            Name = propertyDescriber.Name;
 
             ParentMetadata = parentMetadata;
 
-            PropertyType = propertyDescribers.First(x => x.PropertyType != null)?.PropertyType;
-            PropertyInfo = propertyDescribers.First(x => x.PropertyInfo != null)?.PropertyInfo;
+            PropertyType = propertyDescriber.PropertyType;
+            PropertyInfo = propertyDescriber.PropertyInfo;
 
-            _getValue = propertyDescribers.First(x => x.PropertyInfo != null)?.GetValue;
-            _setValue = propertyDescribers.FirstOrDefault(x => x.PropertyInfo != null)?.SetValue;
+            _getValue = propertyDescriber.GetValue;
+            _setValue = propertyDescriber.SetValue;
 
-            _propertyDescribers = propertyDescribers;
+            _propertyDescriber = propertyDescriber;
         }
 
         public string Name { get; }

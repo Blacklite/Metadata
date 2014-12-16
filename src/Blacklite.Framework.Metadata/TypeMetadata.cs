@@ -14,11 +14,9 @@ namespace Blacklite.Framework.Metadata
         IEnumerable<IPropertyMetadata> Properties { get; }
     }
 
-    public interface ITypeMetadata<T> : ITypeMetadata { }
-
     class TypeMetadata : ITypeMetadata
     {
-        public TypeMetadata(Type type, IMetadataPropertyProvider metadataPropertyProvider)
+        public TypeMetadata(Type type, IPropertyMetadataProvider metadataPropertyProvider)
         {
             // how does this work??
             // All values are resolved from a caching interface of some sort
@@ -46,25 +44,5 @@ namespace Blacklite.Framework.Metadata
         {
             throw new NotImplementedException();
         }
-    }
-
-    class TypeMetadata<T> : ITypeMetadata<T>
-    {
-        private readonly ITypeMetadata _underlyingMetadata;
-
-        public TypeMetadata(IMetadataProvider metadataProvider, IMetadataPropertyProvider metadataPropertyProvider)
-        {
-            _underlyingMetadata = metadataProvider.GetMetadata<T>();
-        }
-
-        public string Name => _underlyingMetadata.Name;
-
-        public IEnumerable<IPropertyMetadata> Properties => _underlyingMetadata.Properties;
-
-        public Type Type => _underlyingMetadata.Type;
-
-        public TypeInfo TypeInfo => _underlyingMetadata.TypeInfo;
-
-        public T1 Get<T1>() where T1 : IMetadatum => _underlyingMetadata.Get<T1>();
     }
 }

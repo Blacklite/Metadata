@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata.MetadataProperties
 {
-    public class ReflectionPropertyDescriptor : IPropertyDescriptor
+    class ReflectionPropertyDescriptor : IPropertyDescriptor
     {
         public IEnumerable<IPropertyDescriber> Describe(Type type)
         {

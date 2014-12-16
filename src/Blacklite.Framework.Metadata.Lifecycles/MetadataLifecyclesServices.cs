@@ -13,7 +13,7 @@ namespace Blacklite.Framework.Metadata.Lifecycles
         {
             var describe = new ServiceDescriber(configuration);
 
-            yield return describe.Singleton<IMetadataPropertyProvider, LifecycleMetadataPropertyProvider>();
+            yield return describe.Singleton<IPropertyMetadataProvider, LifecycleMetadataPropertyProvider>();
         }
     }
 }

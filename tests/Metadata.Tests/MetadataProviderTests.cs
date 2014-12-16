@@ -6,7 +6,7 @@ namespace Metadata.Tests
     {
         public void Test()
         {
-            var provider = new Blacklite.Framework.Metadata.MetadataProvider();
+            //var provider = new Blacklite.Framework.Metadata.MetadataProvider();
         }
     }
 }

@@ -15,10 +15,10 @@ namespace Blacklite.Framework.Metadata
 
     class MetadataProvider : IMetadataProvider
     {
-        private readonly IMetadataPropertyProvider _metadataPropertyProvider;
+        private readonly IPropertyMetadataProvider _metadataPropertyProvider;
         private readonly ConcurrentDictionary<Type, ITypeMetadata> _metadata = new ConcurrentDictionary<Type, ITypeMetadata>();
 
-        public MetadataProvider(IMetadataPropertyProvider metadataPropertyProvider)
+        public MetadataProvider(IPropertyMetadataProvider metadataPropertyProvider)
         {
             _metadataPropertyProvider = metadataPropertyProvider;
         }
