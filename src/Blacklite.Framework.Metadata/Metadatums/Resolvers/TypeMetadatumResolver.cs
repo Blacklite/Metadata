@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Blacklite.Framework.Metadata.Metadatums
+namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
     public interface ITypeMetadatumResolver : IMetadatumResolver
     {
@@ -20,7 +20,7 @@ namespace Blacklite.Framework.Metadata.Metadatums
 
         public abstract T Resolve<T>(ITypeMetadata metadata);
 
-        public virtual bool CanResolve(ITypeMetadata metadata) { return true; }
+        public virtual bool CanResolve(ITypeMetadata metadata) => true;
     }
 
 }

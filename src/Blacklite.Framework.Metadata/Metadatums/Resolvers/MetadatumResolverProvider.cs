@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Blacklite.Framework.Metadata.Metadatums
+namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
     public interface IMetadatumResolverProvider
     {

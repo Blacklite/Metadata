@@ -5,6 +5,7 @@ using Xunit;
 using Blacklite.Framework.Metadata.MetadataProperties;
 using Blacklite.Framework.Metadata.Metadatums;
 using System.Reflection;
+using Blacklite.Framework.Metadata.Metadatums.Resolvers;
 
 namespace Metadata.Tests
 {

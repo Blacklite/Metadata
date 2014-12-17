@@ -1,5 +1,7 @@
 ﻿using Blacklite.Framework.Metadata.Metadatums;
+using Blacklite.Framework.Metadata.Metadatums.Resolvers;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,6 +14,7 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
         private readonly Func<object, object> _getValue;
         private readonly Action<object, object> _setValue;
         private readonly IReadOnlyDictionary<Type, IEnumerable<IPropertyMetadatumResolver>> _metadatumResolvers;
+        private readonly ConcurrentDictionary<Type, IMetadatum> _metadatumCache = new ConcurrentDictionary<Type, IMetadatum>();
 
         public PropertyMetadata(ITypeMetadata parentMetadata, IPropertyDescriber propertyDescriber, IMetadatumResolverProvider metadatumResolverProvider)
         {
@@ -43,21 +46,24 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
 
         public T Get<T>() where T : class, IMetadatum
         {
-            IEnumerable<IPropertyMetadatumResolver> values;
-            if (_metadatumResolvers.TryGetValue(typeof(T), out values))
+            return (T)_metadatumCache.GetOrAdd(typeof(T), type =>
             {
-                var resolvedValue = values
-                    .Where(z => z.CanResolve(this))
-                    .Select(x => x.Resolve<T>(this))
-                    .FirstOrDefault(x => x == null);
-
-                if (resolvedValue != null)
+                IEnumerable<IPropertyMetadatumResolver> values;
+                if (_metadatumResolvers.TryGetValue(typeof(T), out values))
                 {
-                    return resolvedValue;
-                }
-            }
+                    var resolvedValue = values
+                        .Where(z => z.CanResolve(this))
+                        .Select(x => x.Resolve<T>(this))
+                        .FirstOrDefault(x => x != null);
 
-            throw new ArgumentOutOfRangeException("T", "Metadatum type '{0}' must have at least one resolver registered.");
+                    if (resolvedValue != null)
+                    {
+                        return resolvedValue;
+                    }
+                }
+
+                throw new ArgumentOutOfRangeException("T", "Metadatum type '{0}' must have at least one resolver registered.");
+            });
         }
     }
 }

@@ -7,6 +7,7 @@ using Blacklite.Framework.Metadata.Metadatums;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using Blacklite.Framework.Metadata.Metadatums.Resolvers;
 
 namespace Metadata.Tests
 {
@@ -128,6 +129,74 @@ namespace Metadata.Tests
             var resolvedValue = typeMetadata.Get<Visible>();
 
             Assert.True(resolvedValue.Value);
+        }
+
+        [Fact]
+        public void ShouldResolveFirstResolvedValue()
+        {
+            var propertyMetadataProviderMock = new Mock<IPropertyMetadataProvider>();
+            var propertyMetadataProvider = propertyMetadataProviderMock.Object;
+
+            propertyMetadataProviderMock
+                .Setup(x => x.GetProperties(It.Is<ITypeMetadata>(z => z.Name == "Type1")))
+                .Returns(Enumerable.Empty<IPropertyMetadata>());
+
+            propertyMetadataProviderMock
+                .Setup(x => x.GetProperties(It.Is<ITypeMetadata>(z => z.Name == "Type2")))
+                .Returns(Enumerable.Empty<IPropertyMetadata>());
+
+            var metadatumResolver1Mock = new Mock<ITypeMetadatumResolver>();
+            var metadatumResolver1 = metadatumResolver1Mock.Object;
+
+            var metadatumResolver2Mock = new Mock<ITypeMetadatumResolver>();
+            var metadatumResolver2 = metadatumResolver2Mock.Object;
+
+            var metadatumResolver3Mock = new Mock<ITypeMetadatumResolver>();
+            var metadatumResolver3 = metadatumResolver3Mock.Object;
+
+            metadatumResolver1Mock
+                .Setup(x => x.GetMetadatumType())
+                .Returns(typeof(Visible));
+
+            metadatumResolver1Mock
+                .Setup(x => x.CanResolve(It.IsAny<ITypeMetadata>()))
+                .Returns(true);
+
+            metadatumResolver2Mock
+                .Setup(x => x.GetMetadatumType())
+                .Returns(typeof(Visible));
+
+            metadatumResolver2Mock
+                .Setup(x => x.CanResolve(It.IsAny<ITypeMetadata>()))
+                .Returns(true);
+
+            var returnValue = new Visible(false);
+            metadatumResolver1Mock
+                .Setup(x => x.Resolve<Visible>(It.IsAny<ITypeMetadata>()))
+                .Returns(returnValue);
+
+            var returnValue2 = new Visible(true);
+            metadatumResolver2Mock
+                .Setup(x => x.Resolve<Visible>(It.IsAny<ITypeMetadata>()))
+                .Returns(returnValue2);
+
+            var resolve = new ReadOnlyDictionary<Type, IEnumerable<ITypeMetadatumResolver>>(
+                    new Dictionary<Type, IEnumerable<ITypeMetadatumResolver>>()
+                    {
+                        [typeof(Visible)] = new[] { metadatumResolver1, metadatumResolver3, metadatumResolver2 }
+                    });
+
+            var metadatumResolverProviderMock = new Mock<IMetadatumResolverProvider>();
+            var metadatumResolverProvider = metadatumResolverProviderMock.Object;
+            metadatumResolverProviderMock
+                .Setup(x => x.GetTypeResolvers())
+                .Returns(resolve);
+
+            var typeMetadata = new TypeMetadata(typeof(Type1), propertyMetadataProvider, metadatumResolverProvider);
+
+            var resolvedValue = typeMetadata.Get<Visible>();
+
+            Assert.False(resolvedValue.Value);
         }
     }
 }
