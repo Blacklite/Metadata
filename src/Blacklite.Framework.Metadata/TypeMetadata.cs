@@ -18,7 +18,7 @@ namespace Blacklite.Framework.Metadata
 
     class TypeMetadata : ITypeMetadata
     {
-        private readonly IReadOnlyDictionary<Type, ITypeMetadatumResolver> _metadatumResolvers;
+        private readonly IReadOnlyDictionary<Type, IEnumerable<ITypeMetadatumResolver>> _metadatumResolvers;
         public TypeMetadata(Type type, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
         {
             // how does this work??
@@ -45,12 +45,20 @@ namespace Blacklite.Framework.Metadata
 
         public TypeInfo TypeInfo { get; }
 
-        public T Get<T>() where T : IMetadatum
+        public T Get<T>() where T : class, IMetadatum
         {
-            ITypeMetadatumResolver value;
-            if (_metadatumResolvers.TryGetValue(typeof(T), out value))
+            IEnumerable<ITypeMetadatumResolver> values;
+            if (_metadatumResolvers.TryGetValue(typeof(T), out values))
             {
-                return value.Resolve<T>(this);
+                var resolvedValue = values
+                    .Where(z => z.CanResolve(this))
+                    .Select(x => x.Resolve<T>(this))
+                    .FirstOrDefault(x => x != null);
+
+                if (resolvedValue != null)
+                {
+                    return resolvedValue;
+                }
             }
 
             throw new ArgumentOutOfRangeException("T", "Metadatum type '{0}' must have at least one resolver registered.");

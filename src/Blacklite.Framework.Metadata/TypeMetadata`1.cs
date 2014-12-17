@@ -1,4 +1,5 @@
 ﻿using Blacklite.Framework.Metadata.MetadataProperties;
+using Blacklite.Framework.Metadata.Metadatums;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -24,6 +25,6 @@ namespace Blacklite.Framework.Metadata
 
         public TypeInfo TypeInfo => _underlyingMetadata.TypeInfo;
 
-        public T Get<T>() where T : IMetadatum => _underlyingMetadata.Get<T>();
+        public T Get<T>() where T : class, IMetadatum => _underlyingMetadata.Get<T>();
     }
 }

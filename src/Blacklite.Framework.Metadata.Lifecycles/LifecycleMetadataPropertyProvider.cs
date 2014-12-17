@@ -1,4 +1,5 @@
 ﻿using Blacklite.Framework.Metadata.MetadataProperties;
+using Blacklite.Framework.Metadata.Metadatums;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -13,12 +14,15 @@ namespace Blacklite.Framework.Metadata.Lifecycles
         private readonly Func<IEnumerable<IPropertyDescriptor>> _propertyDescriptorsFunc;
         private IEnumerable<IPropertyDescriptor> _propertyDescriptors;
         private readonly IDisposable _disposable;
+        private readonly IMetadatumResolverProvider _metadatumResolverProvider;
 
         public LifecycleMetadataPropertyProvider(
             Func<IEnumerable<IPropertyDescriptor>> propertyDescriptorsFunc,
-            IEventObservable eventObservable)
+            IEventObservable eventObservable,
+            IMetadatumResolverProvider metadatumResolverProvider)
         {
             _propertyDescriptorsFunc = propertyDescriptorsFunc;
+            _metadatumResolverProvider = metadatumResolverProvider;
 
             _disposable = eventObservable
                 .Where(x => x.Type == EventType.ResetMetadata.ToString() || x.Type == EventType.ResetCache.ToString())
@@ -32,7 +36,7 @@ namespace Blacklite.Framework.Metadata.Lifecycles
                     .GroupBy(x => x.Name)
                     .Select(x => x.OrderByDescending(z => z.Order).First())
                 )
-                .Select(x => new PropertyMetadata(parentMetadata, x));
+                .Select(x => new PropertyMetadata(parentMetadata, x, _metadatumResolverProvider));
 
         public void ClearPropertyDescriptors()
         {

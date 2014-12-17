@@ -13,10 +13,6 @@
         "aspnet50": {
             "dependencies": {
             }
-        },
-        "aspnetcore50": {
-            "dependencies": {
-            }
         }
     }
 }

@@ -5,8 +5,8 @@ namespace Blacklite.Framework.Metadata.Metadatums
 {
     public interface IMetadatumResolverProvider
     {
-        IReadOnlyDictionary<Type, ITypeMetadatumResolver> GetTypeResolvers();
-        IReadOnlyDictionary<Type, IPropertyMetadatumResolver> GetPropertyResolvers();
+        IReadOnlyDictionary<Type, IEnumerable<ITypeMetadatumResolver>> GetTypeResolvers();
+        IReadOnlyDictionary<Type, IEnumerable<IPropertyMetadatumResolver>> GetPropertyResolvers();
     }
 
     class MetadatumResolverProvider : IMetadatumResolverProvider
@@ -16,12 +16,12 @@ namespace Blacklite.Framework.Metadata.Metadatums
 
         }
 
-        public IReadOnlyDictionary<Type, ITypeMetadatumResolver> GetTypeResolvers()
+        public IReadOnlyDictionary<Type, IEnumerable<ITypeMetadatumResolver>> GetTypeResolvers()
         {
             throw new NotImplementedException();
         }
 
-        public IReadOnlyDictionary<Type, IPropertyMetadatumResolver> GetPropertyResolvers()
+        public IReadOnlyDictionary<Type, IEnumerable<IPropertyMetadatumResolver>> GetPropertyResolvers()
         {
             throw new NotImplementedException();
         }

@@ -27,11 +27,11 @@ namespace Blacklite.Framework.Metadata
             _metadatumResolverProvider = metadatumResolverProvider;
         }
 
-        public ITypeMetadata GetMetadata(TypeInfo typeInfo) => GetMetadata(typeInfo.AsType());
+        public ITypeMetadata GetMetadata(TypeInfo typeInfo) => GetUnderlyingMetadata(typeInfo.AsType());
 
-        public ITypeMetadata GetMetadata(Type type) => GetMetadata(type);
+        public ITypeMetadata GetMetadata(Type type) => GetUnderlyingMetadata(type);
 
-        public ITypeMetadata GetMetadata<T>() => GetMetadata(typeof(T));
+        public ITypeMetadata GetMetadata<T>() => GetUnderlyingMetadata(typeof(T));
 
         private ITypeMetadata GetUnderlyingMetadata(Type type) => _metadata.GetOrAdd(type, new TypeMetadata(type, _metadataPropertyProvider, _metadatumResolverProvider));
     }

@@ -1,4 +1,5 @@
 ﻿using Blacklite.Framework.Metadata.MetadataProperties;
+using Blacklite.Framework.Metadata.Metadatums;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -15,10 +16,12 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
     {
         private readonly ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>> _describerCache = new ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>>();
         private readonly IEnumerable<IPropertyDescriptor> _propertyDescriptors;
+        private readonly IMetadatumResolverProvider _metadatumResolverProvider;
 
-        public PropertyMetadataProvider(IEnumerable<IPropertyDescriptor> propertyDescriptors)
+        public PropertyMetadataProvider(IEnumerable<IPropertyDescriptor> propertyDescriptors, IMetadatumResolverProvider metadatumResolverProvider)
         {
             _propertyDescriptors = propertyDescriptors;
+            _metadatumResolverProvider = metadatumResolverProvider;
         }
 
         public IEnumerable<IPropertyMetadata> GetProperties(ITypeMetadata parentMetadata) =>
@@ -28,7 +31,7 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
                     .GroupBy(x => x.Name)
                     .Select(x => x.OrderByDescending(z => z.Order).First())
                 )
-                .Select(x => new PropertyMetadata(parentMetadata, x));
+                .Select(x => new PropertyMetadata(parentMetadata, x, _metadatumResolverProvider));
 
     }
 }
