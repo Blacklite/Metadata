@@ -24,15 +24,21 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
             _propertyDescriptors = propertyDescriptors;
             _metadatumResolverProvider = metadatumResolverProvider;
         }
+        private IEnumerable<IPropertyDescriber> SelectPropertyDescriber(Type type, IEnumerable<IPropertyDescriptor> descriptors) =>
+           descriptors.SelectMany(x => x.Describe(type))
+                       .GroupBy(x => x.Name)
+                       .Select(x => x.OrderByDescending(z => z.Order).First());
 
         public IEnumerable<IPropertyMetadata> GetProperties(ITypeMetadata parentMetadata) =>
-            _describerCache.GetOrAdd(parentMetadata.Type, type =>
-                _propertyDescriptors
-                    .SelectMany(x => x.Describe(type))
-                    .GroupBy(x => x.Name)
-                    .Select(x => x.OrderByDescending(z => z.Order).First())
-                )
-                .Select(x => new PropertyMetadata(parentMetadata, x, _metadatumResolverProvider));
+            _describerCache.GetOrAdd(parentMetadata.Type, type => SelectPropertyDescriber(type, Descriptors))
+                    .Select(x => new PropertyMetadata(parentMetadata, x, _metadatumResolverProvider));
 
+        protected virtual IEnumerable<IPropertyDescriptor> Descriptors
+        {
+            get
+            {
+                return _propertyDescriptors;
+            }
+        }
     }
 }
