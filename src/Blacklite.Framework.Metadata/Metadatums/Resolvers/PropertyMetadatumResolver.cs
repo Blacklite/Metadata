@@ -5,8 +5,8 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
     public interface IPropertyMetadatumResolver : IMetadatumResolver
     {
-        T Resolve<T>(IPropertyMetadata metadata);
-        bool CanResolve(IPropertyMetadata metadata);
+        T Resolve<T>(IPropertyMetadata metadata) where T : class, IMetadatum;
+        bool CanResolve<T>(IPropertyMetadata metadata) where T : class, IMetadatum;
     }
 
     public interface IPropertyMetadatumResolver<T> : IPropertyMetadatumResolver
@@ -19,8 +19,10 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
     {
         public virtual Type GetMetadatumType() => typeof(TProperty);
 
-        public abstract T Resolve<T>(IPropertyMetadata metadata);
+        public abstract int Priority { get; }
 
-        public virtual bool CanResolve(IPropertyMetadata metadata) => true;
+        public abstract T Resolve<T>(IPropertyMetadata metadata) where T : class, IMetadatum;
+
+        public virtual bool CanResolve<T>(IPropertyMetadata metadata) where T : class, IMetadatum => true;
     }
 }

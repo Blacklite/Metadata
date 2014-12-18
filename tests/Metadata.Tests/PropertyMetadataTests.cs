@@ -56,7 +56,7 @@ namespace Metadata.Tests
                 .Returns(typeof(Visible));
 
             metadatumResolver1Mock
-                .Setup(x => x.CanResolve(It.IsAny<IPropertyMetadata>()))
+                .Setup(x => x.CanResolve<Visible>(It.IsAny<IPropertyMetadata>()))
                 .Returns(false);
 
             metadatumResolver2Mock
@@ -64,7 +64,7 @@ namespace Metadata.Tests
                 .Returns(typeof(Visible));
 
             metadatumResolver2Mock
-                .Setup(x => x.CanResolve(It.IsAny<IPropertyMetadata>()))
+                .Setup(x => x.CanResolve<Visible>(It.IsAny<IPropertyMetadata>()))
                 .Returns(true);
 
             var returnValue = new Visible(false);
@@ -86,7 +86,7 @@ namespace Metadata.Tests
             var metadatumResolverProviderMock = new Mock<IMetadatumResolverProvider>();
             var metadatumResolverProvider = metadatumResolverProviderMock.Object;
             metadatumResolverProviderMock
-                .Setup(x => x.GetPropertyResolvers())
+                .SetupGet(x => x.PropertyResolvers)
                 .Returns(resolve);
 
             var propertyDescriber = new PropertyDescriber()
@@ -104,6 +104,10 @@ namespace Metadata.Tests
             var resolvedValue = propertyMetadata.Get<Visible>();
 
             Assert.True(resolvedValue.Value);
+
+            var resolvedValue2 = propertyMetadata.Get<Visible>();
+
+            Assert.Same(resolvedValue, resolvedValue2);
         }
 
         [Fact]
@@ -123,7 +127,7 @@ namespace Metadata.Tests
                 .Returns(typeof(Visible));
 
             metadatumResolver1Mock
-                .Setup(x => x.CanResolve(It.IsAny<IPropertyMetadata>()))
+                .Setup(x => x.CanResolve<Visible>(It.IsAny<IPropertyMetadata>()))
                 .Returns(true);
 
             metadatumResolver2Mock
@@ -131,7 +135,7 @@ namespace Metadata.Tests
                 .Returns(typeof(Visible));
 
             metadatumResolver2Mock
-                .Setup(x => x.CanResolve(It.IsAny<IPropertyMetadata>()))
+                .Setup(x => x.CanResolve<Visible>(It.IsAny<IPropertyMetadata>()))
                 .Returns(true);
 
             var returnValue = new Visible(false);
@@ -153,7 +157,7 @@ namespace Metadata.Tests
             var metadatumResolverProviderMock = new Mock<IMetadatumResolverProvider>();
             var metadatumResolverProvider = metadatumResolverProviderMock.Object;
             metadatumResolverProviderMock
-                .Setup(x => x.GetPropertyResolvers())
+                .Setup(x => x.PropertyResolvers)
                 .Returns(resolve);
 
             var propertyDescriber = new PropertyDescriber()
@@ -171,6 +175,10 @@ namespace Metadata.Tests
             var resolvedValue = propertyMetadata.Get<Visible>();
 
             Assert.False(resolvedValue.Value);
+
+            var resolvedValue2 = propertyMetadata.Get<Visible>();
+
+            Assert.Same(resolvedValue, resolvedValue2);
         }
     }
 }

@@ -4,8 +4,8 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
     public interface ITypeMetadatumResolver : IMetadatumResolver
     {
-        T Resolve<T>(ITypeMetadata metadata);
-        bool CanResolve(ITypeMetadata metadata);
+        T Resolve<T>(ITypeMetadata metadata) where T : class, IMetadatum;
+        bool CanResolve<T>(ITypeMetadata metadata) where T : class, IMetadatum;
     }
 
     public interface ITypeMetadatumResolver<T> : ITypeMetadatumResolver
@@ -18,9 +18,11 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
     {
         public virtual Type GetMetadatumType() => typeof(TObject);
 
-        public abstract T Resolve<T>(ITypeMetadata metadata);
+        public abstract int Priority { get; }
 
-        public virtual bool CanResolve(ITypeMetadata metadata) => true;
+        public abstract T Resolve<T>(ITypeMetadata metadata) where T : class, IMetadatum;
+
+        public virtual bool CanResolve<T>(ITypeMetadata metadata) where T : class, IMetadatum => true;
     }
 
 }

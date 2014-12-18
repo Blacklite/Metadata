@@ -33,7 +33,7 @@ namespace Blacklite.Framework.Metadata
 
             Properties = metadataPropertyProvider.GetProperties(this);
 
-            _metadatumResolvers = metadatumResolverProvider.GetTypeResolvers();
+            _metadatumResolvers = metadatumResolverProvider.TypeResolvers;
 
             Type = type;
 
@@ -50,24 +50,28 @@ namespace Blacklite.Framework.Metadata
 
         public T Get<T>() where T : class, IMetadatum
         {
-            return (T)_metadatumCache.GetOrAdd(typeof(T), type =>
+            IMetadatum value;
+            if (!_metadatumCache.TryGetValue(typeof(T), out value))
             {
                 IEnumerable<ITypeMetadatumResolver> values;
                 if (_metadatumResolvers.TryGetValue(typeof(T), out values))
                 {
                     var resolvedValue = values
-                        .Where(z => z.CanResolve(this))
+                        .Where(z => z.CanResolve<T>(this))
                         .Select(x => x.Resolve<T>(this))
                         .FirstOrDefault(x => x != null);
 
                     if (resolvedValue != null)
                     {
+                        _metadatumCache.TryAdd(typeof(T), resolvedValue);
                         return resolvedValue;
                     }
                 }
 
                 throw new ArgumentOutOfRangeException("T", "Metadatum type '{0}' must have at least one resolver registered.");
-            });
+            }
+
+            return (T)value;
         }
     }
 }

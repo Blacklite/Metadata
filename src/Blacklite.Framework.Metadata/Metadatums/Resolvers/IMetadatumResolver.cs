@@ -5,5 +5,6 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
     public interface IMetadatumResolver
     {
         Type GetMetadatumType();
+        int Priority { get; }
     }
 }
