@@ -16,7 +16,6 @@ use import="Environment"
     if (E("APPVEYOR") != null && (E("APPVEYOR_REPO_TAG") == "true" || E("APPVEYOR_REPO_TAG") == "True")) {
         E("K_BUILD_VERSION", "release-" + E("K_BUILD_VERSION"));
     }
-
 }
 
 var AUTHORS='David Driscoll'
