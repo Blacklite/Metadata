@@ -13,7 +13,7 @@ namespace Blacklite.Framework.Metadata
 
         public TypeMetadata(IMetadataProvider metadataProvider, IPropertyMetadataProvider metadataPropertyProvider)
         {
-            // Use a common provider, as it is "scoped" to the current request
+            // Use a common provider, as it is scoped to the current request
             _underlyingMetadata = metadataProvider.GetMetadata<TObject>();
         }
 
