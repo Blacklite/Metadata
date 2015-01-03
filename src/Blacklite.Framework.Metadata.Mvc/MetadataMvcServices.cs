@@ -12,7 +12,7 @@ namespace Blacklite.Framework.Metadata.Mvc
 {
     public static class MetadataMvcServices
     {
-        public static IEnumerable<IServiceDescriptor> GetMvcMetadata(IConfiguration configuration = null)
+        public static IEnumerable<IServiceDescriptor> GetPerRequestMetadata(IConfiguration configuration = null)
         {
             var describe = new ServiceDescriber(configuration);
 

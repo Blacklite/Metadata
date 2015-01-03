@@ -11,11 +11,11 @@ namespace Microsoft.Framework.DependencyInjection
 {
     public static class MetadataCollectionExtensions
     {
-        public static IServiceCollection AddScopedMetadata(
+        public static IServiceCollection AddPerRequestMetadata(
             [NotNull] this IServiceCollection services,
             IConfiguration configuration = null)
         {
-            services.TryAdd(MetadataMvcServices.GetMvcMetadata(configuration));
+            services.TryAdd(MetadataMvcServices.GetPerRequestMetadata(configuration));
             services.TryAdd(MetadataServices.GetMetadata(configuration));
             return services;
         }
