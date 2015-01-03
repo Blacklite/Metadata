@@ -17,6 +17,8 @@ namespace Blacklite.Framework.Metadata
             _underlyingMetadata = metadataProvider.GetMetadata<TObject>();
         }
 
+        public string Key => _underlyingMetadata.Key;
+
         public string Name => _underlyingMetadata.Name;
 
         public IEnumerable<IPropertyMetadata> Properties => _underlyingMetadata.Properties;
@@ -26,5 +28,7 @@ namespace Blacklite.Framework.Metadata
         public TypeInfo TypeInfo => _underlyingMetadata.TypeInfo;
 
         public T Get<T>() where T : class, IMetadatum => _underlyingMetadata.Get<T>();
+
+        public override string ToString() => _underlyingMetadata.ToString();
     }
 }

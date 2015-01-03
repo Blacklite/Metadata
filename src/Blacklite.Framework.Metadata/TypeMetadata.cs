@@ -48,6 +48,8 @@ namespace Blacklite.Framework.Metadata
 
         public TypeInfo TypeInfo { get; }
 
+        public string Key => string.Format("Type:{0}", Type.FullName);
+
         public T Get<T>() where T : class, IMetadatum
         {
             IMetadatum value;
@@ -73,5 +75,7 @@ namespace Blacklite.Framework.Metadata
 
             return (T)value;
         }
+
+        public override string ToString() => Key;
     }
 }

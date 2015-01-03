@@ -13,16 +13,15 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
     {
     }
 
-    public abstract class TypeMetadatumResolver<TObject> : ITypeMetadatumResolver<TObject>
-        where TObject : IMetadatum
+    public abstract class TypeMetadatumResolver<TMetadatum> : ITypeMetadatumResolver<TMetadatum>
+        where TMetadatum : IMetadatum
     {
-        public virtual Type GetMetadatumType() => typeof(TObject);
+        public abstract Type GetMetadatumType();
 
         public abstract int Priority { get; }
 
         public abstract T Resolve<T>(ITypeMetadata metadata) where T : class, IMetadatum;
 
-        public virtual bool CanResolve<T>(ITypeMetadata metadata) where T : class, IMetadatum => true;
+        public abstract bool CanResolve<T>(ITypeMetadata metadata) where T : class, IMetadatum;
     }
-
 }

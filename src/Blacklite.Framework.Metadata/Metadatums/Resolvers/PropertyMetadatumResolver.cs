@@ -17,12 +17,12 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
     public abstract class PropertyMetadatumResolver<TProperty> : IPropertyMetadatumResolver<TProperty>
         where TProperty : IMetadatum
     {
-        public virtual Type GetMetadatumType() => typeof(TProperty);
+        public abstract Type GetMetadatumType();
 
         public abstract int Priority { get; }
 
         public abstract T Resolve<T>(IPropertyMetadata metadata) where T : class, IMetadatum;
 
-        public virtual bool CanResolve<T>(IPropertyMetadata metadata) where T : class, IMetadatum => true;
+        public abstract bool CanResolve<T>(IPropertyMetadata metadata) where T : class, IMetadatum;
     }
 }

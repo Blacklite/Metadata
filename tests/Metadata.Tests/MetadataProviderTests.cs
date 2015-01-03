@@ -9,6 +9,17 @@ using Blacklite.Framework.Metadata.Metadatums.Resolvers;
 
 namespace Metadata.Tests
 {
+
+    class Visible : IMetadatum
+    {
+        public Visible(bool value)
+        {
+            Value = value;
+        }
+
+        public bool Value { get; }
+    }
+
     public class MetadataProviderTests
     {
         private class Type1 { }

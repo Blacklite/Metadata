@@ -7,13 +7,15 @@
     "frameworks": {
         "aspnet50": {
             "frameworkAssemblies": {
+                "System.Collections.Concurrent": "4.0.0.0"
             },
             "dependencies": {
             }
         },
         "aspnetcore50": {
             "dependencies": {
-                "System.Runtime": "4.0.20-beta-*"
+                "System.Runtime": "4.0.20-beta-*",
+                "System.Collections.Concurrent": "4.0.0-beta-*"
             }
         }
     }

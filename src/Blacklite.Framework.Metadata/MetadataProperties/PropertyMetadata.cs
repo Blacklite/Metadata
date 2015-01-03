@@ -40,6 +40,8 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
 
         public Type PropertyType { get; }
 
+        public string Key => string.Format("{0}:Property:{1}", ParentMetadata.ToString(), Name);
+
         public T GetValue<T>(object context) => (T)_getValue(context);
 
         public void SetValue<T>(object context, T value) => _setValue(context, value);
@@ -69,5 +71,7 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
 
             return (T)value;
         }
+
+        public override string ToString() => Key;
     }
 }
