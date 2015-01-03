@@ -1,6 +1,7 @@
 ﻿using Blacklite.Framework.Metadata.MetadataProperties;
 using Blacklite.Framework.Metadata.Metadatums;
 using Blacklite.Framework.Metadata.Metadatums.Resolvers;
+using Microsoft.AspNet.Http;
 using System;
 using System.Collections.Concurrent;
 using System.Reflection;

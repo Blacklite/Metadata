@@ -1,6 +1,7 @@
 ﻿using Blacklite.Framework.Metadata.MetadataProperties;
 using Blacklite.Framework.Metadata.Metadatums;
 using Blacklite.Framework.Metadata.Metadatums.Resolvers;
+using Microsoft.AspNet.Http;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -9,6 +10,11 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata
 {
+    internal interface ITypeMetadataInternal
+    {
+        ITypeMetadatumResolutionContext GetResolutionContext(Type type);
+    }
+
     public interface ITypeMetadata : IMetadata
     {
         string Name { get; }
@@ -18,7 +24,7 @@ namespace Blacklite.Framework.Metadata
         IEnumerable<IPropertyMetadata> Properties { get; }
     }
 
-    class TypeMetadata : ITypeMetadata
+    class TypeMetadata : ITypeMetadata, ITypeMetadataInternal
     {
         private readonly IReadOnlyDictionary<Type, IEnumerable<ITypeMetadatumResolver>> _metadatumResolvers;
         private readonly ConcurrentDictionary<Type, IMetadatum> _metadatumCache = new ConcurrentDictionary<Type, IMetadatum>();
@@ -40,6 +46,11 @@ namespace Blacklite.Framework.Metadata
             TypeInfo = type.GetTypeInfo();
         }
 
+        public virtual ITypeMetadatumResolutionContext GetResolutionContext(Type type)
+        {
+            return new TypeMetadatumResolutionContext(this, type, null);
+        }
+
         public string Name { get; }
 
         public IEnumerable<IPropertyMetadata> Properties { get; }
@@ -58,9 +69,10 @@ namespace Blacklite.Framework.Metadata
                 IEnumerable<ITypeMetadatumResolver> values;
                 if (_metadatumResolvers.TryGetValue(typeof(T), out values))
                 {
+                    var context = GetResolutionContext(typeof(T));
                     var resolvedValue = values
-                        .Where(z => z.CanResolve<T>(this))
-                        .Select(x => x.Resolve<T>(this))
+                        .Where(z => z.CanResolve<T>(context))
+                        .Select(x => x.Resolve<T>(context))
                         .FirstOrDefault(x => x != null);
 
                     if (resolvedValue != null)

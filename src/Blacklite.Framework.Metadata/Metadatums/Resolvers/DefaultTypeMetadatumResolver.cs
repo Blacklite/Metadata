@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Http;
+using System;
 
 namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
@@ -13,14 +14,14 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 
         public virtual bool CanResolve(ITypeMetadata metadata) => true;
 
-        T ITypeMetadatumResolver.Resolve<T>(ITypeMetadata metadata)
+        T ITypeMetadatumResolver.Resolve<T>(ITypeMetadatumResolutionContext context)
         {
-            return Resolve(metadata) as T;
+            return Resolve(context.Metadata) as T;
         }
 
-        bool ITypeMetadatumResolver.CanResolve<T>(ITypeMetadata metadata)
+        bool ITypeMetadatumResolver.CanResolve<T>(ITypeMetadatumResolutionContext context)
         {
-            if (typeof(T) == typeof(TMetadatum)) return CanResolve(metadata);
+            if (typeof(T) == typeof(TMetadatum)) return CanResolve(context.Metadata);
 
             return false;
         }

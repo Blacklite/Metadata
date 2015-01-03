@@ -56,7 +56,7 @@ namespace Metadata.Tests
                 .Returns(typeof(Visible));
 
             metadatumResolver1Mock
-                .Setup(x => x.CanResolve<Visible>(It.IsAny<IPropertyMetadata>()))
+                .Setup(x => x.CanResolve<Visible>(It.IsAny<IPropertyMetadatumResolutionContext>()))
                 .Returns(false);
 
             metadatumResolver2Mock
@@ -64,17 +64,17 @@ namespace Metadata.Tests
                 .Returns(typeof(Visible));
 
             metadatumResolver2Mock
-                .Setup(x => x.CanResolve<Visible>(It.IsAny<IPropertyMetadata>()))
+                .Setup(x => x.CanResolve<Visible>(It.IsAny<IPropertyMetadatumResolutionContext>()))
                 .Returns(true);
 
             var returnValue = new Visible(false);
             metadatumResolver1Mock
-                .Setup(x => x.Resolve<Visible>(It.IsAny<IPropertyMetadata>()))
+                .Setup(x => x.Resolve<Visible>(It.IsAny<IPropertyMetadatumResolutionContext>()))
                 .Returns(returnValue);
 
             var returnValue2 = new Visible(true);
             metadatumResolver2Mock
-                .Setup(x => x.Resolve<Visible>(It.IsAny<IPropertyMetadata>()))
+                .Setup(x => x.Resolve<Visible>(It.IsAny<IPropertyMetadatumResolutionContext>()))
                 .Returns(returnValue2);
 
             var resolve = new ReadOnlyDictionary<Type, IEnumerable<IPropertyMetadatumResolver>>(
@@ -127,7 +127,7 @@ namespace Metadata.Tests
                 .Returns(typeof(Visible));
 
             metadatumResolver1Mock
-                .Setup(x => x.CanResolve<Visible>(It.IsAny<IPropertyMetadata>()))
+                .Setup(x => x.CanResolve<Visible>(It.IsAny<IPropertyMetadatumResolutionContext>()))
                 .Returns(true);
 
             metadatumResolver2Mock
@@ -135,17 +135,17 @@ namespace Metadata.Tests
                 .Returns(typeof(Visible));
 
             metadatumResolver2Mock
-                .Setup(x => x.CanResolve<Visible>(It.IsAny<IPropertyMetadata>()))
+                .Setup(x => x.CanResolve<Visible>(It.IsAny<IPropertyMetadatumResolutionContext>()))
                 .Returns(true);
 
             var returnValue = new Visible(false);
             metadatumResolver1Mock
-                .Setup(x => x.Resolve<Visible>(It.IsAny<IPropertyMetadata>()))
+                .Setup(x => x.Resolve<Visible>(It.IsAny<IPropertyMetadatumResolutionContext>()))
                 .Returns(returnValue);
 
             var returnValue2 = new Visible(true);
             metadatumResolver2Mock
-                .Setup(x => x.Resolve<Visible>(It.IsAny<IPropertyMetadata>()))
+                .Setup(x => x.Resolve<Visible>(It.IsAny<IPropertyMetadatumResolutionContext>()))
                 .Returns(returnValue2);
 
             var resolve = new ReadOnlyDictionary<Type, IEnumerable<IPropertyMetadatumResolver>>(

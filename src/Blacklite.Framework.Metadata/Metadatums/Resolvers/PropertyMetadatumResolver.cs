@@ -1,12 +1,13 @@
 ﻿using Blacklite.Framework.Metadata.MetadataProperties;
+using Microsoft.AspNet.Http;
 using System;
 
 namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
     public interface IPropertyMetadatumResolver : IMetadatumResolver
     {
-        T Resolve<T>(IPropertyMetadata metadata) where T : class, IMetadatum;
-        bool CanResolve<T>(IPropertyMetadata metadata) where T : class, IMetadatum;
+        T Resolve<T>(IPropertyMetadatumResolutionContext context) where T : class, IMetadatum;
+        bool CanResolve<T>(IPropertyMetadatumResolutionContext context) where T : class, IMetadatum;
     }
 
     public interface IPropertyMetadatumResolver<T> : IPropertyMetadatumResolver
@@ -21,8 +22,8 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 
         public abstract int Priority { get; }
 
-        public abstract T Resolve<T>(IPropertyMetadata metadata) where T : class, IMetadatum;
+        public abstract T Resolve<T>(IPropertyMetadatumResolutionContext context) where T : class, IMetadatum;
 
-        public abstract bool CanResolve<T>(IPropertyMetadata metadata) where T : class, IMetadatum;
+        public abstract bool CanResolve<T>(IPropertyMetadatumResolutionContext context) where T : class, IMetadatum;
     }
 }

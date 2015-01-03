@@ -16,9 +16,8 @@ namespace Blacklite.Framework.Metadata.Storage.Metadatums.Resolvers
 
         public override int Priority { get; } = 1000;
 
-        public override bool CanResolve<T>(ITypeMetadata metadata) => _store.Has<T>(metadata);
+        public override bool CanResolve<T>(ITypeMetadatumResolutionContext context) => _store.Has<T>(context.Metadata);
 
-        public override T Resolve<T>(ITypeMetadata metadata) => _store.Get<T>(metadata);
-
+        public override T Resolve<T>(ITypeMetadatumResolutionContext context) => _store.Get<T>(context.Metadata);
     }
 }

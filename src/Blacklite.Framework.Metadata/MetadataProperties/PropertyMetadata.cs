@@ -1,5 +1,6 @@
 ﻿using Blacklite.Framework.Metadata.Metadatums;
 using Blacklite.Framework.Metadata.Metadatums.Resolvers;
+using Microsoft.AspNet.Http;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
         private readonly IPropertyDescriber _propertyDescriber;
         private readonly Func<object, object> _getValue;
         private readonly Action<object, object> _setValue;
+        private readonly HttpContext _httpContext;
         private readonly IReadOnlyDictionary<Type, IEnumerable<IPropertyMetadatumResolver>> _metadatumResolvers;
         private readonly ConcurrentDictionary<Type, IMetadatum> _metadatumCache = new ConcurrentDictionary<Type, IMetadatum>();
 
@@ -28,8 +30,16 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
             _getValue = propertyDescriber.GetValue;
             _setValue = propertyDescriber.SetValue;
 
+            var internalTypeMetadata = parentMetadata as ITypeMetadataInternal;
+            _httpContext = internalTypeMetadata?.GetResolutionContext(null).HttpContext;
+
             _propertyDescriber = propertyDescriber;
             _metadatumResolvers = metadatumResolverProvider.PropertyResolvers;
+        }
+
+        protected virtual IPropertyMetadatumResolutionContext GetResolutionContext(Type type)
+        {
+            return new PropertyMetadatumResolutionContext(this, type, _httpContext);
         }
 
         public string Name { get; }
@@ -40,7 +50,7 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
 
         public Type PropertyType { get; }
 
-        public string Key => string.Format("{0}:Property:{1}", ParentMetadata.ToString(), Name);
+        public string Key => string.Format("{0}@Property:{1}", ParentMetadata.ToString(), Name);
 
         public T GetValue<T>(object context) => (T)_getValue(context);
 
@@ -54,9 +64,10 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
                 IEnumerable<IPropertyMetadatumResolver> values;
                 if (_metadatumResolvers.TryGetValue(typeof(T), out values))
                 {
+                    var context = GetResolutionContext(typeof(T));
                     var resolvedValue = values
-                        .Where(z => z.CanResolve<T>(this))
-                        .Select(x => x.Resolve<T>(this))
+                        .Where(z => z.CanResolve<T>(context))
+                        .Select(x => x.Resolve<T>(context))
                         .FirstOrDefault(x => x != null);
 
                     if (resolvedValue != null)
