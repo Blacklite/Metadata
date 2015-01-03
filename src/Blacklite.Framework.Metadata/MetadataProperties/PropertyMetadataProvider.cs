@@ -31,7 +31,7 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
 
         public IEnumerable<IPropertyMetadata> GetProperties(ITypeMetadata parentMetadata) =>
             _describerCache.GetOrAdd(parentMetadata.Type, type => SelectPropertyDescriber(type, Descriptors))
-                    .Select(x => new PropertyMetadata(parentMetadata, x, _metadatumResolverProvider));
+                    .Select(x => new PropertyMetadata(parentMetadata, (parentMetadata as ITypeMetadataInternal)?.HttpContext, x, _metadatumResolverProvider));
 
         protected virtual IEnumerable<IPropertyDescriptor> Descriptors
         {

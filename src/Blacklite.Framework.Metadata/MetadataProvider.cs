@@ -2,6 +2,7 @@
 using Blacklite.Framework.Metadata.Metadatums;
 using Blacklite.Framework.Metadata.Metadatums.Resolvers;
 using Microsoft.AspNet.Http;
+using Microsoft.Framework.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
 using System.Reflection;
@@ -35,8 +36,10 @@ namespace Blacklite.Framework.Metadata
 
         public ITypeMetadata GetMetadata<T>() => GetUnderlyingMetadata(typeof(T));
 
-        private ITypeMetadata GetUnderlyingMetadata(Type type) => _metadata.GetOrAdd(type, new TypeMetadata(type, _metadataPropertyProvider, _metadatumResolverProvider));
+        private ITypeMetadata GetUnderlyingMetadata(Type type) => _metadata.GetOrAdd(type, CreateTypeMetadata(type, _metadataPropertyProvider, _metadatumResolverProvider));
+        protected virtual ITypeMetadata CreateTypeMetadata(Type type, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
+        {
+            return new TypeMetadata(type, null, metadataPropertyProvider, metadatumResolverProvider);
+        }
     }
-
-
 }

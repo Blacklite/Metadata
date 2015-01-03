@@ -6,6 +6,7 @@ using System;
 using Xunit;
 using Moq;
 using Blacklite.Framework.Metadata;
+using Blacklite.Framework.Metadata.MetadataProperties;
 
 namespace Metadata.Storage.Tests.Metadatums.Resolvers
 {
@@ -14,15 +15,15 @@ namespace Metadata.Storage.Tests.Metadatums.Resolvers
     public class MetadataStorageMetadatumResolverTest
     {
         [Fact]
-        public void ResolverDoesNotResolveUnlessStoreHasAValue()
+        public void ResolverTypeDoesNotResolveUnlessStoreHasAValue()
         {
-            var store = new InMemoryMetadataStore();
+            var store = new InMemoryMetadataStorageContainer();
 
             var typeMetadataMock = new Mock<ITypeMetadata>();
             typeMetadataMock.SetupGet(x => x.Key).Returns("Type:ABC");
             var typeMetadata = typeMetadataMock.Object;
 
-            var resolver = new MetadataStorageMetadatumResolver(store);
+            var resolver = new MetadataStorageTypeMetadatumResolver(store);
 
             var contextMock = new Mock<ITypeMetadatumResolutionContext>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
@@ -38,29 +39,79 @@ namespace Metadata.Storage.Tests.Metadatums.Resolvers
         }
 
         [Fact]
-        public void ResolverPriorityIs1000()
+        public void ResolverTypePriorityIs1000()
         {
-            var store = new InMemoryMetadataStore();
+            var store = new InMemoryMetadataStorageContainer();
 
-            var resolver = new MetadataStorageMetadatumResolver(store);
+            var resolver = new MetadataStorageTypeMetadatumResolver(store);
 
             Assert.Equal(1000, resolver.Priority);
         }
 
         [Fact]
-        public void ResolverAttemptingToGetAnInvalidValueThrows()
+        public void ResolverTypeAttemptingToGetAnInvalidValueThrows()
         {
-            var store = new InMemoryMetadataStore();
+            var store = new InMemoryMetadataStorageContainer();
 
             var typeMetadataMock = new Mock<ITypeMetadata>();
             typeMetadataMock.SetupGet(x => x.Key).Returns("Type:ABC");
             var typeMetadata = typeMetadataMock.Object;
 
-            var resolver = new MetadataStorageMetadatumResolver(store);
-
-            Assert.Equal(1000, resolver.Priority);
+            var resolver = new MetadataStorageTypeMetadatumResolver(store);
 
             var contextMock = new Mock<ITypeMetadatumResolutionContext>();
+            contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
+            var context = contextMock.Object;
+
+            Assert.Throws(typeof(IndexOutOfRangeException), () => resolver.Resolve<Visible>(context));
+        }
+
+        [Fact]
+        public void ResolverPropertyDoesNotResolveUnlessStoreHasAValue()
+        {
+            var store = new InMemoryMetadataStorageContainer();
+
+            var typeMetadataMock = new Mock<IPropertyMetadata>();
+            typeMetadataMock.SetupGet(x => x.Key).Returns("Type:ABC@Property:DEF");
+            var typeMetadata = typeMetadataMock.Object;
+
+            var resolver = new MetadataStoragePropertyMetadatumResolver(store);
+
+            var contextMock = new Mock<IPropertyMetadatumResolutionContext>();
+            contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
+            var context = contextMock.Object;
+
+            Assert.False(resolver.CanResolve<Visible>(context));
+
+            var visible = new Visible();
+            store.Save(typeMetadata, visible);
+
+            Assert.True(resolver.CanResolve<Visible>(context));
+            Assert.Same(visible, resolver.Resolve<Visible>(context));
+        }
+
+        [Fact]
+        public void ResolverPropertyPriorityIs1000()
+        {
+            var store = new InMemoryMetadataStorageContainer();
+
+            var resolver = new MetadataStoragePropertyMetadatumResolver(store);
+
+            Assert.Equal(1000, resolver.Priority);
+        }
+
+        [Fact]
+        public void ResolverPropertyAttemptingToGetAnInvalidValueThrows()
+        {
+            var store = new InMemoryMetadataStorageContainer();
+
+            var typeMetadataMock = new Mock<IPropertyMetadata>();
+            typeMetadataMock.SetupGet(x => x.Key).Returns("Type:ABC@Property:DEF");
+            var typeMetadata = typeMetadataMock.Object;
+
+            var resolver = new MetadataStoragePropertyMetadatumResolver(store);
+
+            var contextMock = new Mock<IPropertyMetadatumResolutionContext>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
             var context = contextMock.Object;
 

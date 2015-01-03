@@ -46,7 +46,7 @@ namespace Metadata.Tests
 
             //            var provider = new MetadataProvider(propertyMetadataProvider, new Mock<IMetadatumResolverProvider>().Object);
 
-            var type1TypeMetadata = new TypeMetadata(typeof(Type1), propertyMetadataProvider, new Mock<IMetadatumResolverProvider>().Object);
+            var type1TypeMetadata = new TypeMetadata(typeof(Type1), null, propertyMetadataProvider, new Mock<IMetadatumResolverProvider>().Object);
 
             Assert.Contains(propertyMetadata1, type1TypeMetadata.Properties);
             Assert.Contains(propertyMetadata2, type1TypeMetadata.Properties);
@@ -54,7 +54,7 @@ namespace Metadata.Tests
             Assert.DoesNotContain(propertyMetadata4, type1TypeMetadata.Properties);
 
 
-            var type2TypeMetadata = new TypeMetadata(typeof(Type2), propertyMetadataProvider, new Mock<IMetadatumResolverProvider>().Object);
+            var type2TypeMetadata = new TypeMetadata(typeof(Type2), null, propertyMetadataProvider, new Mock<IMetadatumResolverProvider>().Object);
 
             Assert.Contains(propertyMetadata1, type2TypeMetadata.Properties);
             Assert.DoesNotContain(propertyMetadata2, type2TypeMetadata.Properties);
@@ -124,7 +124,7 @@ namespace Metadata.Tests
                 .Returns(resolve);
 
 
-            var typeMetadata = new TypeMetadata(typeof(Type1), propertyMetadataProvider, metadatumResolverProvider);
+            var typeMetadata = new TypeMetadata(typeof(Type1), null, propertyMetadataProvider, metadatumResolverProvider);
 
             var resolvedValue = typeMetadata.Get<Visible>();
 
@@ -196,7 +196,7 @@ namespace Metadata.Tests
                 .Setup(x => x.TypeResolvers)
                 .Returns(resolve);
 
-            var typeMetadata = new TypeMetadata(typeof(Type1), propertyMetadataProvider, metadatumResolverProvider);
+            var typeMetadata = new TypeMetadata(typeof(Type1), null, propertyMetadataProvider, metadatumResolverProvider);
 
             var resolvedValue = typeMetadata.Get<Visible>();
 

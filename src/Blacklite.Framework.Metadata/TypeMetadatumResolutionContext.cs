@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Http;
+using Microsoft.Framework.DependencyInjection;
 using System;
 
 namespace Blacklite.Framework.Metadata

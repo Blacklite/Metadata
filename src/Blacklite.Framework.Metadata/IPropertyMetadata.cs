@@ -13,4 +13,8 @@ namespace Blacklite.Framework.Metadata
 
         TypeInfo PropertyInfo { get; }
     }
+
+    internal interface IPropertyMetadataInternal : IInternalMetadata
+    {
+    }
 }

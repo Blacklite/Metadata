@@ -10,4 +10,9 @@ namespace Blacklite.Framework.Metadata
 
         T Get<T>() where T : class, IMetadatum;
     }
+
+    internal interface IInternalMetadata
+    {
+        void InvalidateMetadatumCache(Type type);
+    }
 }

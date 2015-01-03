@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 
 namespace Blacklite.Framework.Metadata.Storage
 {
-    class InMemoryMetadataStore : IMetadataStore
+    class InMemoryMetadataStorageContainer : IMetadataStorageContainer
     {
         private readonly ConcurrentDictionary<string, ConcurrentDictionary<Type, IMetadatum>> _store = new ConcurrentDictionary<string, ConcurrentDictionary<Type, IMetadatum>>();
 

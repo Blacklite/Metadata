@@ -30,6 +30,7 @@ namespace Metadata.Tests
             };
 
             var propertyMetadata = new PropertyMetadata(new Mock<ITypeMetadata>().Object,
+                null,
                 propertyDescriber,
                 new Mock<IMetadatumResolverProvider>().Object
             );
@@ -97,6 +98,7 @@ namespace Metadata.Tests
             };
 
             var propertyMetadata = new PropertyMetadata(new Mock<ITypeMetadata>().Object,
+                null,
                 propertyDescriber,
                 metadatumResolverProvider
             );
@@ -168,6 +170,7 @@ namespace Metadata.Tests
             };
 
             var propertyMetadata = new PropertyMetadata(new Mock<ITypeMetadata>().Object,
+                null,
                 propertyDescriber,
                 metadatumResolverProvider
             );

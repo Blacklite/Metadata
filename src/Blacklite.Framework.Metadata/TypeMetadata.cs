@@ -10,11 +10,6 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata
 {
-    internal interface ITypeMetadataInternal
-    {
-        ITypeMetadatumResolutionContext GetResolutionContext(Type type);
-    }
-
     public interface ITypeMetadata : IMetadata
     {
         string Name { get; }
@@ -24,11 +19,16 @@ namespace Blacklite.Framework.Metadata
         IEnumerable<IPropertyMetadata> Properties { get; }
     }
 
+    internal interface ITypeMetadataInternal : IInternalMetadata
+    {
+        HttpContext HttpContext { get; }
+    }
+
     class TypeMetadata : ITypeMetadata, ITypeMetadataInternal
     {
         private readonly IReadOnlyDictionary<Type, IEnumerable<ITypeMetadatumResolver>> _metadatumResolvers;
         private readonly ConcurrentDictionary<Type, IMetadatum> _metadatumCache = new ConcurrentDictionary<Type, IMetadatum>();
-        public TypeMetadata(Type type, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
+        public TypeMetadata(Type type, HttpContext httpContext, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
         {
             // how does this work??
             // All values are resolved from a caching interface of some sort
@@ -44,11 +44,8 @@ namespace Blacklite.Framework.Metadata
             Type = type;
 
             TypeInfo = type.GetTypeInfo();
-        }
 
-        public virtual ITypeMetadatumResolutionContext GetResolutionContext(Type type)
-        {
-            return new TypeMetadatumResolutionContext(this, type, null);
+            HttpContext = httpContext;
         }
 
         public string Name { get; }
@@ -89,5 +86,18 @@ namespace Blacklite.Framework.Metadata
         }
 
         public override string ToString() => Key;
+
+        void IInternalMetadata.InvalidateMetadatumCache(Type type)
+        {
+            IMetadatum value;
+            _metadatumCache.TryRemove(type, out value);
+        }
+
+        private ITypeMetadatumResolutionContext GetResolutionContext(Type type)
+        {
+            return new TypeMetadatumResolutionContext(this, type, HttpContext);
+        }
+
+        public HttpContext HttpContext { get; protected set; }
     }
 }

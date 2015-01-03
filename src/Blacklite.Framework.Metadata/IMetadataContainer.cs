@@ -1,9 +1,9 @@
 ﻿using Blacklite.Framework.Metadata.Metadatums;
 using System;
 
-namespace Blacklite.Framework.Metadata.Storage
+namespace Blacklite.Framework.Metadata
 {
-    public interface IMetadataStore
+    public interface IMetadataContainer
     {
         bool Has(IMetadata parentMetadata, Type metadatum);
 

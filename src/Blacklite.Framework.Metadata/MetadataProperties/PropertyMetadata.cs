@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata.MetadataProperties
 {
-    class PropertyMetadata : IPropertyMetadata
+    class PropertyMetadata : IPropertyMetadata, IPropertyMetadataInternal
     {
         private readonly IPropertyDescriber _propertyDescriber;
         private readonly Func<object, object> _getValue;
@@ -18,7 +18,7 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
         private readonly IReadOnlyDictionary<Type, IEnumerable<IPropertyMetadatumResolver>> _metadatumResolvers;
         private readonly ConcurrentDictionary<Type, IMetadatum> _metadatumCache = new ConcurrentDictionary<Type, IMetadatum>();
 
-        public PropertyMetadata(ITypeMetadata parentMetadata, IPropertyDescriber propertyDescriber, IMetadatumResolverProvider metadatumResolverProvider)
+        public PropertyMetadata(ITypeMetadata parentMetadata, HttpContext httpContext, IPropertyDescriber propertyDescriber, IMetadatumResolverProvider metadatumResolverProvider)
         {
             Name = propertyDescriber.Name;
 
@@ -30,8 +30,7 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
             _getValue = propertyDescriber.GetValue;
             _setValue = propertyDescriber.SetValue;
 
-            var internalTypeMetadata = parentMetadata as ITypeMetadataInternal;
-            _httpContext = internalTypeMetadata?.GetResolutionContext(null).HttpContext;
+            _httpContext = httpContext;
 
             _propertyDescriber = propertyDescriber;
             _metadatumResolvers = metadatumResolverProvider.PropertyResolvers;
@@ -84,5 +83,11 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
         }
 
         public override string ToString() => Key;
+
+        void IInternalMetadata.InvalidateMetadatumCache(Type type)
+        {
+            IMetadatum value;
+            _metadatumCache.TryRemove(type, out value);
+        }
     }
 }
