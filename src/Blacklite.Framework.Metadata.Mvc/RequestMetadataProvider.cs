@@ -13,7 +13,7 @@ namespace Blacklite.Framework.Metadata.Mvc
     {
         private readonly HttpContext _httpContext;
 
-        public RequestMetadataProvider(IContextAccessor<HttpContext> httpContext, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
+        public RequestMetadataProvider(IScopedInstance<HttpContext> httpContext, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
             : base(metadataPropertyProvider, metadatumResolverProvider)
         {
             _httpContext = httpContext.Value;
