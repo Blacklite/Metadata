@@ -1,6 +1,7 @@
 ﻿using Blacklite.Framework.Metadata.MetadataProperties;
 using Blacklite.Framework.Metadata.Metadatums;
 using Blacklite.Framework.Metadata.Metadatums.Resolvers;
+using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.Framework.DependencyInjection;
 using System;
@@ -13,7 +14,7 @@ namespace Blacklite.Framework.Metadata.Mvc
     {
         private readonly HttpContext _httpContext;
 
-        public RequestMetadataProvider(IScopedInstance<HttpContext> httpContext, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
+        public RequestMetadataProvider(IHttpContextAccessor httpContext, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
             : base(metadataPropertyProvider, metadatumResolverProvider)
         {
             _httpContext = httpContext.Value;
