@@ -6,7 +6,6 @@ using System;
 using Xunit;
 using Moq;
 using Blacklite.Framework.Metadata;
-using Blacklite.Framework.Metadata.MetadataProperties;
 
 namespace Metadata.Storage.Tests.Metadatums.Resolvers
 {
