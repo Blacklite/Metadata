@@ -9,22 +9,24 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata
 {
-    class TypeMetadata : ITypeMetadata, IInternalMetadata
+    class ApplicationTypeMetadata : IApplicationTypeMetadata, IInternalMetadata
     {
-        private readonly IApplicationTypeMetadata _parent;
         private readonly IMetadatumResolverProvider _metadatumResolverProvider;
         private readonly ConcurrentDictionary<Type, IMetadatum> _metadatumCache = new ConcurrentDictionary<Type, IMetadatum>();
         private readonly IServiceProvider _serviceProvider;
-        public TypeMetadata(IApplicationTypeMetadata parent, IServiceProvider serviceProvider, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
+        public ApplicationTypeMetadata(Type type, IServiceProvider serviceProvider, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
         {
-            _parent = parent;
             _serviceProvider = serviceProvider;
             _metadatumResolverProvider = metadatumResolverProvider;
-
-            Name = parent.Name;
-            Type = parent.Type;
-            TypeInfo = parent.TypeInfo;
-            Properties = metadataPropertyProvider.GetProperties(parent, this, serviceProvider);
+            // how does this work??
+            // All values are resolved from a caching interface of some sort
+            // The cache interface draws from both the "application" level, but also the "scope" level.
+            // This interface could be replaced to offer customization of this process, ie pull from the "applicaiton", "tennat" and "scope" levels.
+            // Properties will come from a provider, that takes in the type, so that other properties can be generated at runtime.
+            Name = type.Name;
+            Type = type;
+            TypeInfo = type.GetTypeInfo();
+            Properties = metadataPropertyProvider.GetApplicationProperties(this, serviceProvider);
         }
 
         public string Name { get; }
@@ -43,13 +45,13 @@ namespace Blacklite.Framework.Metadata
             if (!_metadatumCache.TryGetValue(typeof(T), out value))
             {
                 IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>> values;
-                if (_metadatumResolverProvider.TypeResolvers.TryGetValue(typeof(T), out values))
+                if (_metadatumResolverProvider.ApplicationTypeResolvers.TryGetValue(typeof(T), out values))
                 {
                     var context = new TypeMetadatumResolutionContext(_serviceProvider, this, typeof(T));
                     var resolvedValue = values
                         .Where(z => z.CanResolve<T>(context))
                         .Select(x => x.Resolve<T>(context))
-                        .FirstOrDefault(x => x != null) ?? _parent.Get<T>();
+                        .FirstOrDefault(x => x != null);
 
                     if (resolvedValue != null)
                     {

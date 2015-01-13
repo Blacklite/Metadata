@@ -1,44 +1,30 @@
 ﻿using Blacklite.Framework.Metadata.Metadatums;
 using Blacklite.Framework.Metadata.Metadatums.Resolvers;
-using Microsoft.AspNet.Http;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Blacklite.Framework.Metadata.MetadataProperties
+namespace Blacklite.Framework.Metadata.Properties
 {
-    class PropertyMetadata : IPropertyMetadata, IPropertyMetadataInternal
+    class PropertyMetadata : IPropertyMetadata, IInternalMetadata
     {
-        private readonly IPropertyDescriber _propertyDescriber;
-        private readonly Func<object, object> _getValue;
-        private readonly Action<object, object> _setValue;
-        private readonly HttpContext _httpContext;
-        private readonly IReadOnlyDictionary<Type, IEnumerable<IPropertyMetadatumResolver>> _metadatumResolvers;
+        private readonly IPropertyMetadata _parent;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IMetadatumResolverProvider _metadatumResolverProvider;
         private readonly ConcurrentDictionary<Type, IMetadatum> _metadatumCache = new ConcurrentDictionary<Type, IMetadatum>();
 
-        public PropertyMetadata(ITypeMetadata parentMetadata, HttpContext httpContext, IPropertyDescriber propertyDescriber, IMetadatumResolverProvider metadatumResolverProvider)
+        public PropertyMetadata(IPropertyMetadata parent, ITypeMetadata parentMetadata, IServiceProvider serviceProvider, IMetadatumResolverProvider metadatumResolverProvider)
         {
-            Name = propertyDescriber.Name;
-
+            _parent = parent;
+            _metadatumResolverProvider = metadatumResolverProvider;
+            _serviceProvider = serviceProvider;
+            Name = parent.Name;
             ParentMetadata = parentMetadata;
 
-            PropertyType = propertyDescriber.PropertyType;
-            PropertyInfo = propertyDescriber.PropertyInfo;
-
-            _getValue = propertyDescriber.GetValue;
-            _setValue = propertyDescriber.SetValue;
-
-            _httpContext = httpContext;
-
-            _propertyDescriber = propertyDescriber;
-            _metadatumResolvers = metadatumResolverProvider.PropertyResolvers;
-        }
-
-        protected virtual IPropertyMetadatumResolutionContext GetResolutionContext(Type type)
-        {
-            return new PropertyMetadatumResolutionContext(this, type, _httpContext);
+            PropertyType = parent.PropertyType;
+            PropertyInfo = parent.PropertyInfo;
         }
 
         public string Name { get; }
@@ -51,19 +37,19 @@ namespace Blacklite.Framework.Metadata.MetadataProperties
 
         public string Key => string.Format("{0}@Property:{1}", ParentMetadata.ToString(), Name);
 
-        public T GetValue<T>(object context) => (T)_getValue(context);
+        public T GetValue<T>(object context) => _parent.GetValue<T>(context);
 
-        public void SetValue<T>(object context, T value) => _setValue(context, value);
+        public void SetValue<T>(object context, T value) => _parent.SetValue(context, value);
 
         public T Get<T>() where T : class, IMetadatum
         {
             IMetadatum value;
             if (!_metadatumCache.TryGetValue(typeof(T), out value))
             {
-                IEnumerable<IPropertyMetadatumResolver> values;
-                if (_metadatumResolvers.TryGetValue(typeof(T), out values))
+                IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>> values;
+                if (_metadatumResolverProvider.PropertyResolvers.TryGetValue(typeof(T), out values))
                 {
-                    var context = GetResolutionContext(typeof(T));
+                    var context = new PropertyMetadatumResolutionContext(_serviceProvider, this, typeof(T));
                     var resolvedValue = values
                         .Where(z => z.CanResolve<T>(context))
                         .Select(x => x.Resolve<T>(context))

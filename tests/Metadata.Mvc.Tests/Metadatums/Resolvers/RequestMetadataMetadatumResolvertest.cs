@@ -4,10 +4,8 @@ using System;
 using Xunit;
 using Moq;
 using Blacklite.Framework.Metadata;
-using Blacklite.Framework.Metadata.MetadataProperties;
 using Blacklite.Framework.Metadata.Mvc;
 using Blacklite.Framework.Metadata.Mvc.Metadatums.Resolvers;
-using Microsoft.AspNet.Http;
 using System.Collections.Generic;
 
 namespace Metadata.Mvc.Tests.Metadatums.Resolvers
@@ -31,14 +29,9 @@ namespace Metadata.Mvc.Tests.Metadatums.Resolvers
             serviceProviderMock.Setup(x => x.GetService(typeof(IRequestMetadataContainer))).Returns(store);
             var serviceProvider = serviceProviderMock.Object;
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(new Dictionary<object, object>());
-            httpContextMock.SetupGet(x => x.RequestServices).Returns(serviceProvider);
-            var httpContext = httpContextMock.Object;
-
-            var contextMock = new Mock<ITypeMetadatumResolutionContext>();
+            var contextMock = new Mock<IMetadatumResolutionContext<ITypeMetadata>>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
-            contextMock.SetupGet(x => x.HttpContext).Returns(httpContext);
+            contextMock.SetupGet(x => x.ServiceProvider).Returns(serviceProvider);
 
             var context = contextMock.Object;
 
@@ -48,7 +41,7 @@ namespace Metadata.Mvc.Tests.Metadatums.Resolvers
             store.Save(typeMetadata, visible);
 
             Assert.True(resolver.CanResolve<Visible>(context));
-            Assert.Same(visible, resolver.Resolve<Visible>(context));
+            Assert.Same(visible, resolver.Resolve<Visible>(context, store));
         }
 
         [Fact]
@@ -76,18 +69,13 @@ namespace Metadata.Mvc.Tests.Metadatums.Resolvers
             serviceProviderMock.Setup(x => x.GetService(typeof(IRequestMetadataContainer))).Returns(store);
             var serviceProvider = serviceProviderMock.Object;
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(new Dictionary<object, object>());
-            httpContextMock.SetupGet(x => x.RequestServices).Returns(serviceProvider);
-            var httpContext = httpContextMock.Object;
-
-            var contextMock = new Mock<ITypeMetadatumResolutionContext>();
+            var contextMock = new Mock<IMetadatumResolutionContext<ITypeMetadata>>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
-            contextMock.SetupGet(x => x.HttpContext).Returns(httpContext);
+            contextMock.SetupGet(x => x.ServiceProvider).Returns(serviceProvider);
 
             var context = contextMock.Object;
 
-            Assert.Throws(typeof(IndexOutOfRangeException), () => resolver.Resolve<Visible>(context));
+            Assert.Throws(typeof(IndexOutOfRangeException), () => resolver.Resolve<Visible>(context, store));
         }
 
         [Fact]
@@ -105,14 +93,9 @@ namespace Metadata.Mvc.Tests.Metadatums.Resolvers
             serviceProviderMock.Setup(x => x.GetService(typeof(IRequestMetadataContainer))).Returns(store);
             var serviceProvider = serviceProviderMock.Object;
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(new Dictionary<object, object>());
-            httpContextMock.SetupGet(x => x.RequestServices).Returns(serviceProvider);
-            var httpContext = httpContextMock.Object;
-
-            var contextMock = new Mock<ITypeMetadatumResolutionContext>();
+            var contextMock = new Mock<IMetadatumResolutionContext<ITypeMetadata>>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
-            contextMock.SetupGet(x => x.HttpContext).Returns(httpContext);
+            contextMock.SetupGet(x => x.ServiceProvider).Returns(serviceProvider);
 
             var context = contextMock.Object;
 
@@ -120,8 +103,7 @@ namespace Metadata.Mvc.Tests.Metadatums.Resolvers
             store.Save(typeMetadata, visible);
 
             Assert.True(resolver.CanResolve<Visible>(context));
-            Assert.Same(visible, resolver.Resolve<Visible>(context));
-            Assert.Same(store, httpContext.Items[typeof(IRequestMetadataContainer)]);
+            Assert.Same(visible, resolver.Resolve<Visible>(context, store));
         }
 
         [Fact]
@@ -139,14 +121,9 @@ namespace Metadata.Mvc.Tests.Metadatums.Resolvers
             serviceProviderMock.Setup(x => x.GetService(typeof(IRequestMetadataContainer))).Returns(store);
             var serviceProvider = serviceProviderMock.Object;
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(new Dictionary<object, object>());
-            httpContextMock.SetupGet(x => x.RequestServices).Returns(serviceProvider);
-            var httpContext = httpContextMock.Object;
-
-            var contextMock = new Mock<IPropertyMetadatumResolutionContext>();
+            var contextMock = new Mock<IMetadatumResolutionContext<IPropertyMetadata>>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
-            contextMock.SetupGet(x => x.HttpContext).Returns(httpContext);
+            contextMock.SetupGet(x => x.ServiceProvider).Returns(serviceProvider);
 
             var context = contextMock.Object;
 
@@ -156,7 +133,7 @@ namespace Metadata.Mvc.Tests.Metadatums.Resolvers
             store.Save(typeMetadata, visible);
 
             Assert.True(resolver.CanResolve<Visible>(context));
-            Assert.Same(visible, resolver.Resolve<Visible>(context));
+            Assert.Same(visible, resolver.Resolve<Visible>(context, store));
         }
 
         [Fact]
@@ -184,52 +161,13 @@ namespace Metadata.Mvc.Tests.Metadatums.Resolvers
             serviceProviderMock.Setup(x => x.GetService(typeof(IRequestMetadataContainer))).Returns(store);
             var serviceProvider = serviceProviderMock.Object;
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(new Dictionary<object, object>());
-            httpContextMock.SetupGet(x => x.RequestServices).Returns(serviceProvider);
-            var httpContext = httpContextMock.Object;
-
-            var contextMock = new Mock<IPropertyMetadatumResolutionContext>();
+            var contextMock = new Mock<IMetadatumResolutionContext<IPropertyMetadata>>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
-            contextMock.SetupGet(x => x.HttpContext).Returns(httpContext);
+            contextMock.SetupGet(x => x.ServiceProvider).Returns(serviceProvider);
 
             var context = contextMock.Object;
 
-            Assert.Throws(typeof(IndexOutOfRangeException), () => resolver.Resolve<Visible>(context));
-        }
-
-        [Fact]
-        public void ResolverPropertySetsItselfAsPartOfTheHttpContext()
-        {
-            var store = new RequestMetadataContainer();
-
-            var typeMetadataMock = new Mock<IPropertyMetadata>();
-            typeMetadataMock.SetupGet(x => x.Key).Returns("Type:ABC@Property:DEF");
-            var typeMetadata = typeMetadataMock.Object;
-
-            var resolver = new RequestMetadataPropertyMetadatumResolver();
-
-            var serviceProviderMock = new Mock<IServiceProvider>();
-            serviceProviderMock.Setup(x => x.GetService(typeof(IRequestMetadataContainer))).Returns(store);
-            var serviceProvider = serviceProviderMock.Object;
-
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(new Dictionary<object, object>());
-            httpContextMock.SetupGet(x => x.RequestServices).Returns(serviceProvider);
-            var httpContext = httpContextMock.Object;
-
-            var contextMock = new Mock<IPropertyMetadatumResolutionContext>();
-            contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
-            contextMock.SetupGet(x => x.HttpContext).Returns(httpContext);
-
-            var context = contextMock.Object;
-
-            var visible = new Visible();
-            store.Save(typeMetadata, visible);
-
-            Assert.True(resolver.CanResolve<Visible>(context));
-            Assert.Same(visible, resolver.Resolve<Visible>(context));
-            Assert.Same(store, httpContext.Items[typeof(IRequestMetadataContainer)]);
+            Assert.Throws(typeof(IndexOutOfRangeException), () => resolver.Resolve<Visible>(context, store));
         }
     }
 }

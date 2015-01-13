@@ -4,6 +4,7 @@ using Xunit;
 using Blacklite.Framework.Metadata.Metadatums.Resolvers;
 using Blacklite.Framework.Metadata.Metadatums;
 using System.Linq;
+using Blacklite.Framework.Metadata;
 
 namespace Metadata.Tests.Metadatums.Resolvers
 {
@@ -66,6 +67,8 @@ namespace Metadata.Tests.Metadatums.Resolvers
             var pretendResolver3 = pretendResolver3Mock.Object;
 
             var provider = new MetadatumResolverProvider(
+                Enumerable.Empty<IApplicationTypeMetadatumResolver>(),
+                Enumerable.Empty<IApplicationPropertyMetadatumResolver>(),
                 new[] {
                     globalResolver1, globalResolver2, globalResolver3,
                     visibleResolver1, visibleResolver2, visibleResolver3,
@@ -76,8 +79,8 @@ namespace Metadata.Tests.Metadatums.Resolvers
 
             var resolvers = provider.TypeResolvers;
 
-            var visibleResolvers = resolvers[typeof(Visible)];
-            var pretendResolvers = resolvers[typeof(Pretend)];
+            var visibleResolvers = resolvers[typeof(Visible)].Cast<MetadatumResolverDescriptor<ITypeMetadatumResolver, ITypeMetadata>>();
+            var pretendResolvers = resolvers[typeof(Pretend)].Cast<MetadatumResolverDescriptor<ITypeMetadatumResolver, ITypeMetadata>>();
 
             Assert.Equal(6, visibleResolvers.Count());
             Assert.Same(globalResolver2, visibleResolvers.First());
@@ -151,6 +154,8 @@ namespace Metadata.Tests.Metadatums.Resolvers
             var pretendResolver3 = pretendResolver3Mock.Object;
 
             var provider = new MetadatumResolverProvider(
+                Enumerable.Empty<IApplicationTypeMetadatumResolver>(),
+                Enumerable.Empty<IApplicationPropertyMetadatumResolver>(),
                 Enumerable.Empty<ITypeMetadatumResolver>(),
                 new[] {
                     globalResolver1, globalResolver2, globalResolver3,
@@ -158,10 +163,10 @@ namespace Metadata.Tests.Metadatums.Resolvers
                     pretendResolver1, pretendResolver2, pretendResolver3,
                 });
 
-            var resolvers = provider.PropertyResolvers;
 
-            var visibleResolvers = resolvers[typeof(Visible)];
-            var pretendResolvers = resolvers[typeof(Pretend)];
+            var resolvers = provider.PropertyResolvers;
+            var visibleResolvers = resolvers[typeof(Visible)].Cast<MetadatumResolverDescriptor<IPropertyMetadatumResolver, IPropertyMetadata>>();
+            var pretendResolvers = resolvers[typeof(Pretend)].Cast<MetadatumResolverDescriptor<IPropertyMetadatumResolver, IPropertyMetadata>>();
 
             Assert.Equal(6, visibleResolvers.Count());
             Assert.Same(globalResolver2, visibleResolvers.First());

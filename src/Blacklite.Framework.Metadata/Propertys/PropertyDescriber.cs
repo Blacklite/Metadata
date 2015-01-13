@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Blacklite.Framework.Metadata.MetadataProperties
+namespace Blacklite.Framework.Metadata.Properties
 {
     class PropertyDescriber : IPropertyDescriber
     {

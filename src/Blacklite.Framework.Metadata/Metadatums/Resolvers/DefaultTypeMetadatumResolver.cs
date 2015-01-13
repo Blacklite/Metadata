@@ -1,29 +1,24 @@
-﻿using Microsoft.AspNet.Http;
-using System;
+﻿using System;
 
 namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
-    public abstract class DefaultTypeMetadatumResolver<TMetadatum> : ITypeMetadatumResolver<TMetadatum>
-         where TMetadatum : IMetadatum
+    public abstract class SimpleTypeMetadatumResolver<TMetadatum> : ITypeMetadatumResolver<TMetadatum>, IApplicationTypeMetadatumResolver<TMetadatum>
+         where TMetadatum : class, IMetadatum
     {
         public virtual Type GetMetadatumType() => typeof(TMetadatum);
 
         public virtual int Priority { get; } = 0;
 
-        public abstract TMetadatum Resolve(ITypeMetadata metadata);
-
         public virtual bool CanResolve(ITypeMetadata metadata) => true;
 
-        T ITypeMetadatumResolver.Resolve<T>(ITypeMetadatumResolutionContext context)
+        bool IMetadatumResolver<ITypeMetadata>.CanResolve<T>(IMetadatumResolutionContext<ITypeMetadata> context)
         {
-            return Resolve(context.Metadata) as T;
-        }
-
-        bool ITypeMetadatumResolver.CanResolve<T>(ITypeMetadatumResolutionContext context)
-        {
-            if (typeof(T) == typeof(TMetadatum)) return CanResolve(context.Metadata);
+            if (typeof(T) == typeof(TMetadatum))
+                return CanResolve(context.Metadata);
 
             return false;
         }
+
+        public abstract TMetadatum Resolve(IMetadatumResolutionContext<ITypeMetadata> context);
     }
 }

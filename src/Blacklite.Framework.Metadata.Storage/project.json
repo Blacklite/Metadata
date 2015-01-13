@@ -5,6 +5,13 @@
     },
 
     "frameworks": {
+        "net45": {
+            "frameworkAssemblies": {
+                "System.Collections.Concurrent": "4.0.0.0"
+            },
+            "dependencies": {
+            }
+        },
         "aspnet50": {
             "frameworkAssemblies": {
                 "System.Collections.Concurrent": "4.0.0.0"

@@ -8,14 +8,14 @@ using System.Collections.Generic;
 
 namespace Microsoft.Framework.DependencyInjection
 {
-    public static class MetadataStorageCollectionExtensions
+    public static class BlackliteMetadataStorageCollectionExtensions
     {
         public static IServiceCollection AddInMemoryMetadataStore(
             [NotNull] this IServiceCollection services,
             IConfiguration configuration = null)
         {
             ConfigureDefaultServices(services, configuration);
-            services.TryAdd(MetadataStorageServices.GetInMemoryMetadataStore(configuration));
+            services.TryAdd(BlackliteMetadataStorageServices.GetInMemoryMetadataStore(configuration));
             return services;
         }
 
@@ -23,7 +23,7 @@ namespace Microsoft.Framework.DependencyInjection
             [NotNull] this IServiceCollection services,
             IConfiguration configuration = null)
         {
-            services.TryAdd(MetadataStorageServices.GetMetadataStorage(configuration));
+            services.TryAdd(BlackliteMetadataStorageServices.GetMetadataStorage(configuration));
             return services;
         }
 

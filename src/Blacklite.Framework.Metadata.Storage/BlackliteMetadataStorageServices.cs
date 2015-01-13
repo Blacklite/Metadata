@@ -1,5 +1,4 @@
-﻿using Blacklite.Framework.Metadata.MetadataProperties;
-using Blacklite.Framework.Metadata.Metadatums.Resolvers;
+﻿using Blacklite.Framework.Metadata.Metadatums.Resolvers;
 using Blacklite.Framework.Metadata.Storage.Metadatums.Resolvers;
 using Microsoft.Framework.ConfigurationModel;
 using Microsoft.Framework.DependencyInjection;
@@ -10,13 +9,13 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata.Storage
 {
-    public static class MetadataStorageServices
+    public static class BlackliteMetadataStorageServices
     {
         public static IEnumerable<IServiceDescriptor> GetMetadataStorage(IConfiguration configuration = null)
         {
             var describe = new ServiceDescriber(configuration);
-            yield return describe.Singleton<ITypeMetadatumResolver, MetadataStorageTypeMetadatumResolver>();
-            yield return describe.Singleton<IPropertyMetadatumResolver, MetadataStoragePropertyMetadatumResolver>();
+            yield return describe.Singleton<IApplicationTypeMetadatumResolver, MetadataStorageTypeMetadatumResolver>();
+            yield return describe.Singleton<IApplicationPropertyMetadatumResolver, MetadataStoragePropertyMetadatumResolver>();
         }
 
         public static IEnumerable<IServiceDescriptor> GetInMemoryMetadataStore(IConfiguration configuration = null)

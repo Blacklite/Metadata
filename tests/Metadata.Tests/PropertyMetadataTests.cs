@@ -1,7 +1,7 @@
 ﻿using System;
 using Xunit;
 using Moq;
-using Blacklite.Framework.Metadata.MetadataProperties;
+using Blacklite.Framework.Metadata.Properties;
 using Blacklite.Framework.Metadata;
 using Blacklite.Framework.Metadata.Metadatums;
 using System.Linq;

@@ -2,7 +2,8 @@
     "version": "1.0.0-*",
     "dependencies": {
         "Microsoft.Framework.DependencyInjection": "1.0.0-rc1-*",
-        "Blacklite.Framework.Shared.Reflection":  "1.0.0-beta-*",
+        "Microsoft.Framework.ConfigurationModel": "1.0.0-rc1-*",
+        "Microsoft.AspNet.Http": "1.0.0-rc1-*",
         "Blacklite.Framework.Metadata.Interfaces": { "version": "1.0.0-beta-*", "type": "build" },
         "Blacklite.Framework.Interfaces": { "version": "1.0.0-beta-*", "type": "build" }
     },

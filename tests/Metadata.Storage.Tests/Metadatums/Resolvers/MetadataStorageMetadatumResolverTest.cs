@@ -25,7 +25,7 @@ namespace Metadata.Storage.Tests.Metadatums.Resolvers
 
             var resolver = new MetadataStorageTypeMetadatumResolver(store);
 
-            var contextMock = new Mock<ITypeMetadatumResolutionContext>();
+            var contextMock = new Mock<IMetadatumResolutionContext<ITypeMetadata>>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
             var context = contextMock.Object;
 
@@ -59,7 +59,7 @@ namespace Metadata.Storage.Tests.Metadatums.Resolvers
 
             var resolver = new MetadataStorageTypeMetadatumResolver(store);
 
-            var contextMock = new Mock<ITypeMetadatumResolutionContext>();
+            var contextMock = new Mock<IMetadatumResolutionContext<ITypeMetadata>>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
             var context = contextMock.Object;
 
@@ -77,7 +77,7 @@ namespace Metadata.Storage.Tests.Metadatums.Resolvers
 
             var resolver = new MetadataStoragePropertyMetadatumResolver(store);
 
-            var contextMock = new Mock<IPropertyMetadatumResolutionContext>();
+            var contextMock = new Mock<IMetadatumResolutionContext<IPropertyMetadata>>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
             var context = contextMock.Object;
 
@@ -111,7 +111,7 @@ namespace Metadata.Storage.Tests.Metadatums.Resolvers
 
             var resolver = new MetadataStoragePropertyMetadatumResolver(store);
 
-            var contextMock = new Mock<IPropertyMetadatumResolutionContext>();
+            var contextMock = new Mock<IMetadatumResolutionContext<IPropertyMetadata>>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
             var context = contextMock.Object;
 

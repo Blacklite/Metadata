@@ -1,30 +1,25 @@
-﻿using Blacklite.Framework.Metadata.MetadataProperties;
-using Microsoft.AspNet.Http;
+﻿using Blacklite.Framework.Metadata.Properties;
 using System;
 
 namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
-    public abstract class DefaultPropertyMetadatumResolver<TMetadatum> : IPropertyMetadatumResolver<TMetadatum>
-         where TMetadatum : IMetadatum
+    public abstract class SimplePropertyMetadatumResolver<TMetadatum> : IPropertyMetadatumResolver<TMetadatum>, IApplicationPropertyMetadatumResolver<TMetadatum>
+         where TMetadatum : class, IMetadatum
     {
         public virtual Type GetMetadatumType() => typeof(TMetadatum);
 
         public virtual int Priority { get; } = 0;
 
-        public abstract TMetadatum Resolve(IPropertyMetadata metadata);
-
         public virtual bool CanResolve(IPropertyMetadata metadata) => true;
 
-        T IPropertyMetadatumResolver.Resolve<T>(IPropertyMetadatumResolutionContext context)
+        bool IMetadatumResolver<IPropertyMetadata>.CanResolve<T>(IMetadatumResolutionContext<IPropertyMetadata> context)
         {
-            return Resolve(context.Metadata) as T;
-        }
-
-        bool IPropertyMetadatumResolver.CanResolve<T>(IPropertyMetadatumResolutionContext context)
-        {
-            if (typeof(T) == typeof(TMetadatum)) return CanResolve(context.Metadata);
+            if (typeof(T) == typeof(TMetadatum))
+                return CanResolve(context.Metadata);
 
             return false;
         }
+
+        public abstract TMetadatum Resolve(IMetadatumResolutionContext<IPropertyMetadata> context);
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Blacklite.Framework.Metadata.MetadataProperties
+namespace Blacklite.Framework.Metadata.Properties
 {
     class ReflectionPropertyDescriptor : IPropertyDescriptor
     {

@@ -9,14 +9,14 @@ using System.Collections.Generic;
 
 namespace Microsoft.Framework.DependencyInjection
 {
-    public static class MetadataCollectionExtensions
+    public static class BlackliteMetadataCollectionExtensions
     {
         public static IServiceCollection AddPerRequestMetadata(
             [NotNull] this IServiceCollection services,
             IConfiguration configuration = null)
         {
-            services.TryAdd(MetadataMvcServices.GetPerRequestMetadata(configuration));
-            services.TryAdd(MetadataServices.GetMetadata(configuration));
+            services.TryAdd(BlackliteMetadataMvcServices.GetPerRequestMetadata(configuration));
+            services.TryAdd(BlackliteMetadataServices.GetMetadata(configuration));
             return services;
         }
     }

@@ -6,11 +6,11 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata
 {
-    class TypeMetadata<TObject> : ITypeMetadata<TObject>, IInternalMetadata
+    class ApplicationTypeMetadata<TObject> : ITypeMetadata<TObject>, IInternalMetadata
     {
         private readonly ITypeMetadata _underlyingMetadata;
 
-        public TypeMetadata(IMetadataProvider metadataProvider)
+        public ApplicationTypeMetadata(IApplicationMetadataProvider metadataProvider)
         {
             // Use a common provider, as it is scoped to the current request
             _underlyingMetadata = metadataProvider.GetMetadata<TObject>();

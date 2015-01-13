@@ -1,4 +1,4 @@
-﻿using Blacklite.Framework.Metadata.MetadataProperties;
+﻿using Blacklite.Framework.Metadata.Properties;
 using Blacklite.Framework.Metadata.Metadatums;
 using Blacklite.Framework.Metadata.Metadatums.Resolvers;
 using System;
@@ -15,29 +15,22 @@ namespace Blacklite.Framework.Metadata.Lifecycles
         private readonly Func<IEnumerable<IPropertyDescriptor>> _propertyDescriptorsFunc;
         private IEnumerable<IPropertyDescriptor> _propertyDescriptors;
         private readonly IDisposable _disposable;
-        private readonly IMetadatumResolverProvider _metadatumResolverProvider;
 
         public LifecycleMetadataPropertyProvider(
+            IServiceProvider serviceProvider,
             Func<IEnumerable<IPropertyDescriptor>> propertyDescriptorsFunc,
             IEventObservable eventObservable,
             IMetadatumResolverProvider metadatumResolverProvider)
-            : base(Enumerable.Empty<IPropertyDescriptor>(), metadatumResolverProvider)
+            : base(serviceProvider, Enumerable.Empty<IPropertyDescriptor>(), metadatumResolverProvider)
         {
             _propertyDescriptorsFunc = propertyDescriptorsFunc;
-            _metadatumResolverProvider = metadatumResolverProvider;
 
             _disposable = eventObservable
                 .Where(x => x.Type == EventType.ResetMetadata.ToString() || x.Type == EventType.ResetCache.ToString())
                 .Subscribe(x => ClearPropertyDescriptors());
         }
 
-        protected override IEnumerable<IPropertyDescriptor> Descriptors
-        {
-            get
-            {
-                return _propertyDescriptors ?? (_propertyDescriptors = _propertyDescriptorsFunc());
-            }
-        }
+        protected override IEnumerable<IPropertyDescriptor> Descriptors { get { return _propertyDescriptors ?? (_propertyDescriptors = _propertyDescriptorsFunc()); } }
 
         public void ClearPropertyDescriptors()
         {

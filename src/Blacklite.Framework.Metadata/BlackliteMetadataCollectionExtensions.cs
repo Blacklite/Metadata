@@ -8,13 +8,13 @@ using System.Collections.Generic;
 
 namespace Microsoft.Framework.DependencyInjection
 {
-    public static class MetadataCollectionExtensions
+    public static class BlackliteMetadataCollectionExtensions
     {
         public static IServiceCollection AddMetadata(
             [NotNull] this IServiceCollection services,
             IConfiguration configuration = null)
         {
-            services.TryAdd(MetadataServices.GetMetadata(configuration));
+            services.TryAdd(BlackliteMetadataServices.GetMetadata(configuration));
             return services;
         }
     }

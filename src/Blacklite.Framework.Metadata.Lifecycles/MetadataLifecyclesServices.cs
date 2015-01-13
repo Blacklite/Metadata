@@ -1,4 +1,4 @@
-﻿using Blacklite.Framework.Metadata.MetadataProperties;
+﻿using Blacklite.Framework.Metadata.Properties;
 using Microsoft.Framework.ConfigurationModel;
 using Microsoft.Framework.DependencyInjection;
 using System;
