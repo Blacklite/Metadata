@@ -13,7 +13,7 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
     {
         public TResolver Resolver { get; }
 
-        private readonly IDictionary<Type, Func<IServiceProvider, IMetadatumResolutionContext<TMetadata>, object>> _resolversCache;
+        private readonly IDictionary<Type, Func<IServiceProvider, IMetadatumResolutionContext<TMetadata>, object>> _resolversCache = new Dictionary<Type, Func<IServiceProvider, IMetadatumResolutionContext<TMetadata>, object>>();
         private readonly MethodInfo _resolveMethod;
 
         public bool IsGlobal { get; }
@@ -27,7 +27,7 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
             Resolver = resolver;
             var typeInfo = Resolver.GetType().GetTypeInfo();
 
-            _resolveMethod = typeInfo.DeclaredMethods.Single(x => x.Name == nameof(IMetadatumResolverDescriptor<>.Resolve));
+            _resolveMethod = typeInfo.DeclaredMethods.Single(x => x.Name == nameof(Resolve));
 
             MetadatumType = resolver.GetMetadatumType();
             IsGlobal = MetadatumType == null;
