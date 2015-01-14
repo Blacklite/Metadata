@@ -44,8 +44,6 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blacklite.Framework.Metadat
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Metadata.Mvc.Tests", "tests\Metadata.Mvc.Tests\Metadata.Mvc.Tests.kproj", "{3E62776D-835C-457D-AAE6-7702D2E22220}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blacklite.Framework.Metadata.Interfaces", "src\Blacklite.Framework.Metadata.Interfaces\Blacklite.Framework.Metadata.Interfaces.kproj", "{D4DA83B0-8F34-4043-BFD6-BAC953B260A6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,10 +82,6 @@ Global
 		{3E62776D-835C-457D-AAE6-7702D2E22220}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E62776D-835C-457D-AAE6-7702D2E22220}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E62776D-835C-457D-AAE6-7702D2E22220}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D4DA83B0-8F34-4043-BFD6-BAC953B260A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4DA83B0-8F34-4043-BFD6-BAC953B260A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4DA83B0-8F34-4043-BFD6-BAC953B260A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4DA83B0-8F34-4043-BFD6-BAC953B260A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +95,5 @@ Global
 		{6C801C47-6F12-4F44-921C-0A997CD6149A} = {7DF82F0F-D917-48A6-A922-52C4E4E4CFB6}
 		{15EBA6F2-44FF-476B-B227-3039B2848617} = {EB6026D6-1AB1-45E5-8473-25A6376C1005}
 		{3E62776D-835C-457D-AAE6-7702D2E22220} = {7DF82F0F-D917-48A6-A922-52C4E4E4CFB6}
-		{D4DA83B0-8F34-4043-BFD6-BAC953B260A6} = {EB6026D6-1AB1-45E5-8473-25A6376C1005}
 	EndGlobalSection
 EndGlobal

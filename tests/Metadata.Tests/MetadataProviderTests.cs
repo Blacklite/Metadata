@@ -2,7 +2,7 @@
 using System;
 using Moq;
 using Xunit;
-using Blacklite.Framework.Metadata.MetadataProperties;
+using Blacklite.Framework.Metadata.Properties;
 using Blacklite.Framework.Metadata.Metadatums;
 using System.Reflection;
 using Blacklite.Framework.Metadata.Metadatums.Resolvers;
@@ -32,12 +32,12 @@ namespace Metadata.Tests
             var propertyMetadataProviderMock = new Mock<IPropertyMetadataProvider>();
             var propertyMetadataProvider = propertyMetadataProviderMock.Object;
 
-            var typeMetadata1Mock = new Mock<ITypeMetadata>();
+            var typeMetadata1Mock = new Mock<IApplicationTypeMetadata>();
             var typeMetadata1 = typeMetadata1Mock.Object;
 
             typeMetadata1Mock.SetupGet(x => x.Name).Returns("Type1");
 
-            var typeMetadata2Mock = new Mock<ITypeMetadata>();
+            var typeMetadata2Mock = new Mock<IApplicationTypeMetadata>();
             var typeMetadata2 = typeMetadata2Mock.Object;
 
             typeMetadata2Mock.SetupGet(x => x.Name).Returns("Type1");
@@ -55,14 +55,14 @@ namespace Metadata.Tests
             var propertyMetadata4 = propertyMetadata4Mock.Object;
 
             propertyMetadataProviderMock
-                .Setup(x => x.GetProperties(It.Is<ITypeMetadata>(z => z.Name == "Type1")))
+                .Setup(x => x.GetApplicationProperties(It.Is<IApplicationTypeMetadata>(z => z.Name == "Type1")))
                 .Returns(new[] { propertyMetadata1, propertyMetadata2, propertyMetadata3 });
 
             propertyMetadataProviderMock
-                .Setup(x => x.GetProperties(It.Is<ITypeMetadata>(z => z.Name == "Type2")))
+                .Setup(x => x.GetApplicationProperties(It.Is<IApplicationTypeMetadata>(z => z.Name == "Type2")))
                 .Returns(new[] { propertyMetadata1, propertyMetadata3, propertyMetadata4 });
 
-            var provider = new MetadataProvider(propertyMetadataProvider, new Mock<IMetadatumResolverProvider>().Object);
+            var provider = new ApplicationMetadataProvider(Mock.Of<IServiceProvider>(), propertyMetadataProvider, new Mock<IMetadatumResolverProvider>().Object);
 
             var type1TypeMetadata = provider.GetMetadata(typeof(Type1));
 
@@ -81,12 +81,12 @@ namespace Metadata.Tests
             var propertyMetadataProviderMock = new Mock<IPropertyMetadataProvider>();
             var propertyMetadataProvider = propertyMetadataProviderMock.Object;
 
-            var typeMetadata1Mock = new Mock<ITypeMetadata>();
+            var typeMetadata1Mock = new Mock<IApplicationTypeMetadata>();
             var typeMetadata1 = typeMetadata1Mock.Object;
 
             typeMetadata1Mock.SetupGet(x => x.Name).Returns("Type1");
 
-            var typeMetadata2Mock = new Mock<ITypeMetadata>();
+            var typeMetadata2Mock = new Mock<IApplicationTypeMetadata>();
             var typeMetadata2 = typeMetadata2Mock.Object;
 
             typeMetadata2Mock.SetupGet(x => x.Name).Returns("Type2");
@@ -104,14 +104,14 @@ namespace Metadata.Tests
             var propertyMetadata4 = propertyMetadata4Mock.Object;
 
             propertyMetadataProviderMock
-                .Setup(x => x.GetProperties(It.Is<ITypeMetadata>(z => z.Name == "Type1")))
+                .Setup(x => x.GetApplicationProperties(It.Is<IApplicationTypeMetadata>(z => z.Name == "Type1")))
                 .Returns(new[] { propertyMetadata1, propertyMetadata2, propertyMetadata3 });
 
             propertyMetadataProviderMock
-                .Setup(x => x.GetProperties(It.Is<ITypeMetadata>(z => z.Name == "Type2")))
+                .Setup(x => x.GetApplicationProperties(It.Is<IApplicationTypeMetadata>(z => z.Name == "Type2")))
                 .Returns(new[] { propertyMetadata1, propertyMetadata3, propertyMetadata4 });
 
-            var provider = new MetadataProvider(propertyMetadataProvider, new Mock<IMetadatumResolverProvider>().Object);
+            var provider = new ApplicationMetadataProvider(Mock.Of<IServiceProvider>(), propertyMetadataProvider, new Mock<IMetadatumResolverProvider>().Object);
 
             var type1TypeMetadata = provider.GetMetadata(typeof(Type1));
 

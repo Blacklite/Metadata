@@ -1,14 +1,14 @@
 ﻿using System;
 using Xunit;
 using Moq;
-using Blacklite.Framework.Metadata.MetadataProperties;
+using Blacklite.Framework.Metadata.Properties;
 using Blacklite.Framework.Metadata.Metadatums;
 using System.Reflection;
 using Blacklite.Framework.Metadata;
 using System.Linq;
 using Blacklite.Framework.Metadata.Metadatums.Resolvers;
 
-namespace Metadata.Tests.MetadataProperties
+namespace Metadata.Tests.Properties
 {
     public class PropertyMetadataProviderTests
     {
@@ -90,13 +90,13 @@ namespace Metadata.Tests.MetadataProperties
                 .Setup(x => x.Describe(It.IsAny<Type>()))
                 .Returns(properties3);
 
-            var typeMetadataMock = new Mock<ITypeMetadata>();
+            var typeMetadataMock = new Mock<IApplicationTypeMetadata>();
             typeMetadataMock.SetupGet(x => x.Type).Returns(typeof(PropertyDescriber));
             var typeMetadata = typeMetadataMock.Object;
 
-            var provider = new PropertyMetadataProvider(new[] { propertyDescriptor2, propertyDescriptor1, propertyDescriptor3 }, new Mock<IMetadatumResolverProvider>().Object);
+            var provider = new PropertyMetadataProvider(Mock.Of<IServiceProvider>(), new[] { propertyDescriptor2, propertyDescriptor1, propertyDescriptor3 }, new Mock<IMetadatumResolverProvider>().Object);
 
-            var properties = provider.GetProperties(typeMetadata);
+            var properties = provider.GetApplicationProperties(typeMetadata);
 
             Assert.NotNull(properties.First(x => x.Name == "Property1"));
             Assert.NotNull(properties.First(x => x.Name == "Property2"));
@@ -182,14 +182,14 @@ namespace Metadata.Tests.MetadataProperties
                 .Setup(x => x.Describe(It.IsAny<Type>()))
                 .Returns(properties3);
 
-            var typeMetadataMock = new Mock<ITypeMetadata>();
+            var typeMetadataMock = new Mock<IApplicationTypeMetadata>();
             typeMetadataMock.SetupGet(x => x.Type).Returns(typeof(PropertyDescriber));
             var typeMetadata = typeMetadataMock.Object;
 
 
-            var provider = new PropertyMetadataProvider(new[] { propertyDescriptor2, propertyDescriptor1, propertyDescriptor3 }, new Mock<IMetadatumResolverProvider>().Object);
+            var provider = new PropertyMetadataProvider(Mock.Of<IServiceProvider>(), new[] { propertyDescriptor2, propertyDescriptor1, propertyDescriptor3 }, new Mock<IMetadatumResolverProvider>().Object);
 
-            var properties = provider.GetProperties(typeMetadata);
+            var properties = provider.GetApplicationProperties(typeMetadata);
 
             Assert.Equal(typeof(int), properties.First(x => x.Name == "Property1").PropertyType);
             Assert.Equal(typeof(PropertyDescriber), properties.First(x => x.Name == "Property2").PropertyType);
