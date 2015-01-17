@@ -1,7 +1,7 @@
 ﻿{
     "version": "1.0.0-*",
     "dependencies": {
-        "Microsoft.AspNet.Mvc": "6.0.0-rc1-*",
+        "Microsoft.AspNet.Mvc": "6.0.0-beta3-*",
         "Blacklite.Framework.Metadata": "1.0.0-beta-*"
     },
 
