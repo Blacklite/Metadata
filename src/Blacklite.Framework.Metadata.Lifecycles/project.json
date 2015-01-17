@@ -3,9 +3,7 @@
     "dependencies": {
         "Blacklite.Framework.Interfaces": { "version": "1.0.0-beta-*", "type": "build" },
         "Blacklite.Framework.Metadata": "1.0.0-beta-*",
-        "Blacklite.Framework.GlobalEvents": "1.0.0-beta-*",
-        "Rx-Core": "2.2.5",
-        "Rx-Linq": "2.2.5"
+        "Blacklite.Framework.GlobalEvents": "1.0.0-beta-*"
     },
 
     "frameworks": {
