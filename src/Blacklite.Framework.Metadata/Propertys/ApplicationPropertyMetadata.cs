@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata.Properties
 {
-    class ApplicationPropertyMetadata : IPropertyMetadata, IInternalMetadata
+    class ApplicationPropertyMetadata : IPropertyMetadata
     {
         private readonly IMetadatumResolverProvider _metadatumResolverProvider;
         private readonly IPropertyDescriber _propertyDescriber;
@@ -48,7 +48,7 @@ namespace Blacklite.Framework.Metadata.Properties
 
         public void SetValue<T>(object context, T value) => _setValue(context, value);
 
-        public T Get<T>() where T : class, IMetadatum
+        public T Get<T>() where T : IMetadatum
         {
             IMetadatum value;
             if (!_metadatumCache.TryGetValue(typeof(T), out value))
@@ -77,10 +77,10 @@ namespace Blacklite.Framework.Metadata.Properties
 
         public override string ToString() => Key;
 
-        void IInternalMetadata.InvalidateMetadatumCache(Type type)
+        public bool InvalidateMetadatumCache(Type type)
         {
             IMetadatum value;
-            _metadatumCache.TryRemove(type, out value);
+            return _metadatumCache.TryRemove(type, out value);
         }
     }
 }

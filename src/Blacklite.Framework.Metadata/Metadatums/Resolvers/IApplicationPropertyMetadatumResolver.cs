@@ -13,5 +13,5 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 
 
 
-    public interface IApplicationPropertyMetadatumResolver<TMetadatum> : IMetadatumResolver<IPropertyMetadata, TMetadatum>, IApplicationPropertyMetadatumResolver where TMetadatum : class, IMetadatum { }
+    public interface IApplicationPropertyMetadatumResolver<TMetadatum> : IMetadatumResolver<IPropertyMetadata, TMetadatum>, IApplicationPropertyMetadatumResolver where TMetadatum : IMetadatum { }
 }

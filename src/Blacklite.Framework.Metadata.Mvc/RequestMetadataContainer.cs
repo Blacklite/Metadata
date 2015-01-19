@@ -33,7 +33,7 @@ namespace Blacklite.Framework.Metadata.Mvc
             if (GetStore(parentMetadata).TryAdd(type, value))
             {
                 // Remove any cached value that might have been set already
-                (parentMetadata as IInternalMetadata)?.InvalidateMetadatumCache(type);
+                parentMetadata.InvalidateMetadatumCache(type);
             }
         }
 

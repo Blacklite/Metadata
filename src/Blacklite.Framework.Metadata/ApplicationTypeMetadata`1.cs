@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata
 {
-    class ApplicationTypeMetadata<TObject> : ITypeMetadata<TObject>, IInternalMetadata
+    class ApplicationTypeMetadata<TObject> : ITypeMetadata<TObject>
     {
         private readonly ITypeMetadata _underlyingMetadata;
 
@@ -26,12 +26,9 @@ namespace Blacklite.Framework.Metadata
 
         public TypeInfo TypeInfo => _underlyingMetadata.TypeInfo;
 
-        public T Get<T>() where T : class, IMetadatum => _underlyingMetadata.Get<T>();
+        public T Get<T>() where T : IMetadatum => _underlyingMetadata.Get<T>();
 
-        public void InvalidateMetadatumCache(Type type)
-        {
-            (_underlyingMetadata as IInternalMetadata)?.InvalidateMetadatumCache(type);
-        }
+        public bool InvalidateMetadatumCache(Type type) => _underlyingMetadata.InvalidateMetadatumCache(type);
 
         public override string ToString() => _underlyingMetadata.ToString();
     }

@@ -4,7 +4,7 @@ using System;
 namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
     public abstract class SimplePropertyMetadatumResolver<TMetadatum> : IPropertyMetadatumResolver<TMetadatum>, IApplicationPropertyMetadatumResolver<TMetadatum>
-         where TMetadatum : class, IMetadatum
+         where TMetadatum : IMetadatum
     {
         public virtual Type GetMetadatumType() => typeof(TMetadatum);
 

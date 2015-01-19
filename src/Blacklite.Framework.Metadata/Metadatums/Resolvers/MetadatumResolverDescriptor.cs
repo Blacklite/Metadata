@@ -34,12 +34,12 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
             Priority = resolver.Priority;
         }
 
-        public bool CanResolve<T>(IMetadatumResolutionContext<TMetadata> context) where T : class, IMetadatum
+        public bool CanResolve<T>(IMetadatumResolutionContext<TMetadata> context) where T : IMetadatum
         {
             return Resolver.CanResolve<T>(context);
         }
 
-        public T Resolve<T>(IMetadatumResolutionContext<TMetadata> context) where T : class, IMetadatum
+        public T Resolve<T>(IMetadatumResolutionContext<TMetadata> context) where T : IMetadatum
         {
             Func<IServiceProvider, IMetadatumResolutionContext<TMetadata>, object> method;
             if (!_resolversCache.TryGetValue(typeof(T), out method))

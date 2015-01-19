@@ -12,44 +12,55 @@ namespace Metadata.Tests.Metadatums.Resolvers
     {
         class Pretend : IMetadatum { }
 
+        public abstract class TypeMetadatumResolver : ITypeMetadatumResolver
+        {
+            public abstract int Priority { get; }
+
+            public abstract Type GetMetadatumType();
+
+            public abstract bool CanResolve<T>(IMetadatumResolutionContext<ITypeMetadata> context) where T : IMetadatum;
+
+            public abstract T Resolve<T>() where T : IMetadatum;
+        }
+
         [Fact]
         public void ProperlyOrganizesTypeResolvers()
         {
-            var globalResolver1Mock = new Mock<ITypeMetadatumResolver>();
+            var globalResolver1Mock = new Mock<TypeMetadatumResolver>();
             globalResolver1Mock.SetupGet(x => x.Priority).Returns(-100);
             globalResolver1Mock.Setup(x => x.GetMetadatumType()).Returns(() => null);
 
-            var globalResolver2Mock = new Mock<ITypeMetadatumResolver>();
+            var globalResolver2Mock = new Mock<TypeMetadatumResolver>();
             globalResolver2Mock.SetupGet(x => x.Priority).Returns(100);
             globalResolver2Mock.Setup(x => x.GetMetadatumType()).Returns(() => null);
 
-            var globalResolver3Mock = new Mock<ITypeMetadatumResolver>();
+            var globalResolver3Mock = new Mock<TypeMetadatumResolver>();
             globalResolver3Mock.SetupGet(x => x.Priority).Returns(1);
             globalResolver3Mock.Setup(x => x.GetMetadatumType()).Returns(() => null);
 
 
-            var visibleResolver1Mock = new Mock<ITypeMetadatumResolver>();
+            var visibleResolver1Mock = new Mock<TypeMetadatumResolver>();
             visibleResolver1Mock.SetupGet(x => x.Priority).Returns(-99);
             visibleResolver1Mock.Setup(x => x.GetMetadatumType()).Returns(typeof(Visible));
 
-            var visibleResolver2Mock = new Mock<ITypeMetadatumResolver>();
+            var visibleResolver2Mock = new Mock<TypeMetadatumResolver>();
             visibleResolver2Mock.SetupGet(x => x.Priority).Returns(99);
             visibleResolver2Mock.Setup(x => x.GetMetadatumType()).Returns(typeof(Visible));
 
-            var visibleResolver3Mock = new Mock<ITypeMetadatumResolver>();
+            var visibleResolver3Mock = new Mock<TypeMetadatumResolver>();
             visibleResolver3Mock.SetupGet(x => x.Priority).Returns(0);
             visibleResolver3Mock.Setup(x => x.GetMetadatumType()).Returns(typeof(Visible));
 
 
-            var pretendResolver1Mock = new Mock<ITypeMetadatumResolver>();
+            var pretendResolver1Mock = new Mock<TypeMetadatumResolver>();
             pretendResolver1Mock.SetupGet(x => x.Priority).Returns(99);
             pretendResolver1Mock.Setup(x => x.GetMetadatumType()).Returns(typeof(Pretend));
 
-            var pretendResolver2Mock = new Mock<ITypeMetadatumResolver>();
+            var pretendResolver2Mock = new Mock<TypeMetadatumResolver>();
             pretendResolver2Mock.SetupGet(x => x.Priority).Returns(-99);
             pretendResolver2Mock.Setup(x => x.GetMetadatumType()).Returns(typeof(Pretend));
 
-            var pretendResolver3Mock = new Mock<ITypeMetadatumResolver>();
+            var pretendResolver3Mock = new Mock<TypeMetadatumResolver>();
             pretendResolver3Mock.SetupGet(x => x.Priority).Returns(0);
             pretendResolver3Mock.Setup(x => x.GetMetadatumType()).Returns(typeof(Pretend));
 
@@ -83,60 +94,71 @@ namespace Metadata.Tests.Metadatums.Resolvers
             var pretendResolvers = resolvers[typeof(Pretend)].Cast<MetadatumResolverDescriptor<ITypeMetadatumResolver, ITypeMetadata>>();
 
             Assert.Equal(6, visibleResolvers.Count());
-            Assert.Same(globalResolver2, visibleResolvers.First());
-            Assert.Same(visibleResolver2, visibleResolvers.Skip(1).First());
-            Assert.Same(globalResolver3, visibleResolvers.Skip(2).First());
-            Assert.Same(visibleResolver3, visibleResolvers.Skip(3).First());
-            Assert.Same(visibleResolver1, visibleResolvers.Skip(4).First());
-            Assert.Same(globalResolver1, visibleResolvers.Skip(5).First());
+            Assert.Same(globalResolver2, visibleResolvers.First().Resolver);
+            Assert.Same(visibleResolver2, visibleResolvers.Skip(1).First().Resolver);
+            Assert.Same(globalResolver3, visibleResolvers.Skip(2).First().Resolver);
+            Assert.Same(visibleResolver3, visibleResolvers.Skip(3).First().Resolver);
+            Assert.Same(visibleResolver1, visibleResolvers.Skip(4).First().Resolver);
+            Assert.Same(globalResolver1, visibleResolvers.Skip(5).First().Resolver);
 
             Assert.Equal(6, pretendResolvers.Count());
-            Assert.Same(globalResolver2, pretendResolvers.First());
-            Assert.Same(pretendResolver1, pretendResolvers.Skip(1).First());
-            Assert.Same(globalResolver3, pretendResolvers.Skip(2).First());
-            Assert.Same(pretendResolver3, pretendResolvers.Skip(3).First());
-            Assert.Same(pretendResolver2, pretendResolvers.Skip(4).First());
-            Assert.Same(globalResolver1, pretendResolvers.Skip(5).First());
+            Assert.Same(globalResolver2, pretendResolvers.First().Resolver);
+            Assert.Same(pretendResolver1, pretendResolvers.Skip(1).First().Resolver);
+            Assert.Same(globalResolver3, pretendResolvers.Skip(2).First().Resolver);
+            Assert.Same(pretendResolver3, pretendResolvers.Skip(3).First().Resolver);
+            Assert.Same(pretendResolver2, pretendResolvers.Skip(4).First().Resolver);
+            Assert.Same(globalResolver1, pretendResolvers.Skip(5).First().Resolver);
+        }
+
+        public abstract class PropertyMetadatumResolver : IPropertyMetadatumResolver
+        {
+            public abstract int Priority { get; }
+
+            public abstract Type GetMetadatumType();
+
+            public abstract bool CanResolve<T>(IMetadatumResolutionContext<IPropertyMetadata> context) where T : IMetadatum;
+
+            public abstract T Resolve<T>() where T : IMetadatum;
         }
 
         [Fact]
         public void ProperlyOrganizesPropertyResolvers()
         {
-            var globalResolver1Mock = new Mock<IPropertyMetadatumResolver>();
+            var globalResolver1Mock = new Mock<PropertyMetadatumResolver>();
             globalResolver1Mock.SetupGet(x => x.Priority).Returns(-100);
             globalResolver1Mock.Setup(x => x.GetMetadatumType()).Returns(() => null);
 
-            var globalResolver2Mock = new Mock<IPropertyMetadatumResolver>();
+            var globalResolver2Mock = new Mock<PropertyMetadatumResolver>();
             globalResolver2Mock.SetupGet(x => x.Priority).Returns(100);
             globalResolver2Mock.Setup(x => x.GetMetadatumType()).Returns(() => null);
 
-            var globalResolver3Mock = new Mock<IPropertyMetadatumResolver>();
+            var globalResolver3Mock = new Mock<PropertyMetadatumResolver>();
             globalResolver3Mock.SetupGet(x => x.Priority).Returns(1);
             globalResolver3Mock.Setup(x => x.GetMetadatumType()).Returns(() => null);
 
 
-            var visibleResolver1Mock = new Mock<IPropertyMetadatumResolver>();
+            var visibleResolver1Mock = new Mock<PropertyMetadatumResolver>();
             visibleResolver1Mock.SetupGet(x => x.Priority).Returns(-99);
             visibleResolver1Mock.Setup(x => x.GetMetadatumType()).Returns(typeof(Visible));
 
-            var visibleResolver2Mock = new Mock<IPropertyMetadatumResolver>();
+            var visibleResolver2Mock = new Mock<PropertyMetadatumResolver>();
             visibleResolver2Mock.SetupGet(x => x.Priority).Returns(99);
             visibleResolver2Mock.Setup(x => x.GetMetadatumType()).Returns(typeof(Visible));
 
-            var visibleResolver3Mock = new Mock<IPropertyMetadatumResolver>();
+            var visibleResolver3Mock = new Mock<PropertyMetadatumResolver>();
             visibleResolver3Mock.SetupGet(x => x.Priority).Returns(0);
             visibleResolver3Mock.Setup(x => x.GetMetadatumType()).Returns(typeof(Visible));
 
 
-            var pretendResolver1Mock = new Mock<IPropertyMetadatumResolver>();
+            var pretendResolver1Mock = new Mock<PropertyMetadatumResolver>();
             pretendResolver1Mock.SetupGet(x => x.Priority).Returns(99);
             pretendResolver1Mock.Setup(x => x.GetMetadatumType()).Returns(typeof(Pretend));
 
-            var pretendResolver2Mock = new Mock<IPropertyMetadatumResolver>();
+            var pretendResolver2Mock = new Mock<PropertyMetadatumResolver>();
             pretendResolver2Mock.SetupGet(x => x.Priority).Returns(-99);
             pretendResolver2Mock.Setup(x => x.GetMetadatumType()).Returns(typeof(Pretend));
 
-            var pretendResolver3Mock = new Mock<IPropertyMetadatumResolver>();
+            var pretendResolver3Mock = new Mock<PropertyMetadatumResolver>();
             pretendResolver3Mock.SetupGet(x => x.Priority).Returns(0);
             pretendResolver3Mock.Setup(x => x.GetMetadatumType()).Returns(typeof(Pretend));
 
@@ -169,20 +191,20 @@ namespace Metadata.Tests.Metadatums.Resolvers
             var pretendResolvers = resolvers[typeof(Pretend)].Cast<MetadatumResolverDescriptor<IPropertyMetadatumResolver, IPropertyMetadata>>();
 
             Assert.Equal(6, visibleResolvers.Count());
-            Assert.Same(globalResolver2, visibleResolvers.First());
-            Assert.Same(visibleResolver2, visibleResolvers.Skip(1).First());
-            Assert.Same(globalResolver3, visibleResolvers.Skip(2).First());
-            Assert.Same(visibleResolver3, visibleResolvers.Skip(3).First());
-            Assert.Same(visibleResolver1, visibleResolvers.Skip(4).First());
-            Assert.Same(globalResolver1, visibleResolvers.Skip(5).First());
+            Assert.Same(globalResolver2, visibleResolvers.First().Resolver);
+            Assert.Same(visibleResolver2, visibleResolvers.Skip(1).First().Resolver);
+            Assert.Same(globalResolver3, visibleResolvers.Skip(2).First().Resolver);
+            Assert.Same(visibleResolver3, visibleResolvers.Skip(3).First().Resolver);
+            Assert.Same(visibleResolver1, visibleResolvers.Skip(4).First().Resolver);
+            Assert.Same(globalResolver1, visibleResolvers.Skip(5).First().Resolver);
 
             Assert.Equal(6, pretendResolvers.Count());
-            Assert.Same(globalResolver2, pretendResolvers.First());
-            Assert.Same(pretendResolver1, pretendResolvers.Skip(1).First());
-            Assert.Same(globalResolver3, pretendResolvers.Skip(2).First());
-            Assert.Same(pretendResolver3, pretendResolvers.Skip(3).First());
-            Assert.Same(pretendResolver2, pretendResolvers.Skip(4).First());
-            Assert.Same(globalResolver1, pretendResolvers.Skip(5).First());
+            Assert.Same(globalResolver2, pretendResolvers.First().Resolver);
+            Assert.Same(pretendResolver1, pretendResolvers.Skip(1).First().Resolver);
+            Assert.Same(globalResolver3, pretendResolvers.Skip(2).First().Resolver);
+            Assert.Same(pretendResolver3, pretendResolvers.Skip(3).First().Resolver);
+            Assert.Same(pretendResolver2, pretendResolvers.Skip(4).First().Resolver);
+            Assert.Same(globalResolver1, pretendResolvers.Skip(5).First().Resolver);
         }
     }
 }

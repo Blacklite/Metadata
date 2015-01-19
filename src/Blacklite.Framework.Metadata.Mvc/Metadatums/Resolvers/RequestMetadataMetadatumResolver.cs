@@ -16,7 +16,7 @@ namespace Blacklite.Framework.Metadata.Mvc.Metadatums.Resolvers
             context.ServiceProvider.GetService<IRequestMetadataContainer>()?.Has<T>(context.Metadata) ?? false;
 
         public T Resolve<T>(IMetadatumResolutionContext<ITypeMetadata> context, IRequestMetadataContainer container)
-            where T : class, IMetadatum => container.Get<T>(context.Metadata);
+            where T : IMetadatum => container.Get<T>(context.Metadata);
     }
 
     public class RequestMetadataPropertyMetadatumResolver : PropertyMetadatumResolver<IMetadatum>
@@ -30,6 +30,6 @@ namespace Blacklite.Framework.Metadata.Mvc.Metadatums.Resolvers
             context.ServiceProvider.GetService<IRequestMetadataContainer>()?.Has<T>(context.Metadata) ?? false;
 
         public T Resolve<T>(IMetadatumResolutionContext<IPropertyMetadata> context, IRequestMetadataContainer container)
-            where T : class, IMetadatum => container.Get<T>(context.Metadata);
+            where T : IMetadatum => container.Get<T>(context.Metadata);
     }
 }

@@ -14,7 +14,7 @@ namespace Blacklite.Framework.Metadata.Properties
         IEnumerable<IPropertyMetadata> GetProperties(IApplicationTypeMetadata applicationTypeMetadata, ITypeMetadata parentMetadata, IServiceProvider serviceProvider);
     }
 
-    class PropertyMetadataProvider : IPropertyMetadataProvider
+    public class PropertyMetadataProvider : IPropertyMetadataProvider
     {
         private readonly ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>> _describerCache = new ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>>();
         private readonly IEnumerable<IPropertyDescriptor> _propertyDescriptors;

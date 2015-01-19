@@ -11,6 +11,7 @@
     "frameworks": {
         "net45": {
             "frameworkAssemblies": {
+				"System.Runtime": "4.0.0.0",
                 "System.Collections.Concurrent": "4.0.0.0"
             },
             "dependencies": {
@@ -18,6 +19,7 @@
         },
         "aspnet50": {
             "frameworkAssemblies": {
+				"System.Runtime": "4.0.20.0",
                 "System.Collections.Concurrent": "4.0.0.0"
             },
             "dependencies": {

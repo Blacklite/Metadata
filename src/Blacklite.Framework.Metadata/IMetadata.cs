@@ -13,6 +13,8 @@ namespace Blacklite.Framework.Metadata
     {
         string Key { get; }
 
-        T Get<T>() where T : class, IMetadatum;
+        T Get<T>() where T : IMetadatum;
+
+        bool InvalidateMetadatumCache(Type type);
     }
 }

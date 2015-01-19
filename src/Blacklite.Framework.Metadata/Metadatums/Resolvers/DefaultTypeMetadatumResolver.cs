@@ -3,7 +3,7 @@
 namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
     public abstract class SimpleTypeMetadatumResolver<TMetadatum> : ITypeMetadatumResolver<TMetadatum>, IApplicationTypeMetadatumResolver<TMetadatum>
-         where TMetadatum : class, IMetadatum
+         where TMetadatum : IMetadatum
     {
         public virtual Type GetMetadatumType() => typeof(TMetadatum);
 

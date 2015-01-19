@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata
 {
-    class ApplicationTypeMetadata : IApplicationTypeMetadata, IInternalMetadata
+    class ApplicationTypeMetadata : IApplicationTypeMetadata
     {
         private readonly IMetadatumResolverProvider _metadatumResolverProvider;
         private readonly ConcurrentDictionary<Type, IMetadatum> _metadatumCache = new ConcurrentDictionary<Type, IMetadatum>();
@@ -39,7 +39,7 @@ namespace Blacklite.Framework.Metadata
 
         public string Key => string.Format("Type:{0}", Type.FullName);
 
-        public T Get<T>() where T : class, IMetadatum
+        public T Get<T>() where T : IMetadatum
         {
             IMetadatum value;
             if (!_metadatumCache.TryGetValue(typeof(T), out value))
@@ -68,10 +68,10 @@ namespace Blacklite.Framework.Metadata
 
         public override string ToString() => Key;
 
-        void IInternalMetadata.InvalidateMetadatumCache(Type type)
+        public bool InvalidateMetadatumCache(Type type)
         {
             IMetadatum value;
-            _metadatumCache.TryRemove(type, out value);
+            return _metadatumCache.TryRemove(type, out value);
         }
     }
 }
