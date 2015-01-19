@@ -1,10 +1,10 @@
 ﻿using System;
 using Moq;
 using Xunit;
-using Blacklite.Framework.Metadata.MetadataProperties;
+using Blacklite.Framework.Metadata.Properties;
 using System.Linq;
 
-namespace Metadata.Tests.MetadataProperties
+namespace Metadata.Tests.Properties
 {
     public class ReflectionPropertyDescriptorTests
     {

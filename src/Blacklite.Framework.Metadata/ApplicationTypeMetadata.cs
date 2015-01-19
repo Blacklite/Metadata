@@ -26,7 +26,7 @@ namespace Blacklite.Framework.Metadata
             Name = type.Name;
             Type = type;
             TypeInfo = type.GetTypeInfo();
-            Properties = metadataPropertyProvider.GetApplicationProperties(this, serviceProvider);
+            Properties = metadataPropertyProvider.GetApplicationProperties(this);
         }
 
         public string Name { get; }

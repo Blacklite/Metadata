@@ -10,7 +10,7 @@ namespace Blacklite.Framework.Metadata.Properties
 {
     public interface IPropertyMetadataProvider
     {
-        IEnumerable<IPropertyMetadata> GetApplicationProperties(IApplicationTypeMetadata parentMetadata, IServiceProvider serviceProvider);
+        IEnumerable<IPropertyMetadata> GetApplicationProperties(IApplicationTypeMetadata parentMetadata);
         IEnumerable<IPropertyMetadata> GetProperties(IApplicationTypeMetadata applicationTypeMetadata, ITypeMetadata parentMetadata, IServiceProvider serviceProvider);
     }
 
@@ -33,9 +33,9 @@ namespace Blacklite.Framework.Metadata.Properties
                        .GroupBy(x => x.Name)
                        .Select(x => x.OrderByDescending(z => z.Order).First());
 
-        public IEnumerable<IPropertyMetadata> GetApplicationProperties(IApplicationTypeMetadata parentMetadata, IServiceProvider serviceProvider) =>
+        public IEnumerable<IPropertyMetadata> GetApplicationProperties(IApplicationTypeMetadata parentMetadata) =>
             _describerCache.GetOrAdd(parentMetadata.Type, type => SelectPropertyDescriber(type, Descriptors))
-                    .Select(x => new ApplicationPropertyMetadata(parentMetadata, x, serviceProvider, _metadatumResolverProvider));
+                    .Select(x => new ApplicationPropertyMetadata(parentMetadata, x, _serviceProvider, _metadatumResolverProvider));
 
         public IEnumerable<IPropertyMetadata> GetProperties(IApplicationTypeMetadata applicationTypeMetadata, ITypeMetadata parentMetadata, IServiceProvider serviceProvider) =>
             _describerCache.GetOrAdd(parentMetadata.Type, type => SelectPropertyDescriber(type, Descriptors))

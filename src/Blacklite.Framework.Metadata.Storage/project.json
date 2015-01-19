@@ -3,6 +3,10 @@
     "dependencies": {
         "Blacklite.Framework.Metadata": "1.0.0-beta-*"
     },
+	
+	"compilationOptions": {
+		"warningsAsErrors": true
+	},
 
     "frameworks": {
         "net45": {
