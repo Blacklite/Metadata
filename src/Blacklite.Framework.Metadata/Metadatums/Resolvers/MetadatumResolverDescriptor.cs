@@ -47,7 +47,7 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
                 var genericMethod = _resolveMethod.MakeGenericMethod(typeof(T));
                 var contextTypeInfo = typeof(IMetadatumResolutionContext<TMetadata>).GetTypeInfo();
 
-                method = _resolveMethod.CreateInjectableMethod()
+                method = genericMethod.CreateInjectableMethod()
                     .ConfigureParameter(x => contextTypeInfo.IsAssignableFrom(x.ParameterType.GetTypeInfo()))
                     .CreateFunc<IMetadatumResolutionContext<TMetadata>, object>(Resolver);
 
