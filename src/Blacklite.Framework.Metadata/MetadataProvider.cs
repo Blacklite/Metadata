@@ -13,12 +13,14 @@ namespace Blacklite.Framework.Metadata
         private readonly IPropertyMetadataProvider _metadataPropertyProvider;
         private readonly IMetadatumResolverProvider _metadatumResolverProvider;
         private readonly IServiceProvider _serviceProvider;
+        private readonly ITypeMetadataActivator _typeMetadataActivator;
         private readonly IApplicationMetadataProvider _metadataProvider;
         private readonly ConcurrentDictionary<Type, ITypeMetadata> _metadata = new ConcurrentDictionary<Type, ITypeMetadata>();
 
-        public MetadataProvider(IApplicationMetadataProvider metadataProvider, IServiceProvider serviceProvider, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
+        public MetadataProvider(IApplicationMetadataProvider metadataProvider, ITypeMetadataActivator typeMetadataActivator, IServiceProvider serviceProvider, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
         {
             _metadataPropertyProvider = metadataPropertyProvider;
+            _typeMetadataActivator = typeMetadataActivator;
             _metadatumResolverProvider = metadatumResolverProvider;
             _serviceProvider = serviceProvider;
             _metadataProvider = metadataProvider;
@@ -32,9 +34,6 @@ namespace Blacklite.Framework.Metadata
 
         private ITypeMetadata GetUnderlyingMetadata(Type type) => _metadata.GetOrAdd(type, CreateTypeMetadata(type));
 
-        private ITypeMetadata CreateTypeMetadata(Type type)
-        {
-            return new TypeMetadata(_metadataProvider.GetMetadata(type), _serviceProvider, _metadataPropertyProvider, _metadatumResolverProvider);
-        }
+        private ITypeMetadata CreateTypeMetadata(Type type) => _typeMetadataActivator.Create(_metadataProvider.GetMetadata(type), _serviceProvider, _metadataPropertyProvider, _metadatumResolverProvider);
     }
 }

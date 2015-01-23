@@ -26,15 +26,16 @@ namespace Metadata.Storage.Tests.Metadatums.Resolvers
 
             var contextMock = new Mock<IMetadatumResolutionContext<ITypeMetadata>>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
+            contextMock.SetupGet(x => x.MetadatumType).Returns(typeof(Visible));
             var context = contextMock.Object;
 
-            Assert.False(resolver.CanResolve<Visible>(context));
+            Assert.False(resolver.CanResolve(context));
 
             var visible = new Visible();
             store.Save(typeMetadata, visible);
 
-            Assert.True(resolver.CanResolve<Visible>(context));
-            Assert.Same(visible, resolver.Resolve<Visible>(context));
+            Assert.True(resolver.CanResolve(context));
+            Assert.Same(visible, resolver.Resolve(context));
         }
 
         [Fact]
@@ -60,9 +61,10 @@ namespace Metadata.Storage.Tests.Metadatums.Resolvers
 
             var contextMock = new Mock<IMetadatumResolutionContext<ITypeMetadata>>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
+            contextMock.SetupGet(x => x.MetadatumType).Returns(typeof(Visible));
             var context = contextMock.Object;
 
-            Assert.Throws(typeof(IndexOutOfRangeException), () => resolver.Resolve<Visible>(context));
+            Assert.Throws(typeof(IndexOutOfRangeException), () => resolver.Resolve(context));
         }
 
         [Fact]
@@ -78,15 +80,16 @@ namespace Metadata.Storage.Tests.Metadatums.Resolvers
 
             var contextMock = new Mock<IMetadatumResolutionContext<IPropertyMetadata>>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
+            contextMock.SetupGet(x => x.MetadatumType).Returns(typeof(Visible));
             var context = contextMock.Object;
 
-            Assert.False(resolver.CanResolve<Visible>(context));
+            Assert.False(resolver.CanResolve(context));
 
             var visible = new Visible();
             store.Save(typeMetadata, visible);
 
-            Assert.True(resolver.CanResolve<Visible>(context));
-            Assert.Same(visible, resolver.Resolve<Visible>(context));
+            Assert.True(resolver.CanResolve(context));
+            Assert.Same(visible, resolver.Resolve(context));
         }
 
         [Fact]
@@ -112,9 +115,10 @@ namespace Metadata.Storage.Tests.Metadatums.Resolvers
 
             var contextMock = new Mock<IMetadatumResolutionContext<IPropertyMetadata>>();
             contextMock.SetupGet(x => x.Metadata).Returns(typeMetadata);
+            contextMock.SetupGet(x => x.MetadatumType).Returns(typeof(Visible));
             var context = contextMock.Object;
 
-            Assert.Throws(typeof(IndexOutOfRangeException), () => resolver.Resolve<Visible>(context));
+            Assert.Throws(typeof(IndexOutOfRangeException), () => resolver.Resolve(context));
         }
     }
 }

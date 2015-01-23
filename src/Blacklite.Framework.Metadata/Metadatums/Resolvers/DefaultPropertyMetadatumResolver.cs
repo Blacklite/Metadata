@@ -12,9 +12,9 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 
         public virtual bool CanResolve(IPropertyMetadata metadata) => true;
 
-        bool IMetadatumResolver<IPropertyMetadata>.CanResolve<T>(IMetadatumResolutionContext<IPropertyMetadata> context)
+        bool IMetadatumResolver<IPropertyMetadata>.CanResolve(IMetadatumResolutionContext<IPropertyMetadata> context)
         {
-            if (typeof(T) == typeof(TMetadatum))
+            if (context.MetadatumType == typeof(TMetadatum))
                 return CanResolve(context.Metadata);
 
             return false;

@@ -54,18 +54,18 @@ namespace Blacklite.Framework.Metadata.Properties
             if (!_metadatumCache.TryGetValue(typeof(T), out value))
             {
                 IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>> values;
-                if (_metadatumResolverProvider.PropertyResolvers.TryGetValue(typeof(T), out values))
+                if (_metadatumResolverProvider.ApplicationPropertyResolvers.TryGetValue(typeof(T), out values))
                 {
                     var context = new PropertyMetadatumResolutionContext(_serviceProvider, this, typeof(T));
                     var resolvedValue = values
-                        .Where(z => z.CanResolve<T>(context))
-                        .Select(x => x.Resolve<T>(context))
+                        .Where(z => z.CanResolve(context))
+                        .Select(x => x.Resolve(context))
                         .FirstOrDefault(x => x != null);
 
                     if (resolvedValue != null)
                     {
                         _metadatumCache.TryAdd(typeof(T), resolvedValue);
-                        return resolvedValue;
+                        return (T)resolvedValue;
                     }
                 }
 

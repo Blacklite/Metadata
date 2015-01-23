@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using Blacklite.Framework.GlobalEvents;
 
 namespace Blacklite.Framework.Metadata.Lifecycles
 {
@@ -19,7 +20,7 @@ namespace Blacklite.Framework.Metadata.Lifecycles
         public LifecycleMetadataPropertyProvider(
             IServiceProvider serviceProvider,
             Func<IEnumerable<IPropertyDescriptor>> propertyDescriptorsFunc,
-            IEventObservable eventObservable,
+            IEventObservable<IGlobalEvent> eventObservable,
             IMetadatumResolverProvider metadatumResolverProvider)
             : base(serviceProvider, Enumerable.Empty<IPropertyDescriptor>(), metadatumResolverProvider)
         {

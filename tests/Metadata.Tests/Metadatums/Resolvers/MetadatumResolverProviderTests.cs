@@ -18,9 +18,9 @@ namespace Metadata.Tests.Metadatums.Resolvers
 
             public abstract Type GetMetadatumType();
 
-            public abstract bool CanResolve<T>(IMetadatumResolutionContext<ITypeMetadata> context) where T : IMetadatum;
+            public abstract bool CanResolve(IMetadatumResolutionContext<ITypeMetadata> context);
 
-            public abstract T Resolve<T>() where T : IMetadatum;
+            public abstract IMetadatum Resolve(IMetadatumResolutionContext<ITypeMetadata> context);
         }
 
         [Fact]
@@ -116,9 +116,9 @@ namespace Metadata.Tests.Metadatums.Resolvers
 
             public abstract Type GetMetadatumType();
 
-            public abstract bool CanResolve<T>(IMetadatumResolutionContext<IPropertyMetadata> context) where T : IMetadatum;
+            public abstract bool CanResolve(IMetadatumResolutionContext<IPropertyMetadata> context);
 
-            public abstract T Resolve<T>() where T : IMetadatum;
+            public abstract IMetadatum Resolve(IMetadatumResolutionContext<IPropertyMetadata> context);
         }
 
         [Fact]

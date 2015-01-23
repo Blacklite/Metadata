@@ -15,9 +15,16 @@ namespace Blacklite.Framework.Metadata
             var describe = new ServiceDescriber(configuration);
 
             yield return describe.Singleton<IApplicationMetadataProvider, ApplicationMetadataProvider>();
-            yield return describe.Scoped<IMetadataProvider, MetadataProvider>();
             yield return describe.Singleton<IPropertyMetadataProvider, PropertyMetadataProvider>();
+            yield return describe.Scoped<IMetadataProvider, MetadataProvider>();
             yield return describe.Scoped(typeof(ITypeMetadata<>), typeof(TypeMetadata<>));
+            yield return describe.Singleton<ITypeMetadataActivator, TypeMetadataActivator>();
+        }
+
+        public static IEnumerable<IServiceDescriptor> GetPropertyDescriptors(IConfiguration configuration = null)
+        {
+            var describe = new ServiceDescriber(configuration);
+
             yield return describe.Singleton<IPropertyDescriptor, ReflectionPropertyDescriptor>();
         }
     }

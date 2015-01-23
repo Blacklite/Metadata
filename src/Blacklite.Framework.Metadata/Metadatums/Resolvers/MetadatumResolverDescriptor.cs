@@ -11,10 +11,9 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
         where TMetadata : IMetadata
         where TResolver : IMetadatumResolver<TMetadata>
     {
-        public TResolver Resolver { get; }
+        private readonly Func<IServiceProvider, IMetadatumResolutionContext<TMetadata>, IMetadatum> _resolveFunc;
 
-        private readonly IDictionary<Type, Func<IServiceProvider, IMetadatumResolutionContext<TMetadata>, object>> _resolversCache = new Dictionary<Type, Func<IServiceProvider, IMetadatumResolutionContext<TMetadata>, object>>();
-        private readonly MethodInfo _resolveMethod;
+        public TResolver Resolver { get; }
 
         public bool IsGlobal { get; }
 
@@ -25,36 +24,29 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
         public MetadatumResolverDescriptor(TResolver resolver)
         {
             Resolver = resolver;
-            var typeInfo = Resolver.GetType().GetTypeInfo();
 
-            _resolveMethod = typeInfo.DeclaredMethods.Single(x => x.Name == nameof(Resolve));
+            var resolveMethod = resolver.GetType().GetTypeInfo().DeclaredMethods.SingleOrDefault(x => x.Name == nameof(Resolve));
 
             MetadatumType = resolver.GetMetadatumType();
             IsGlobal = MetadatumType == null;
             Priority = resolver.Priority;
+
+            var contextTypeInfo = typeof(IMetadatumResolutionContext<TMetadata>).GetTypeInfo();
+
+            _resolveFunc = resolveMethod.CreateInjectableMethod()
+                .ConfigureParameter(x => contextTypeInfo.IsAssignableFrom(x.ParameterType.GetTypeInfo()))
+                .ReturnType(typeof(IMetadatum))
+                .CreateFunc<IMetadatumResolutionContext<TMetadata>, IMetadatum>(resolver);
         }
 
-        public bool CanResolve<T>(IMetadatumResolutionContext<TMetadata> context) where T : IMetadatum
+        public bool CanResolve(IMetadatumResolutionContext<TMetadata> context)
         {
-            return Resolver.CanResolve<T>(context);
+            return Resolver.CanResolve(context);
         }
 
-        public T Resolve<T>(IMetadatumResolutionContext<TMetadata> context) where T : IMetadatum
+        public IMetadatum Resolve(IMetadatumResolutionContext<TMetadata> context)
         {
-            Func<IServiceProvider, IMetadatumResolutionContext<TMetadata>, object> method;
-            if (!_resolversCache.TryGetValue(typeof(T), out method))
-            {
-                var genericMethod = _resolveMethod.MakeGenericMethod(typeof(T));
-                var contextTypeInfo = typeof(IMetadatumResolutionContext<TMetadata>).GetTypeInfo();
-
-                method = genericMethod.CreateInjectableMethod()
-                    .ConfigureParameter(x => contextTypeInfo.IsAssignableFrom(x.ParameterType.GetTypeInfo()))
-                    .CreateFunc<IMetadatumResolutionContext<TMetadata>, object>(Resolver);
-
-                _resolversCache.Add(typeof(T), method);
-            }
-
-            return (T)method(context.ServiceProvider, context);
+            return _resolveFunc(context.ServiceProvider, context);
         }
     }
 

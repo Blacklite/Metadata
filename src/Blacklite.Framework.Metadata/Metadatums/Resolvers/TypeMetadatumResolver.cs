@@ -9,6 +9,6 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 
         public abstract int Priority { get; }
 
-        public abstract bool CanResolve<T>(IMetadatumResolutionContext<ITypeMetadata> context) where T : IMetadatum;
+        public abstract bool CanResolve(IMetadatumResolutionContext<ITypeMetadata> context);
     }
 }

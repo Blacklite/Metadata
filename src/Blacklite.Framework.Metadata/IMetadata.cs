@@ -1,14 +1,8 @@
-﻿
-
-
-using System;
+﻿using System;
 using Blacklite.Framework.Metadata.Metadatums;
 
 namespace Blacklite.Framework.Metadata
 {
-
-
-
     public interface IMetadata
     {
         string Key { get; }

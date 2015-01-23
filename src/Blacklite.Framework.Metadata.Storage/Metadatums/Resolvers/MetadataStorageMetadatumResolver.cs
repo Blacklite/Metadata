@@ -16,10 +16,9 @@ namespace Blacklite.Framework.Metadata.Storage.Metadatums.Resolvers
 
         public override int Priority { get; } = 1000;
 
-        public override bool CanResolve<T>(IMetadatumResolutionContext<ITypeMetadata> context) => _store.Has<T>(context.Metadata);
+        public override bool CanResolve(IMetadatumResolutionContext<ITypeMetadata> context) => _store.Has(context.Metadata, context.MetadatumType);
 
-        public T Resolve<T>(IMetadatumResolutionContext<ITypeMetadata> context)
-            where T : IMetadatum => _store.Get<T>(context.Metadata);
+        public IMetadatum Resolve(IMetadatumResolutionContext<ITypeMetadata> context) => _store.Get(context.Metadata, context.MetadatumType);
     }
 
     public class MetadataStoragePropertyMetadatumResolver : PropertyMetadatumResolver<IMetadatum>
@@ -34,9 +33,8 @@ namespace Blacklite.Framework.Metadata.Storage.Metadatums.Resolvers
 
         public override int Priority { get; } = 1000;
 
-        public override bool CanResolve<T>(IMetadatumResolutionContext<IPropertyMetadata> context) => _store.Has<T>(context.Metadata);
+        public override bool CanResolve(IMetadatumResolutionContext<IPropertyMetadata> context) => _store.Has(context.Metadata, context.MetadatumType);
 
-        public T Resolve<T>(IMetadatumResolutionContext<IPropertyMetadata> context)
-            where T : IMetadatum => _store.Get<T>(context.Metadata);
+        public IMetadatum Resolve(IMetadatumResolutionContext<IPropertyMetadata> context) => _store.Get(context.Metadata, context.MetadatumType);
     }
 }

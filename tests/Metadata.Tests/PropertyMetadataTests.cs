@@ -57,7 +57,7 @@ namespace Metadata.Tests
                 .Returns(typeof(Visible));
 
             metadatumResolver1Mock
-                .Setup(x => x.CanResolve<Visible>(It.IsAny<IMetadatumResolutionContext<IPropertyMetadata>>()))
+                .Setup(x => x.CanResolve(It.Is<IMetadatumResolutionContext<IPropertyMetadata>>(z => z.MetadatumType == typeof(Visible))))
                 .Returns(false);
 
             metadatumResolver2Mock
@@ -65,7 +65,7 @@ namespace Metadata.Tests
                 .Returns(typeof(Visible));
 
             metadatumResolver2Mock
-                .Setup(x => x.CanResolve<Visible>(It.IsAny<IMetadatumResolutionContext<IPropertyMetadata>>()))
+                .Setup(x => x.CanResolve(It.Is<IMetadatumResolutionContext<IPropertyMetadata>>(z => z.MetadatumType == typeof(Visible))))
                 .Returns(true);
 
             //var returnValue = new Visible(false);
@@ -129,7 +129,7 @@ namespace Metadata.Tests
                 .Returns(typeof(Visible));
 
             metadatumResolver1Mock
-                .Setup(x => x.CanResolve<Visible>(It.IsAny<IMetadatumResolutionContext<IPropertyMetadata>>()))
+                .Setup(x => x.CanResolve(It.Is<IMetadatumResolutionContext<IPropertyMetadata>>(z => z.MetadatumType == typeof(Visible))))
                 .Returns(true);
 
             metadatumResolver2Mock
@@ -137,7 +137,7 @@ namespace Metadata.Tests
                 .Returns(typeof(Visible));
 
             metadatumResolver2Mock
-                .Setup(x => x.CanResolve<Visible>(It.IsAny<IMetadatumResolutionContext<IPropertyMetadata>>()))
+                .Setup(x => x.CanResolve(It.Is<IMetadatumResolutionContext<IPropertyMetadata>>(z => z.MetadatumType == typeof(Visible))))
                 .Returns(true);
 
             //var returnValue = new Visible(false);

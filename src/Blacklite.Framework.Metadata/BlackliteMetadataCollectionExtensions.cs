@@ -15,6 +15,7 @@ namespace Microsoft.Framework.DependencyInjection
             IConfiguration configuration = null)
         {
             services.TryAdd(BlackliteMetadataServices.GetMetadata(configuration));
+            services.Add(BlackliteMetadataServices.GetPropertyDescriptors(configuration));
             return services;
         }
     }

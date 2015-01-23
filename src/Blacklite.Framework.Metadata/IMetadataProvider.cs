@@ -1,14 +1,8 @@
-﻿
-
-
-using System;
+﻿using System;
 using System.Reflection;
 
 namespace Blacklite.Framework.Metadata
 {
-
-
-
     public interface IMetadataProvider
     {
         ITypeMetadata GetMetadata<T>();

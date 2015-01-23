@@ -49,14 +49,14 @@ namespace Blacklite.Framework.Metadata
                 {
                     var context = new TypeMetadatumResolutionContext(_serviceProvider, this, typeof(T));
                     var resolvedValue = values
-                        .Where(z => z.CanResolve<T>(context))
-                        .Select(x => x.Resolve<T>(context))
+                        .Where(z => z.CanResolve(context))
+                        .Select(x => x.Resolve(context))
                         .FirstOrDefault(x => x != null);
 
                     if (resolvedValue != null)
                     {
                         _metadatumCache.TryAdd(typeof(T), resolvedValue);
-                        return resolvedValue;
+                        return (T)resolvedValue;
                     }
                 }
 

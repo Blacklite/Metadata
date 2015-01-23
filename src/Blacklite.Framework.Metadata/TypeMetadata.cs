@@ -11,20 +11,20 @@ namespace Blacklite.Framework.Metadata
 {
     class TypeMetadata : ITypeMetadata
     {
-        private readonly IApplicationTypeMetadata _parent;
+        private readonly ITypeMetadata _fallback;
         private readonly IMetadatumResolverProvider _metadatumResolverProvider;
         private readonly ConcurrentDictionary<Type, IMetadatum> _metadatumCache = new ConcurrentDictionary<Type, IMetadatum>();
         private readonly IServiceProvider _serviceProvider;
-        public TypeMetadata(IApplicationTypeMetadata parent, IServiceProvider serviceProvider, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
+        public TypeMetadata(ITypeMetadata fallback, IServiceProvider serviceProvider, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
         {
-            _parent = parent;
+            _fallback = fallback;
             _serviceProvider = serviceProvider;
             _metadatumResolverProvider = metadatumResolverProvider;
 
-            Name = parent.Name;
-            Type = parent.Type;
-            TypeInfo = parent.TypeInfo;
-            Properties = metadataPropertyProvider.GetProperties(parent, this, serviceProvider);
+            Name = fallback.Name;
+            Type = fallback.Type;
+            TypeInfo = fallback.TypeInfo;
+            Properties = metadataPropertyProvider.GetProperties(fallback, this, serviceProvider);
         }
 
         public string Name { get; }
@@ -43,21 +43,23 @@ namespace Blacklite.Framework.Metadata
             if (!_metadatumCache.TryGetValue(typeof(T), out value))
             {
                 IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>> values;
+                IMetadatum resolvedValue = null;
                 if (_metadatumResolverProvider.TypeResolvers.TryGetValue(typeof(T), out values))
                 {
                     var context = new TypeMetadatumResolutionContext(_serviceProvider, this, typeof(T));
-                    var resolvedValue = values
-                        .Where(z => z.CanResolve<T>(context))
-                        .Select(x => x.Resolve<T>(context))
+                    resolvedValue = values
+                        .Where(z => z.CanResolve(context))
+                        .Select(x => x.Resolve(context))
                         .FirstOrDefault(x => x != null);
-                    if (EqualityComparer<T>.Default.Equals(resolvedValue, default(T)))
-                        resolvedValue = _parent.Get<T>();
+                }
 
-                    if (resolvedValue != null)
-                    {
-                        _metadatumCache.TryAdd(typeof(T), resolvedValue);
-                        return resolvedValue;
-                    }
+                if (resolvedValue == null)
+                    resolvedValue = _fallback.Get<T>();
+
+                if (resolvedValue != null)
+                {
+                    _metadatumCache.TryAdd(typeof(T), resolvedValue);
+                    return (T)resolvedValue;
                 }
 
                 throw new ArgumentOutOfRangeException("T", "Metadatum type '{0}' must have at least one resolver registered.");
