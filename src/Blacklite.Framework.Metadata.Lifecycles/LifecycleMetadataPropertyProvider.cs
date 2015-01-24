@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using Blacklite.Framework.GlobalEvents;
+using Blacklite.Framework.Events;
 
 namespace Blacklite.Framework.Metadata.Lifecycles
 {

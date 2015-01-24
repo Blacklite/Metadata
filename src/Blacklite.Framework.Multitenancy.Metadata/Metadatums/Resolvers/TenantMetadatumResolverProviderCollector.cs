@@ -17,7 +17,7 @@ namespace Blacklite.Framework.Multitenancy.Metadata.Metadatums.Resolvers
             PropertyResolvers = MetadatumResolverProviderCollectorHelper.GetMetadatumResolverDictionary<ITenantPropertyMetadatumResolver, IPropertyMetadata>(propertyMetadatumResolvers);
         }
 
-        public string Key { get; } = "Tenant";
+        public string Key { get; } = nameof(Tenant);
 
         public IDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>> PropertyResolvers { get; }
 
