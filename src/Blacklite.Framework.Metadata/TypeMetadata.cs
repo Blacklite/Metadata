@@ -11,12 +11,14 @@ namespace Blacklite.Framework.Metadata
 {
     class TypeMetadata : ITypeMetadata
     {
+        private readonly string _key;
         private readonly ITypeMetadata _fallback;
         private readonly IMetadatumResolverProvider _metadatumResolverProvider;
         private readonly ConcurrentDictionary<Type, IMetadatum> _metadatumCache = new ConcurrentDictionary<Type, IMetadatum>();
         private readonly IServiceProvider _serviceProvider;
-        public TypeMetadata(ITypeMetadata fallback, IServiceProvider serviceProvider, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
+        public TypeMetadata(ITypeMetadata fallback, string key, IServiceProvider serviceProvider, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
         {
+            _key = key;
             _fallback = fallback;
             _serviceProvider = serviceProvider;
             _metadatumResolverProvider = metadatumResolverProvider;
@@ -24,7 +26,7 @@ namespace Blacklite.Framework.Metadata
             Name = fallback.Name;
             Type = fallback.Type;
             TypeInfo = fallback.TypeInfo;
-            Properties = metadataPropertyProvider.GetProperties(fallback, this, serviceProvider);
+            Properties = metadataPropertyProvider.GetProperties(fallback, this, _key, serviceProvider);
         }
 
         public string Name { get; }
@@ -42,9 +44,9 @@ namespace Blacklite.Framework.Metadata
             IMetadatum value;
             if (!_metadatumCache.TryGetValue(typeof(T), out value))
             {
-                IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>> values;
                 IMetadatum resolvedValue = null;
-                if (_metadatumResolverProvider.TypeResolvers.TryGetValue(typeof(T), out values))
+                var values = _metadatumResolverProvider.GetTypeResolvers(_key, typeof(T));
+                if (values != null)
                 {
                     var context = new TypeMetadatumResolutionContext(_serviceProvider, this, typeof(T));
                     resolvedValue = values

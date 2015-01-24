@@ -5,50 +5,32 @@ using System.Linq;
 
 namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
+    public interface IMetadatumResolverProvider
+    {
+        IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>> GetTypeResolvers(string key, Type type);
+        IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>> GetPropertyResolvers(string key, Type type);
+    }
+
     class MetadatumResolverProvider : IMetadatumResolverProvider
     {
-        private static IReadOnlyDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<TMetadata>>> GetMetadatumResolverDictionary<TResolver, TMetadata>(IEnumerable<TResolver> resolvers)
-            where TResolver : IMetadatumResolver<TMetadata>
-            where TMetadata : IMetadata
+        private readonly IDictionary<string, IDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>>>> _typeResolvers;
+        private readonly IDictionary<string, IDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>>> _propertyResolvers;
+
+        public MetadatumResolverProvider(IEnumerable<IMetadatumResolverProviderCollector> collectors)
         {
-            var descriptors = resolvers.Select(x => new MetadatumResolverDescriptor<TResolver, TMetadata>(x));
-            var globalDescriptors = descriptors.Where(x => x.IsGlobal);
-
-            var dictionary = descriptors
-                .Where(x => !x.IsGlobal)
-                        .GroupBy(x => x.MetadatumType)
-                        .ToDictionary(x => x.Key, x =>
-                            x.Union(globalDescriptors)
-                             .OrderByDescending(z => z.Priority)
-                             .Cast<IMetadatumResolverDescriptor<TMetadata>>()
-                             .AsEnumerable());
-
-            return new ReadOnlyDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<TMetadata>>>(dictionary);
+            _typeResolvers = collectors.ToDictionary(x => x.Key, x => x.TypeResolvers);
+            _propertyResolvers = collectors.ToDictionary(x => x.Key, x => x.PropertyResolvers);
         }
 
-        public MetadatumResolverProvider(
-            IEnumerable<IApplicationTypeMetadatumResolver> applicaitonTypeMetadatumResolvers,
-            IEnumerable<IApplicationPropertyMetadatumResolver> applicaitonPropertyMetadatumResolvers,
-            IEnumerable<ITypeMetadatumResolver> typeMetadatumResolvers,
-            IEnumerable<IPropertyMetadatumResolver> propertyMetadatumResolvers)
+        public IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>> GetTypeResolvers(string key, Type type)
         {
-            // Null metadatum type isn't invalid, it allows the resolver to
-            // operate against all metadatums.
-            // For example, a resolver that looks at a persistance store, could possibly
-            // resolve every available type of metadatum if it has a value for it.
-            ApplicationTypeResolvers = GetMetadatumResolverDictionary<IApplicationTypeMetadatumResolver, ITypeMetadata>(applicaitonTypeMetadatumResolvers);
-            TypeResolvers = GetMetadatumResolverDictionary<ITypeMetadatumResolver,ITypeMetadata>(typeMetadatumResolvers);
-            ApplicationPropertyResolvers = GetMetadatumResolverDictionary<IApplicationPropertyMetadatumResolver,IPropertyMetadata>(applicaitonPropertyMetadatumResolvers);
-            PropertyResolvers = GetMetadatumResolverDictionary<IPropertyMetadatumResolver, IPropertyMetadata>(propertyMetadatumResolvers);
+            return _typeResolvers[key][type];
         }
 
-        public IReadOnlyDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>>> TypeResolvers { get; }
-
-        public IReadOnlyDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>> PropertyResolvers { get; }
-
-        public IReadOnlyDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>>> ApplicationTypeResolvers { get; }
-
-        public IReadOnlyDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>> ApplicationPropertyResolvers { get; }
+        public IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>> GetPropertyResolvers(string key, Type type)
+        {
+            return _propertyResolvers[key][type];
+        }
     }
 
 }

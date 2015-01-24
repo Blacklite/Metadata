@@ -10,13 +10,15 @@ namespace Blacklite.Framework.Metadata.Properties
 {
     class PropertyMetadata : IPropertyMetadata
     {
+        private readonly string _key;
         private readonly IPropertyMetadata _fallback;
         private readonly IServiceProvider _serviceProvider;
         private readonly IMetadatumResolverProvider _metadatumResolverProvider;
         private readonly ConcurrentDictionary<Type, IMetadatum> _metadatumCache = new ConcurrentDictionary<Type, IMetadatum>();
 
-        public PropertyMetadata(IPropertyMetadata fallback, ITypeMetadata parentMetadata, IServiceProvider serviceProvider, IMetadatumResolverProvider metadatumResolverProvider)
+        public PropertyMetadata(IPropertyMetadata fallback, string key, ITypeMetadata parentMetadata, IServiceProvider serviceProvider, IMetadatumResolverProvider metadatumResolverProvider)
         {
+            _key = key;
             _fallback = fallback;
             _metadatumResolverProvider = metadatumResolverProvider;
             _serviceProvider = serviceProvider;
@@ -46,9 +48,9 @@ namespace Blacklite.Framework.Metadata.Properties
             IMetadatum value;
             if (!_metadatumCache.TryGetValue(typeof(T), out value))
             {
-                IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>> values;
                 IMetadatum resolvedValue = null;
-                if (_metadatumResolverProvider.PropertyResolvers.TryGetValue(typeof(T), out values))
+                var values = _metadatumResolverProvider.GetPropertyResolvers(_key, typeof(T));
+                if (values != null)
                 {
                     var context = new PropertyMetadatumResolutionContext(_serviceProvider, this, typeof(T));
                     resolvedValue = values

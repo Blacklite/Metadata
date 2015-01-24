@@ -39,19 +39,14 @@ namespace Metadata.Tests.Metadatums.Resolvers
             scopedResolver.Setup(x => x.Resolve(It.IsAny<IMetadatumResolutionContext<ITypeMetadata>>())).Returns(new Scoped());
 
             var metadatumResolverProviderMock = new Mock<IMetadatumResolverProvider>();
-            metadatumResolverProviderMock.Setup(x => x.TypeResolvers).Returns(
-                new ReadOnlyDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>>>(
-                new Dictionary<Type, IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>>>()
-                {
-                    [typeof(Scoped)] = new[] { new MetadatumResolverDescriptor<ITypeMetadatumResolver, ITypeMetadata>(scopedResolver.Object) }
-                }));
+            metadatumResolverProviderMock.Setup(x => x.GetTypeResolvers("Default", typeof(Scoped))).Returns(new[] { new MetadatumResolverDescriptor<ITypeMetadatumResolver, ITypeMetadata>(scopedResolver.Object) });
             var metadatumResolverProvider = metadatumResolverProviderMock.Object;
 
             var applicationMetdataMock = new Mock<IApplicationTypeMetadata>();
             applicationMetdataMock.Setup(x => x.Get<Simple>()).Returns(simple);
 
             var applicationMetdata = applicationMetdataMock.Object;
-            var metadata = new TypeMetadata(applicationMetdata, serviceProvider, metadataPropertyProvider, metadatumResolverProvider);
+            var metadata = new TypeMetadata(applicationMetdata, "Default", serviceProvider, metadataPropertyProvider, metadatumResolverProvider);
 
             var scopedResult = metadata.Get<Scoped>();
             Assert.NotEqual(scoped, scopedResult);
@@ -92,26 +87,11 @@ namespace Metadata.Tests.Metadatums.Resolvers
             simpleResolver.Setup(x => x.Resolve(It.IsAny<IMetadatumResolutionContext<ITypeMetadata>>())).Returns(simple);
 
             var metadatumResolverProviderMock = new Mock<IMetadatumResolverProvider>();
-            metadatumResolverProviderMock.Setup(x => x.ApplicationTypeResolvers).Returns(new ReadOnlyDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>>>(
-                new Dictionary<Type, IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>>>()
-                {
-                    [typeof(Scoped)] = new[] { new MetadatumResolverDescriptor<IApplicationTypeMetadatumResolver, ITypeMetadata>(scopedResolver.Object) },
-                    [typeof(Simple)] = new[] { new MetadatumResolverDescriptor<IApplicationTypeMetadatumResolver, ITypeMetadata>(simpleResolver.Object) }
-                }));
+            metadatumResolverProviderMock.Setup(x => x.GetTypeResolvers("Application", typeof(Scoped))).Returns(new[] { new MetadatumResolverDescriptor<IApplicationTypeMetadatumResolver, ITypeMetadata>(scopedResolver.Object) });
+            metadatumResolverProviderMock.Setup(x => x.GetTypeResolvers("Application", typeof(Simple))).Returns(new[] { new MetadatumResolverDescriptor<IApplicationTypeMetadatumResolver, ITypeMetadata>(simpleResolver.Object) });
             var metadatumResolverProvider = metadatumResolverProviderMock.Object;
 
-            var metadatumDescriberProviderMock = new Mock<IMetadatumResolverProvider>();
-            metadatumDescriberProviderMock.Setup(x => x.ApplicationTypeResolvers).Returns(
-                new ReadOnlyDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>>>(
-                new Dictionary<Type, IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>>>()
-                {
-                    [typeof(Scoped)] = new[] { new MetadatumResolverDescriptor<IApplicationTypeMetadatumResolver, ITypeMetadata>(scopedResolver.Object), },
-                    [typeof(Simple)] = new[] { new MetadatumResolverDescriptor<IApplicationTypeMetadatumResolver, ITypeMetadata>(simpleResolver.Object), }
-                }));
-
-            var metadatumDescriberProvider = metadatumDescriberProviderMock.Object;
-
-            var provider = new ApplicationTypeMetadata(typeof(MetadatumResolverTests), serviceProvider, metadataPropertyProvider, metadatumDescriberProvider);
+            var provider = new ApplicationTypeMetadata(typeof(MetadatumResolverTests), serviceProvider, metadataPropertyProvider, metadatumResolverProvider);
 
             var scopedResult = provider.Get<Scoped>();
             Assert.Same(scoped, scopedResult);
@@ -143,12 +123,7 @@ namespace Metadata.Tests.Metadatums.Resolvers
             scopedResolver.Setup(x => x.Resolve(It.IsAny<IMetadatumResolutionContext<IPropertyMetadata>>())).Returns(new Scoped());
 
             var metadatumResolverProviderMock = new Mock<IMetadatumResolverProvider>();
-            metadatumResolverProviderMock.Setup(x => x.PropertyResolvers).Returns(
-                new ReadOnlyDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>>(
-                new Dictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>>()
-                {
-                    [typeof(Scoped)] = new[] { new MetadatumResolverDescriptor<IPropertyMetadatumResolver, IPropertyMetadata>(scopedResolver.Object) }
-                }));
+            metadatumResolverProviderMock.Setup(x => x.GetPropertyResolvers("Default", typeof(Scoped))).Returns(new[] { new MetadatumResolverDescriptor<IPropertyMetadatumResolver, IPropertyMetadata>(scopedResolver.Object) });
             var metadatumResolverProvider = metadatumResolverProviderMock.Object;
 
             var applicationMetdataMock = new Mock<IPropertyMetadata>();
@@ -157,7 +132,7 @@ namespace Metadata.Tests.Metadatums.Resolvers
 
             var parentMetadataMock = new Mock<ITypeMetadata>();
             var parentMetadata = parentMetadataMock.Object;
-            var metadata = new PropertyMetadata(applicationMetdata, parentMetadata, serviceProvider, metadatumResolverProvider);
+            var metadata = new PropertyMetadata(applicationMetdata, "Default", parentMetadata, serviceProvider, metadatumResolverProvider);
 
             var scopedResult = metadata.Get<Scoped>();
             Assert.NotEqual(scoped, scopedResult);
@@ -198,24 +173,9 @@ namespace Metadata.Tests.Metadatums.Resolvers
             simpleResolver.Setup(x => x.Resolve(It.IsAny<IMetadatumResolutionContext<IPropertyMetadata>>())).Returns(simple);
 
             var metadatumResolverProviderMock = new Mock<IMetadatumResolverProvider>();
-            metadatumResolverProviderMock.Setup(x => x.ApplicationPropertyResolvers).Returns(new ReadOnlyDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>>(
-                new Dictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>>()
-                {
-                    [typeof(Scoped)] = new[] { new MetadatumResolverDescriptor<IApplicationPropertyMetadatumResolver, IPropertyMetadata>(scopedResolver.Object) },
-                    [typeof(Simple)] = new[] { new MetadatumResolverDescriptor<IApplicationPropertyMetadatumResolver, IPropertyMetadata>(simpleResolver.Object) }
-                }));
+            metadatumResolverProviderMock.Setup(x => x.GetPropertyResolvers("Application", typeof(Scoped))).Returns(new[] { new MetadatumResolverDescriptor<IApplicationPropertyMetadatumResolver, IPropertyMetadata>(scopedResolver.Object) });
+            metadatumResolverProviderMock.Setup(x => x.GetPropertyResolvers("Application", typeof(Simple))).Returns(new[] { new MetadatumResolverDescriptor<IApplicationPropertyMetadatumResolver, IPropertyMetadata>(simpleResolver.Object) });
             var metadatumResolverProvider = metadatumResolverProviderMock.Object;
-
-            var metadatumDescriberProviderMock = new Mock<IMetadatumResolverProvider>();
-            metadatumDescriberProviderMock.Setup(x => x.ApplicationPropertyResolvers).Returns(
-                new ReadOnlyDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>>(
-                new Dictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>>()
-                {
-                    [typeof(Scoped)] = new[] { new MetadatumResolverDescriptor<IApplicationPropertyMetadatumResolver, IPropertyMetadata>(scopedResolver.Object), },
-                    [typeof(Simple)] = new[] { new MetadatumResolverDescriptor<IApplicationPropertyMetadatumResolver, IPropertyMetadata>(simpleResolver.Object), }
-                }));
-
-            var metadatumDescriberProvider = metadatumDescriberProviderMock.Object;
 
             var parentMetadataMock = new Mock<ITypeMetadata>();
             var parentMetadata = parentMetadataMock.Object;
@@ -223,7 +183,7 @@ namespace Metadata.Tests.Metadatums.Resolvers
             var propertyDescriberMock = new Mock<IPropertyDescriber>();
             var propertyDescriber = propertyDescriberMock.Object;
 
-            var provider = new ApplicationPropertyMetadata(parentMetadata, propertyDescriber, serviceProvider, metadatumDescriberProvider);
+            var provider = new ApplicationPropertyMetadata(parentMetadata, propertyDescriber, serviceProvider, metadatumResolverProvider);
 
             var scopedResult = provider.Get<Scoped>();
             Assert.Same(scoped, scopedResult);

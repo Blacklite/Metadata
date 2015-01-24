@@ -78,20 +78,18 @@ namespace Metadata.Tests.Metadatums.Resolvers
             var pretendResolver3 = pretendResolver3Mock.Object;
 
             var provider = new MetadatumResolverProvider(
-                Enumerable.Empty<IApplicationTypeMetadatumResolver>(),
-                Enumerable.Empty<IApplicationPropertyMetadatumResolver>(),
                 new[] {
-                    globalResolver1, globalResolver2, globalResolver3,
-                    visibleResolver1, visibleResolver2, visibleResolver3,
-                    pretendResolver1, pretendResolver2, pretendResolver3,
-                },
-                Enumerable.Empty<IPropertyMetadatumResolver>()
-                );
+                    new MetadatumResolverProviderCollector(
+                    new[] {
+                        globalResolver1, globalResolver2, globalResolver3,
+                        visibleResolver1, visibleResolver2, visibleResolver3,
+                        pretendResolver1, pretendResolver2, pretendResolver3,
+                    },
+                    Enumerable.Empty<IPropertyMetadatumResolver>()
+                )});
 
-            var resolvers = provider.TypeResolvers;
-
-            var visibleResolvers = resolvers[typeof(Visible)].Cast<MetadatumResolverDescriptor<ITypeMetadatumResolver, ITypeMetadata>>();
-            var pretendResolvers = resolvers[typeof(Pretend)].Cast<MetadatumResolverDescriptor<ITypeMetadatumResolver, ITypeMetadata>>();
+            var visibleResolvers = provider.GetTypeResolvers("Default", typeof(Visible)).Cast<MetadatumResolverDescriptor<ITypeMetadatumResolver, ITypeMetadata>>();
+            var pretendResolvers = provider.GetTypeResolvers("Default", typeof(Pretend)).Cast<MetadatumResolverDescriptor<ITypeMetadatumResolver, ITypeMetadata>>();
 
             Assert.Equal(6, visibleResolvers.Count());
             Assert.Same(globalResolver2, visibleResolvers.First().Resolver);
@@ -175,20 +173,19 @@ namespace Metadata.Tests.Metadatums.Resolvers
             var pretendResolver2 = pretendResolver2Mock.Object;
             var pretendResolver3 = pretendResolver3Mock.Object;
 
-            var provider = new MetadatumResolverProvider(
-                Enumerable.Empty<IApplicationTypeMetadatumResolver>(),
-                Enumerable.Empty<IApplicationPropertyMetadatumResolver>(),
-                Enumerable.Empty<ITypeMetadatumResolver>(),
-                new[] {
-                    globalResolver1, globalResolver2, globalResolver3,
-                    visibleResolver1, visibleResolver2, visibleResolver3,
-                    pretendResolver1, pretendResolver2, pretendResolver3,
-                });
+            var provider = new MetadatumResolverProvider(new[] {
+                    new MetadatumResolverProviderCollector(
+                        Enumerable.Empty<ITypeMetadatumResolver>(),
+                        new[] {
+                            globalResolver1, globalResolver2, globalResolver3,
+                            visibleResolver1, visibleResolver2, visibleResolver3,
+                            pretendResolver1, pretendResolver2, pretendResolver3,
+                        }
+                    )});
 
 
-            var resolvers = provider.PropertyResolvers;
-            var visibleResolvers = resolvers[typeof(Visible)].Cast<MetadatumResolverDescriptor<IPropertyMetadatumResolver, IPropertyMetadata>>();
-            var pretendResolvers = resolvers[typeof(Pretend)].Cast<MetadatumResolverDescriptor<IPropertyMetadatumResolver, IPropertyMetadata>>();
+            var visibleResolvers = provider.GetPropertyResolvers("Default", typeof(Visible)).Cast<MetadatumResolverDescriptor<IPropertyMetadatumResolver, IPropertyMetadata>>();
+            var pretendResolvers = provider.GetPropertyResolvers("Default", typeof(Pretend)).Cast<MetadatumResolverDescriptor<IPropertyMetadatumResolver, IPropertyMetadata>>();
 
             Assert.Equal(6, visibleResolvers.Count());
             Assert.Same(globalResolver2, visibleResolvers.First().Resolver);

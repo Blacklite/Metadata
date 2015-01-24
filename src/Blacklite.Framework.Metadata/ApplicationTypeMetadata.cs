@@ -44,8 +44,8 @@ namespace Blacklite.Framework.Metadata
             IMetadatum value;
             if (!_metadatumCache.TryGetValue(typeof(T), out value))
             {
-                IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>> values;
-                if (_metadatumResolverProvider.ApplicationTypeResolvers.TryGetValue(typeof(T), out values))
+                var values = _metadatumResolverProvider.GetTypeResolvers("Application", typeof(T));
+                if (values != null)
                 {
                     var context = new TypeMetadatumResolutionContext(_serviceProvider, this, typeof(T));
                     var resolvedValue = values

@@ -1,4 +1,5 @@
-﻿using Blacklite.Framework.Metadata.Properties;
+﻿using Blacklite.Framework.Metadata.Metadatums.Resolvers;
+using Blacklite.Framework.Metadata.Properties;
 using Microsoft.Framework.ConfigurationModel;
 using Microsoft.Framework.DependencyInjection;
 using System;
@@ -19,6 +20,7 @@ namespace Blacklite.Framework.Metadata
             yield return describe.Scoped<IMetadataProvider, MetadataProvider>();
             yield return describe.Scoped(typeof(ITypeMetadata<>), typeof(TypeMetadata<>));
             yield return describe.Singleton<ITypeMetadataFactory, TypeMetadataFactory>();
+            yield return describe.Singleton<IMetadatumResolverProvider, MetadatumResolverProvider>();
         }
 
         public static IEnumerable<IServiceDescriptor> GetPropertyDescriptors(IConfiguration configuration = null)
@@ -26,6 +28,8 @@ namespace Blacklite.Framework.Metadata
             var describe = new ServiceDescriber(configuration);
 
             yield return describe.Singleton<IPropertyDescriptor, ReflectionPropertyDescriptor>();
+            yield return describe.Transient<IMetadatumResolverProviderCollector, MetadatumResolverProviderCollector>();
+            yield return describe.Transient<IMetadatumResolverProviderCollector, ApplicationMetadatumResolverProviderCollector>();
         }
     }
 }

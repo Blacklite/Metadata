@@ -11,7 +11,7 @@ namespace Blacklite.Framework.Metadata.Properties
     public interface IPropertyMetadataProvider
     {
         IEnumerable<IPropertyMetadata> GetApplicationProperties(IApplicationTypeMetadata parentMetadata);
-        IEnumerable<IPropertyMetadata> GetProperties(ITypeMetadata fallbackTypeMetadata, ITypeMetadata parentMetadata, IServiceProvider serviceProvider);
+        IEnumerable<IPropertyMetadata> GetProperties(ITypeMetadata fallbackTypeMetadata, ITypeMetadata parentMetadata, string key, IServiceProvider serviceProvider);
     }
 
     public class PropertyMetadataProvider : IPropertyMetadataProvider
@@ -37,9 +37,9 @@ namespace Blacklite.Framework.Metadata.Properties
             _describerCache.GetOrAdd(parentMetadata.Type, type => SelectPropertyDescriber(type, Descriptors))
                     .Select(x => new ApplicationPropertyMetadata(parentMetadata, x, _serviceProvider, _metadatumResolverProvider));
 
-        public IEnumerable<IPropertyMetadata> GetProperties(ITypeMetadata fallbackTypeMetadata, ITypeMetadata parentMetadata, IServiceProvider serviceProvider) =>
+        public IEnumerable<IPropertyMetadata> GetProperties(ITypeMetadata fallbackTypeMetadata, ITypeMetadata parentMetadata, string key, IServiceProvider serviceProvider) =>
             _describerCache.GetOrAdd(parentMetadata.Type, type => SelectPropertyDescriber(type, Descriptors))
-                    .Select(x => new PropertyMetadata(fallbackTypeMetadata.Properties.Single(z => z.Name == x.Name), parentMetadata, serviceProvider, _metadatumResolverProvider));
+                    .Select(x => new PropertyMetadata(fallbackTypeMetadata.Properties.Single(z => z.Name == x.Name), key, parentMetadata, serviceProvider, _metadatumResolverProvider));
 
         protected virtual IEnumerable<IPropertyDescriptor> Descriptors { get { return _propertyDescriptors; } }
     }

@@ -15,7 +15,7 @@ namespace Blacklite.Framework.Multitenancy.Metadata
         {
             var describe = new ServiceDescriber(configuration);
 
-            yield return describe.Singleton<ITenantMetadataProvider, TenantMetadataProvider>();
+            yield return describe.TenantOnlySingleton<ITenantMetadataProvider, TenantMetadataProvider>();
             yield return describe.Singleton<IMetadataProvider, ScopedMetadataProvider>();
         }
     }
