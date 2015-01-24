@@ -47,6 +47,18 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Metadata.Lifecycles.Tests",
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Metadata.Mvc.Tests", "tests\Metadata.Mvc.Tests\Metadata.Mvc.Tests.kproj", "{3E62776D-835C-457D-AAE6-7702D2E22220}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blacklite.Framework.Multitenancy.Metadata", "src\Blacklite.Framework.Multitenancy.Metadata\Blacklite.Framework.Multitenancy.Metadata.kproj", "{94D9F63D-36FA-4824-B106-D158763402B0}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blacklite.Framework.Multitenancy", "..\Multitenancy\src\Blacklite.Framework.Multitenancy\Blacklite.Framework.Multitenancy.kproj", "{1628899E-71FF-4D91-8AD3-42E5C8DC384E}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blacklite.Framework.Shared.Reflection", "..\Common\src\Blacklite.Framework.Shared.Reflection\Blacklite.Framework.Shared.Reflection.kproj", "{54B81C20-E88D-48E6-A74B-D30AE280056F}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blacklite.Framework.Interfaces", "..\Common\src\Blacklite.Framework.Interfaces\Blacklite.Framework.Interfaces.kproj", "{B31A377D-1905-4438-A02B-CD4EEAD8DCC7}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blacklite.Framework.Events", "..\Common\src\Blacklite.Framework.Events\Blacklite.Framework.Events.kproj", "{161CF813-CA55-49ED-B0A5-CB1A7F1CC43D}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blacklite.Framework.Multitenancy.Interfaces", "..\Multitenancy\src\Blacklite.Framework.Multitenancy.Interfaces\Blacklite.Framework.Multitenancy.Interfaces.kproj", "{57A8E605-6ADB-4683-854E-D8ABB6CF2BCC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +97,30 @@ Global
 		{3E62776D-835C-457D-AAE6-7702D2E22220}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E62776D-835C-457D-AAE6-7702D2E22220}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E62776D-835C-457D-AAE6-7702D2E22220}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94D9F63D-36FA-4824-B106-D158763402B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94D9F63D-36FA-4824-B106-D158763402B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94D9F63D-36FA-4824-B106-D158763402B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94D9F63D-36FA-4824-B106-D158763402B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1628899E-71FF-4D91-8AD3-42E5C8DC384E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1628899E-71FF-4D91-8AD3-42E5C8DC384E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1628899E-71FF-4D91-8AD3-42E5C8DC384E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1628899E-71FF-4D91-8AD3-42E5C8DC384E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54B81C20-E88D-48E6-A74B-D30AE280056F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54B81C20-E88D-48E6-A74B-D30AE280056F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54B81C20-E88D-48E6-A74B-D30AE280056F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54B81C20-E88D-48E6-A74B-D30AE280056F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B31A377D-1905-4438-A02B-CD4EEAD8DCC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B31A377D-1905-4438-A02B-CD4EEAD8DCC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B31A377D-1905-4438-A02B-CD4EEAD8DCC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B31A377D-1905-4438-A02B-CD4EEAD8DCC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{161CF813-CA55-49ED-B0A5-CB1A7F1CC43D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{161CF813-CA55-49ED-B0A5-CB1A7F1CC43D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{161CF813-CA55-49ED-B0A5-CB1A7F1CC43D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{161CF813-CA55-49ED-B0A5-CB1A7F1CC43D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57A8E605-6ADB-4683-854E-D8ABB6CF2BCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57A8E605-6ADB-4683-854E-D8ABB6CF2BCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57A8E605-6ADB-4683-854E-D8ABB6CF2BCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57A8E605-6ADB-4683-854E-D8ABB6CF2BCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,5 +134,6 @@ Global
 		{64BCD801-5EC0-43BA-A583-0E6176C7120B} = {7DF82F0F-D917-48A6-A922-52C4E4E4CFB6}
 		{6C801C47-6F12-4F44-921C-0A997CD6149A} = {7DF82F0F-D917-48A6-A922-52C4E4E4CFB6}
 		{3E62776D-835C-457D-AAE6-7702D2E22220} = {7DF82F0F-D917-48A6-A922-52C4E4E4CFB6}
+		{94D9F63D-36FA-4824-B106-D158763402B0} = {EB6026D6-1AB1-45E5-8473-25A6376C1005}
 	EndGlobalSection
 EndGlobal

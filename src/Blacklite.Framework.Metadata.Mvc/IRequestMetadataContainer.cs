@@ -3,7 +3,5 @@ using System;
 
 namespace Blacklite.Framework.Metadata.Mvc
 {
-    public interface IRequestMetadataContainer : IMetadataContainer
-    {
-    }
+    public interface IRequestMetadataContainer : IMetadataContainer { }
 }

@@ -4,12 +4,12 @@ using System;
 
 namespace Blacklite.Framework.Metadata
 {
-    public interface ITypeMetadataActivator
+    public interface ITypeMetadataFactory
     {
         ITypeMetadata Create(ITypeMetadata fallback, IServiceProvider serviceProvider, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider);
     }
 
-    class TypeMetadataActivator : ITypeMetadataActivator
+    class TypeMetadataFactory : ITypeMetadataFactory
     {
         public ITypeMetadata Create(ITypeMetadata fallback, IServiceProvider serviceProvider, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
         {

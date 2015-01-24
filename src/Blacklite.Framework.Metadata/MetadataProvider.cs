@@ -13,11 +13,11 @@ namespace Blacklite.Framework.Metadata
         private readonly IPropertyMetadataProvider _metadataPropertyProvider;
         private readonly IMetadatumResolverProvider _metadatumResolverProvider;
         private readonly IServiceProvider _serviceProvider;
-        private readonly ITypeMetadataActivator _typeMetadataActivator;
+        private readonly ITypeMetadataFactory _typeMetadataActivator;
         private readonly IApplicationMetadataProvider _metadataProvider;
         private readonly ConcurrentDictionary<Type, ITypeMetadata> _metadata = new ConcurrentDictionary<Type, ITypeMetadata>();
 
-        public MetadataProvider(IApplicationMetadataProvider metadataProvider, ITypeMetadataActivator typeMetadataActivator, IServiceProvider serviceProvider, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
+        public MetadataProvider(IApplicationMetadataProvider metadataProvider, ITypeMetadataFactory typeMetadataActivator, IServiceProvider serviceProvider, IPropertyMetadataProvider metadataPropertyProvider, IMetadatumResolverProvider metadatumResolverProvider)
         {
             _metadataPropertyProvider = metadataPropertyProvider;
             _typeMetadataActivator = typeMetadataActivator;

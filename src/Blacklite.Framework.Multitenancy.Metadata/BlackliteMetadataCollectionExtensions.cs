@@ -1,7 +1,7 @@
 ﻿using Blacklite;
 using Blacklite.Framework;
 using Blacklite.Framework.Metadata;
-using Blacklite.Framework.Metadata.Mvc;
+using Blacklite.Framework.Multitenancy.Metadata;
 using Microsoft.Framework.ConfigurationModel;
 using Microsoft.Framework.DependencyInjection;
 using System;
@@ -9,14 +9,14 @@ using System.Collections.Generic;
 
 namespace Microsoft.Framework.DependencyInjection
 {
-    public static class BlackliteMetadataCollectionExtensions
+    public static class BlackliteMultitenancyMetadataCollectionExtensions
     {
-        public static IServiceCollection AddPerRequestMetadata(
+        public static IServiceCollection AddMetadata(
             [NotNull] this IServiceCollection services,
             IConfiguration configuration = null)
         {
             services.TryAdd(BlackliteMetadataServices.GetMetadata(configuration));
-            services.Add(BlackliteMetadataMvcServices.GetPerRequestMetadata(configuration));
+            services.Add(BlackliteMultitenancyMetadataServices.GetMultitenancyMetadata(configuration));
             return services;
         }
     }
