@@ -11,12 +11,12 @@ namespace Microsoft.Framework.DependencyInjection
 {
     public static class BlackliteMultitenancyMetadataCollectionExtensions
     {
-        public static IServiceCollection AddMetadata(
+        public static IServiceCollection AddMultitenancyMetadata(
             [NotNull] this IServiceCollection services,
             IConfiguration configuration = null)
         {
-            services.TryAdd(BlackliteMetadataServices.GetMetadata(configuration));
-            services.Add(BlackliteMultitenancyMetadataServices.GetMultitenancyMetadata(configuration));
+            services.AddMetadata()
+                    .Add(BlackliteMultitenancyMetadataServices.GetMultitenancyMetadata(configuration));
             return services;
         }
     }

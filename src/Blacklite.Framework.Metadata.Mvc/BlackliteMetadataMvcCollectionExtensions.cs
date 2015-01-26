@@ -15,8 +15,8 @@ namespace Microsoft.Framework.DependencyInjection
             [NotNull] this IServiceCollection services,
             IConfiguration configuration = null)
         {
-            services.TryAdd(BlackliteMetadataServices.GetMetadata(configuration));
-            services.Add(BlackliteMetadataMvcServices.GetPerRequestMetadata(configuration));
+            services.AddMetadata()
+                    .TryAddImplementation(BlackliteMetadataMvcServices.GetPerRequestMetadata(configuration));
             return services;
         }
     }
