@@ -58,13 +58,8 @@ namespace Blacklite.Framework.Metadata
                 if (resolvedValue == null)
                     resolvedValue = _fallback.Get<T>();
 
-                if (resolvedValue != null)
-                {
-                    _metadatumCache.TryAdd(typeof(T), resolvedValue);
-                    return (T)resolvedValue;
-                }
-
-                throw new ArgumentOutOfRangeException("T", "Metadatum type '{0}' must have at least one resolver registered.");
+                _metadatumCache.TryAdd(typeof(T), resolvedValue);
+                return (T)resolvedValue;
             }
 
             return (T)value;

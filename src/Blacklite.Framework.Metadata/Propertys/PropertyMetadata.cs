@@ -26,14 +26,14 @@ namespace Blacklite.Framework.Metadata.Properties
             ParentMetadata = parentMetadata;
 
             PropertyType = fallback.PropertyType;
-            PropertyInfo = fallback.PropertyInfo;
+            PropertyTypeInfo = fallback.PropertyTypeInfo;
         }
 
         public string Name { get; }
 
         public ITypeMetadata ParentMetadata { get; }
 
-        public TypeInfo PropertyInfo { get; }
+        public TypeInfo PropertyTypeInfo { get; }
 
         public Type PropertyType { get; }
 
@@ -62,13 +62,8 @@ namespace Blacklite.Framework.Metadata.Properties
                 if (resolvedValue == null)
                     resolvedValue = _fallback.Get<T>();
 
-                if (resolvedValue != null)
-                {
-                    _metadatumCache.TryAdd(typeof(T), resolvedValue);
-                    return (T)resolvedValue;
-                }
-
-                throw new ArgumentOutOfRangeException("T", "Metadatum type '{0}' must have at least one resolver registered.");
+                _metadatumCache.TryAdd(typeof(T), resolvedValue);
+                return (T)resolvedValue;
             }
 
             return (T)value;

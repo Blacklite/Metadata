@@ -24,7 +24,7 @@ namespace Blacklite.Framework.Metadata.Properties
             ParentMetadata = parentMetadata;
 
             PropertyType = propertyDescriber.PropertyType;
-            PropertyInfo = propertyDescriber.PropertyInfo;
+            PropertyTypeInfo = propertyDescriber.PropertyInfo;
 
             _getValue = propertyDescriber.GetValue;
             _setValue = propertyDescriber.SetValue;
@@ -38,7 +38,7 @@ namespace Blacklite.Framework.Metadata.Properties
 
         public ITypeMetadata ParentMetadata { get; }
 
-        public TypeInfo PropertyInfo { get; }
+        public TypeInfo PropertyTypeInfo { get; }
 
         public Type PropertyType { get; }
 
@@ -62,14 +62,9 @@ namespace Blacklite.Framework.Metadata.Properties
                         .Select(x => x.Resolve(context))
                         .FirstOrDefault(x => x != null);
 
-                    if (resolvedValue != null)
-                    {
-                        _metadatumCache.TryAdd(typeof(T), resolvedValue);
-                        return (T)resolvedValue;
-                    }
+                    _metadatumCache.TryAdd(typeof(T), resolvedValue);
+                    return (T)resolvedValue;
                 }
-
-                throw new ArgumentOutOfRangeException("T", "Metadatum type '{0}' must have at least one resolver registered.");
             }
 
             return (T)value;

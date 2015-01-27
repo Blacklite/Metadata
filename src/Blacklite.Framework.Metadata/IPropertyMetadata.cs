@@ -11,7 +11,7 @@ namespace Blacklite.Framework.Metadata
 
         Type PropertyType { get; }
 
-        TypeInfo PropertyInfo { get; }
+        TypeInfo PropertyTypeInfo { get; }
 
         T GetValue<T>(object context);
 
