@@ -26,18 +26,21 @@ namespace Blacklite.Framework.Metadata.Properties
             ParentMetadata = parentMetadata;
 
             PropertyType = fallback.PropertyType;
-            PropertyTypeInfo = fallback.PropertyTypeInfo;
+            PropertyInfo = fallback.PropertyInfo;
+            Attributes = fallback.Attributes;
         }
 
         public string Name { get; }
 
         public ITypeMetadata ParentMetadata { get; }
 
-        public TypeInfo PropertyTypeInfo { get; }
+        public TypeInfo PropertyInfo { get; }
 
         public Type PropertyType { get; }
 
         public string Key => string.Format("{0}@Property:{1}", ParentMetadata.ToString(), Name);
+
+        public IEnumerable<Attribute> Attributes { get; }
 
         public T GetValue<T>(object context) => _fallback.GetValue<T>(context);
 

@@ -9,6 +9,15 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata
 {
+    public interface ITypeMetadata : IMetadata
+    {
+        string Name { get; }
+        Type Type { get; }
+        TypeInfo TypeInfo { get; }
+
+        IEnumerable<IPropertyMetadata> Properties { get; }
+    }
+
     class TypeMetadata : ITypeMetadata
     {
         private readonly string _key;
@@ -26,7 +35,7 @@ namespace Blacklite.Framework.Metadata
             Name = fallback.Name;
             Type = fallback.Type;
             TypeInfo = fallback.TypeInfo;
-            Properties = metadataPropertyProvider.GetProperties(fallback, this, _key, serviceProvider);
+            Properties = metadataPropertyProvider.GetProperties(fallback, this, _key, serviceProvider).ToArray();
         }
 
         public string Name { get; }
@@ -38,6 +47,8 @@ namespace Blacklite.Framework.Metadata
         public TypeInfo TypeInfo { get; }
 
         public string Key => string.Format("Type:{0}", Type.FullName);
+
+        public IEnumerable<Attribute> Attributes { get; }
 
         public T Get<T>() where T : IMetadatum
         {

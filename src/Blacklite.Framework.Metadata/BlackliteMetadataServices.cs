@@ -28,8 +28,17 @@ namespace Blacklite.Framework.Metadata
             var describe = new ServiceDescriber(configuration);
 
             yield return describe.Singleton<IPropertyDescriptor, ReflectionPropertyDescriptor>();
-            yield return describe.Transient<IMetadatumResolverProviderCollector, MetadatumResolverProviderCollector>();
+            yield return describe.Transient<IMetadatumResolverProviderCollector, ScopedMetadatumResolverProviderCollector>();
             yield return describe.Transient<IMetadatumResolverProviderCollector, ApplicationMetadatumResolverProviderCollector>();
+        }
+
+        public static IEnumerable<IServiceDescriptor> GetScopedMetadata(IConfiguration configuration = null)
+        {
+            var describe = new ServiceDescriber(configuration);
+
+            yield return describe.Scoped<IScopedMetadataContainer, ScopedMetadataContainer>();
+            yield return describe.Singleton<IScopedTypeMetadatumResolver, ScopedMetadataTypeMetadatumResolver>();
+            yield return describe.Singleton<IScopedPropertyMetadatumResolver, ScopedMetadataPropertyMetadatumResolver>();
         }
     }
 }

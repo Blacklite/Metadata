@@ -18,5 +18,14 @@ namespace Microsoft.Framework.DependencyInjection
             services.TryAddImplementation(BlackliteMetadataServices.GetPropertyDescriptors(configuration));
             return services;
         }
+
+        public static IServiceCollection AddScopedMetadata(
+            [NotNull] this IServiceCollection services,
+            IConfiguration configuration = null)
+        {
+            services.AddMetadata()
+                    .TryAddImplementation(BlackliteMetadataServices.GetScopedMetadata(configuration));
+            return services;
+        }
     }
 }

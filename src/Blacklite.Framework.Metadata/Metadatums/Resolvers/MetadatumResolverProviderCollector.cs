@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 
 namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
@@ -10,28 +11,77 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
     {
         string Key { get; }
 
-        IDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>>> TypeResolvers { get; }
+        IMetadatumResolverProviderCollectorItem<ITypeMetadata> TypeResolvers { get; }
 
-        IDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>> PropertyResolvers { get; }
+        IMetadatumResolverProviderCollectorItem<IPropertyMetadata> PropertyResolvers { get; }
     }
 
     public static class MetadatumResolverProviderCollectorHelper
     {
-        public static IDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<TMetadata>>> GetMetadatumResolverDictionary<TResolver, TMetadata>(IEnumerable<TResolver> resolvers)
+        public static IMetadatumResolverProviderCollectorItem<TMetadata> GetMetadatumResolverDictionary<TResolver, TMetadata>(IEnumerable<TResolver> resolvers)
             where TResolver : IMetadatumResolver<TMetadata>
             where TMetadata : IMetadata
         {
-            var descriptors = resolvers.Select(x => new MetadatumResolverDescriptor<TResolver, TMetadata>(x));
-            var globalDescriptors = descriptors.Where(x => x.IsGlobal);
+            return new MetadatumResolverProviderCollectorItem<TResolver, TMetadata>(resolvers);
+        }
+    }
 
-            return descriptors
+    public interface IMetadatumResolverProviderCollectorItem<TMetadata>
+            where TMetadata : IMetadata
+    {
+        IEnumerable<IMetadatumResolverDescriptor<TMetadata>> this[Type type] { get; }
+    }
+
+    public class MetadatumResolverProviderCollectorItem<TResolver, TMetadata> : IMetadatumResolverProviderCollectorItem<TMetadata>
+            where TResolver : IMetadatumResolver<TMetadata>
+            where TMetadata : IMetadata
+    {
+        private readonly IEnumerable<MetadatumResolverDescriptor<TResolver, TMetadata>> _globalResolverDescriptors;
+        private readonly IDictionary<Type, IEnumerable<MetadatumResolverDescriptor<TResolver, TMetadata>>> _specificDescriptors = new Dictionary<Type, IEnumerable<MetadatumResolverDescriptor<TResolver, TMetadata>>>();
+        private readonly IDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<TMetadata>>> _resolverDictionary = new Dictionary<Type, IEnumerable<IMetadatumResolverDescriptor<TMetadata>>>();
+
+        public MetadatumResolverProviderCollectorItem(IEnumerable<TResolver> resolvers)
+        {
+            var descriptors = resolvers.Select(x => new MetadatumResolverDescriptor<TResolver, TMetadata>(x));
+            _globalResolverDescriptors = descriptors.Where(x => x.IsGlobal);
+
+            _specificDescriptors = descriptors
                 .Where(x => !x.IsGlobal)
                         .GroupBy(x => x.MetadatumType)
-                        .ToDictionary(x => x.Key, x =>
-                            x.Union(globalDescriptors)
-                             .OrderByDescending(z => z.Priority)
-                             .Cast<IMetadatumResolverDescriptor<TMetadata>>()
-                             .AsEnumerable());
+                        .ToDictionary(x => x.Key, x => x.AsEnumerable());
+        }
+
+        public IEnumerable<IMetadatumResolverDescriptor<TMetadata>> this[Type type]
+        {
+            get
+            {
+                if (!typeof(IMetadatum).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
+                    throw new NotSupportedException("Invalid type");
+
+                IEnumerable<IMetadatumResolverDescriptor<TMetadata>> value;
+                if (!_resolverDictionary.TryGetValue(type, out value))
+                {
+                    IEnumerable<MetadatumResolverDescriptor<TResolver, TMetadata>> specificValues;
+                    if (_specificDescriptors.TryGetValue(type, out specificValues))
+                    {
+                        _specificDescriptors.Remove(type);
+                    }
+                    else
+                    {
+                        specificValues = Enumerable.Empty<MetadatumResolverDescriptor<TResolver, TMetadata>>();
+                    }
+
+                    value = _globalResolverDescriptors
+                        .Union(specificValues)
+                        .OrderByDescending(z => z.Priority)
+                        .Cast<IMetadatumResolverDescriptor<TMetadata>>()
+                        .ToArray();
+
+                    _resolverDictionary.Add(type, value);
+                }
+
+                return value;
+            }
         }
     }
 
@@ -47,26 +97,26 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 
         public string Key { get; } = "Application";
 
-        public IDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>> PropertyResolvers { get; }
+        public IMetadatumResolverProviderCollectorItem<IPropertyMetadata> PropertyResolvers { get; }
 
-        public IDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>>> TypeResolvers { get; }
+        public IMetadatumResolverProviderCollectorItem<ITypeMetadata> TypeResolvers { get; }
     }
 
-    class MetadatumResolverProviderCollector : IMetadatumResolverProviderCollector
+    class ScopedMetadatumResolverProviderCollector : IMetadatumResolverProviderCollector
     {
-        public MetadatumResolverProviderCollector(
-            IEnumerable<ITypeMetadatumResolver> typeMetadatumResolvers,
-            IEnumerable<IPropertyMetadatumResolver> propertyMetadatumResolvers)
+        public ScopedMetadatumResolverProviderCollector(
+            IEnumerable<IScopedTypeMetadatumResolver> typeMetadatumResolvers,
+            IEnumerable<IScopedPropertyMetadatumResolver> propertyMetadatumResolvers)
         {
-            TypeResolvers = MetadatumResolverProviderCollectorHelper.GetMetadatumResolverDictionary<ITypeMetadatumResolver, ITypeMetadata>(typeMetadatumResolvers);
-            PropertyResolvers = MetadatumResolverProviderCollectorHelper.GetMetadatumResolverDictionary<IPropertyMetadatumResolver, IPropertyMetadata>(propertyMetadatumResolvers);
+            TypeResolvers = MetadatumResolverProviderCollectorHelper.GetMetadatumResolverDictionary<IScopedTypeMetadatumResolver, ITypeMetadata>(typeMetadatumResolvers);
+            PropertyResolvers = MetadatumResolverProviderCollectorHelper.GetMetadatumResolverDictionary<IScopedPropertyMetadatumResolver, IPropertyMetadata>(propertyMetadatumResolvers);
         }
 
-        public string Key { get; } = "Default";
+        public string Key { get; } = "Scoped";
 
-        public IDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>> PropertyResolvers { get; }
+        public IMetadatumResolverProviderCollectorItem<IPropertyMetadata> PropertyResolvers { get; }
 
-        public IDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>>> TypeResolvers { get; }
+        public IMetadatumResolverProviderCollectorItem<ITypeMetadata> TypeResolvers { get; }
     }
 
 }

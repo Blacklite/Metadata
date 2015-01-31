@@ -9,6 +9,10 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata
 {
+    public interface IApplicationTypeMetadata : ITypeMetadata
+    {
+    }
+
     class ApplicationTypeMetadata : IApplicationTypeMetadata
     {
         private readonly IMetadatumResolverProvider _metadatumResolverProvider;
@@ -26,7 +30,8 @@ namespace Blacklite.Framework.Metadata
             Name = type.Name;
             Type = type;
             TypeInfo = type.GetTypeInfo();
-            Properties = metadataPropertyProvider.GetApplicationProperties(this);
+            Attributes = TypeInfo.GetCustomAttributes();
+            Properties = metadataPropertyProvider.GetApplicationProperties(this).ToArray();
         }
 
         public string Name { get; }
@@ -38,6 +43,8 @@ namespace Blacklite.Framework.Metadata
         public TypeInfo TypeInfo { get; }
 
         public string Key => string.Format("Type:{0}", Type.FullName);
+
+        public IEnumerable<Attribute> Attributes { get; }
 
         public T Get<T>() where T : IMetadatum
         {

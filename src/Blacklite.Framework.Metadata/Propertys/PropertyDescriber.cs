@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Blacklite.Framework.Metadata.Properties
@@ -16,5 +17,7 @@ namespace Blacklite.Framework.Metadata.Properties
         public Func<object, object> GetValue { get; set; }
 
         public Action<object, object> SetValue { get; set; }
+
+        public IEnumerable<Attribute> Attributes { get; set; }
     }
 }

@@ -13,8 +13,8 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 
     class MetadatumResolverProvider : IMetadatumResolverProvider
     {
-        private readonly IDictionary<string, IDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>>>> _typeResolvers;
-        private readonly IDictionary<string, IDictionary<Type, IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>>>> _propertyResolvers;
+        private readonly IDictionary<string, IMetadatumResolverProviderCollectorItem<ITypeMetadata>> _typeResolvers;
+        private readonly IDictionary<string, IMetadatumResolverProviderCollectorItem<IPropertyMetadata>> _propertyResolvers;
 
         public MetadatumResolverProvider(IEnumerable<IMetadatumResolverProviderCollector> collectors)
         {
@@ -24,12 +24,24 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 
         public IEnumerable<IMetadatumResolverDescriptor<ITypeMetadata>> GetTypeResolvers(string key, Type type)
         {
-            return _typeResolvers[key][type];
+            IMetadatumResolverProviderCollectorItem<ITypeMetadata> resolvers;
+            if (!_typeResolvers.TryGetValue(key, out resolvers))
+            {
+                return Enumerable.Empty<IMetadatumResolverDescriptor<ITypeMetadata>>();
+            }
+
+            return resolvers[type];
         }
 
         public IEnumerable<IMetadatumResolverDescriptor<IPropertyMetadata>> GetPropertyResolvers(string key, Type type)
         {
-            return _propertyResolvers[key][type];
+            IMetadatumResolverProviderCollectorItem<IPropertyMetadata> resolvers;
+            if (!_propertyResolvers.TryGetValue(key, out resolvers))
+            {
+                return Enumerable.Empty<IMetadatumResolverDescriptor<IPropertyMetadata>>();
+            }
+
+            return resolvers[type];
         }
     }
 

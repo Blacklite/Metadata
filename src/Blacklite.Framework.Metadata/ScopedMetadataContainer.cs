@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Concurrent;
 
-namespace Blacklite.Framework.Metadata.Mvc
+namespace Blacklite.Framework.Metadata
 {
-    class RequestMetadataContainer : IRequestMetadataContainer
+    public interface IScopedMetadataContainer : IMetadataContainer { }
+
+    class ScopedMetadataContainer : IScopedMetadataContainer
     {
         private readonly ConcurrentDictionary<string, ConcurrentDictionary<Type, IMetadatum>> _store = new ConcurrentDictionary<string, ConcurrentDictionary<Type, IMetadatum>>();
 

@@ -8,6 +8,15 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata
 {
+    public interface IApplicationMetadataProvider
+    {
+        IApplicationTypeMetadata GetMetadata<T>();
+
+        IApplicationTypeMetadata GetMetadata(Type type);
+
+        IApplicationTypeMetadata GetMetadata(TypeInfo typeInfo);
+    }
+
     class ApplicationMetadataProvider : IApplicationMetadataProvider
     {
         private readonly IPropertyMetadataProvider _metadataPropertyProvider;
@@ -28,7 +37,7 @@ namespace Blacklite.Framework.Metadata
 
         public IApplicationTypeMetadata GetMetadata<T>() => GetUnderlyingMetadata(typeof(T));
 
-        private IApplicationTypeMetadata GetUnderlyingMetadata(Type type) => _metadata.GetOrAdd(type, CreateTypeMetadata(type));
+        private IApplicationTypeMetadata GetUnderlyingMetadata(Type type) => _metadata.GetOrAdd(type, x => CreateTypeMetadata(x));
 
         private IApplicationTypeMetadata CreateTypeMetadata(Type type)
         {

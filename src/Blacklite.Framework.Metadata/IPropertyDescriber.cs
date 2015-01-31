@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Blacklite.Framework.Metadata
@@ -8,6 +9,8 @@ namespace Blacklite.Framework.Metadata
         int Order { get; }
 
         string Name { get; }
+
+        IEnumerable<Attribute> Attributes { get; }
 
         Type PropertyType { get; }
 

@@ -24,7 +24,7 @@ namespace Blacklite.Framework.Metadata.Properties
             ParentMetadata = parentMetadata;
 
             PropertyType = propertyDescriber.PropertyType;
-            PropertyTypeInfo = propertyDescriber.PropertyInfo;
+            PropertyInfo = propertyDescriber.PropertyInfo;
 
             _getValue = propertyDescriber.GetValue;
             _setValue = propertyDescriber.SetValue;
@@ -32,17 +32,21 @@ namespace Blacklite.Framework.Metadata.Properties
             _propertyDescriber = propertyDescriber;
             _metadatumResolverProvider = metadatumResolverProvider;
             _serviceProvider = serviceProvider;
+
+            Attributes = propertyDescriber.Attributes ?? Enumerable.Empty<Attribute>();
         }
 
         public string Name { get; }
 
         public ITypeMetadata ParentMetadata { get; }
 
-        public TypeInfo PropertyTypeInfo { get; }
+        public TypeInfo PropertyInfo { get; }
 
         public Type PropertyType { get; }
 
         public string Key => string.Format("{0}@Property:{1}", ParentMetadata.ToString(), Name);
+
+        public IEnumerable<Attribute> Attributes { get; }
 
         public T GetValue<T>(object context) => (T)_getValue(context);
 

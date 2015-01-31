@@ -41,8 +41,8 @@ namespace Blacklite.Framework.Metadata
 
         public ITypeMetadata GetMetadata<T>() => GetUnderlyingMetadata(typeof(T));
 
-        private ITypeMetadata GetUnderlyingMetadata(Type type) => _metadata.GetOrAdd(type, CreateTypeMetadata(type));
+        private ITypeMetadata GetUnderlyingMetadata(Type type) => _metadata.GetOrAdd(type, x => CreateTypeMetadata(x));
 
-        private ITypeMetadata CreateTypeMetadata(Type type) => _typeMetadataActivator.Create(_metadataProvider.GetMetadata(type), "Default", _serviceProvider, _metadataPropertyProvider, _metadatumResolverProvider);
+        private ITypeMetadata CreateTypeMetadata(Type type) => _typeMetadataActivator.Create(_metadataProvider.GetMetadata(type), "Scoped", _serviceProvider, _metadataPropertyProvider, _metadatumResolverProvider);
     }
 }

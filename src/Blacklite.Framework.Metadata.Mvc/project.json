@@ -2,7 +2,8 @@
     "version": "1.0.0-*",
     "dependencies": {
         "Microsoft.AspNet.Mvc": "6.0.0-beta4-*",
-        "Blacklite.Framework.Metadata": "1.0.0-beta-*"
+        "Blacklite.Framework.Metadata": "1.0.0-beta-*",
+        "Blacklite.Framework.Metadata.Modeling": "1.0.0-beta-*"
     },
 	
 	"compilationOptions": {

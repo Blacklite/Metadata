@@ -35,7 +35,7 @@ namespace Blacklite.Framework.Multitenancy.Metadata
 
         public ITypeMetadata GetMetadata<T>() => GetUnderlyingMetadata(typeof(T));
 
-        private ITypeMetadata GetUnderlyingMetadata(Type type) => _metadata.GetOrAdd(type, CreateTypeMetadata(type));
+        private ITypeMetadata GetUnderlyingMetadata(Type type) => _metadata.GetOrAdd(type, x => CreateTypeMetadata(x));
 
         private ITypeMetadata CreateTypeMetadata(Type type) => _typeMetadataActivator.Create(_metadataProvider.GetMetadata(type), "Tenant", _serviceProvider, _metadataPropertyProvider, _metadatumResolverProvider);
     }
@@ -66,7 +66,7 @@ namespace Blacklite.Framework.Multitenancy.Metadata
 
         public ITypeMetadata GetMetadata<T>() => GetUnderlyingMetadata(typeof(T));
 
-        private ITypeMetadata GetUnderlyingMetadata(Type type) => _metadata.GetOrAdd(type, CreateTypeMetadata(type));
+        private ITypeMetadata GetUnderlyingMetadata(Type type) => _metadata.GetOrAdd(type, x => CreateTypeMetadata(x));
 
         private ITypeMetadata CreateTypeMetadata(Type type)
         {
@@ -74,7 +74,7 @@ namespace Blacklite.Framework.Multitenancy.Metadata
             if (metadata == null)
                 metadata = _applicationMetadataProvider.GetMetadata(type);
 
-            return _typeMetadataActivator.Create(metadata, "Default", _serviceProvider, _metadataPropertyProvider, _metadatumResolverProvider);
+            return _typeMetadataActivator.Create(metadata, "Scoped", _serviceProvider, _metadataPropertyProvider, _metadatumResolverProvider);
         }
     }
 }

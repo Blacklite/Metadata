@@ -6,6 +6,8 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata
 {
+    public interface IApplicationTypeMetadata<T> : ITypeMetadata<T>, IApplicationTypeMetadata { }
+
     class ApplicationTypeMetadata<TObject> : ITypeMetadata<TObject>
     {
         private readonly ITypeMetadata _underlyingMetadata;
