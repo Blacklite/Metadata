@@ -6,7 +6,6 @@ using System.Reflection;
 
 namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
-
     public interface IMetadatumResolverProviderCollector
     {
         string Key { get; }
@@ -85,6 +84,12 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
         }
     }
 
+    public static class MetadatumKey
+    {
+        public static string Application = nameof(Application);
+        public static string Default = nameof(Default);
+    }
+
     class ApplicationMetadatumResolverProviderCollector : IMetadatumResolverProviderCollector
     {
         public ApplicationMetadatumResolverProviderCollector(
@@ -95,28 +100,27 @@ namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
             PropertyResolvers = MetadatumResolverProviderCollectorHelper.GetMetadatumResolverDictionary<IApplicationPropertyMetadatumResolver, IPropertyMetadata>(propertyMetadatumResolvers);
         }
 
-        public string Key { get; } = "Application";
+        public string Key { get; } = MetadatumKey.Application;
 
         public IMetadatumResolverProviderCollectorItem<IPropertyMetadata> PropertyResolvers { get; }
 
         public IMetadatumResolverProviderCollectorItem<ITypeMetadata> TypeResolvers { get; }
     }
 
-    class ScopedMetadatumResolverProviderCollector : IMetadatumResolverProviderCollector
+    class MetadatumResolverProviderCollector : IMetadatumResolverProviderCollector
     {
-        public ScopedMetadatumResolverProviderCollector(
-            IEnumerable<IScopedTypeMetadatumResolver> typeMetadatumResolvers,
-            IEnumerable<IScopedPropertyMetadatumResolver> propertyMetadatumResolvers)
+        public MetadatumResolverProviderCollector(
+            IEnumerable<ITypeMetadatumResolver> typeMetadatumResolvers,
+            IEnumerable<IPropertyMetadatumResolver> propertyMetadatumResolvers)
         {
-            TypeResolvers = MetadatumResolverProviderCollectorHelper.GetMetadatumResolverDictionary<IScopedTypeMetadatumResolver, ITypeMetadata>(typeMetadatumResolvers);
-            PropertyResolvers = MetadatumResolverProviderCollectorHelper.GetMetadatumResolverDictionary<IScopedPropertyMetadatumResolver, IPropertyMetadata>(propertyMetadatumResolvers);
+            TypeResolvers = MetadatumResolverProviderCollectorHelper.GetMetadatumResolverDictionary<ITypeMetadatumResolver, ITypeMetadata>(typeMetadatumResolvers);
+            PropertyResolvers = MetadatumResolverProviderCollectorHelper.GetMetadatumResolverDictionary<IPropertyMetadatumResolver, IPropertyMetadata>(propertyMetadatumResolvers);
         }
 
-        public string Key { get; } = "Scoped";
+        public string Key { get; } = MetadatumKey.Default;
 
         public IMetadatumResolverProviderCollectorItem<IPropertyMetadata> PropertyResolvers { get; }
 
         public IMetadatumResolverProviderCollectorItem<ITypeMetadata> TypeResolvers { get; }
     }
-
 }

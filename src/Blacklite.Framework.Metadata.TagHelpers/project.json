@@ -11,7 +11,7 @@
     "frameworks": {
         "aspnet50": {
             "frameworkAssemblies": {
-                "System.Runtime": "4.0.20.0"
+                "System.Runtime": "4.0.10.0"
             },
             "dependencies": {
             }

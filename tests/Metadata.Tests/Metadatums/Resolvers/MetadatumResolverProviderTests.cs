@@ -88,8 +88,8 @@ namespace Metadata.Tests.Metadatums.Resolvers
                     Enumerable.Empty<IPropertyMetadatumResolver>()
                 )});
 
-            var visibleResolvers = provider.GetTypeResolvers("Default", typeof(Visible)).Cast<MetadatumResolverDescriptor<ITypeMetadatumResolver, ITypeMetadata>>();
-            var pretendResolvers = provider.GetTypeResolvers("Default", typeof(Pretend)).Cast<MetadatumResolverDescriptor<ITypeMetadatumResolver, ITypeMetadata>>();
+            var visibleResolvers = provider.GetTypeResolvers(MetadatumKey.Default, typeof(Visible)).Cast<MetadatumResolverDescriptor<ITypeMetadatumResolver, ITypeMetadata>>();
+            var pretendResolvers = provider.GetTypeResolvers(MetadatumKey.Default, typeof(Pretend)).Cast<MetadatumResolverDescriptor<ITypeMetadatumResolver, ITypeMetadata>>();
 
             Assert.Equal(6, visibleResolvers.Count());
             Assert.Same(globalResolver2, visibleResolvers.First().Resolver);
@@ -184,8 +184,8 @@ namespace Metadata.Tests.Metadatums.Resolvers
                     )});
 
 
-            var visibleResolvers = provider.GetPropertyResolvers("Default", typeof(Visible)).Cast<MetadatumResolverDescriptor<IPropertyMetadatumResolver, IPropertyMetadata>>();
-            var pretendResolvers = provider.GetPropertyResolvers("Default", typeof(Pretend)).Cast<MetadatumResolverDescriptor<IPropertyMetadatumResolver, IPropertyMetadata>>();
+            var visibleResolvers = provider.GetPropertyResolvers(MetadatumKey.Default, typeof(Visible)).Cast<MetadatumResolverDescriptor<IPropertyMetadatumResolver, IPropertyMetadata>>();
+            var pretendResolvers = provider.GetPropertyResolvers(MetadatumKey.Default, typeof(Pretend)).Cast<MetadatumResolverDescriptor<IPropertyMetadatumResolver, IPropertyMetadata>>();
 
             Assert.Equal(6, visibleResolvers.Count());
             Assert.Same(globalResolver2, visibleResolvers.First().Resolver);

@@ -3,7 +3,7 @@ using System;
 
 namespace Blacklite.Framework.Metadata.Metadatums.Resolvers
 {
-    public interface IScopedPropertyMetadatumResolver : IMetadatumResolver<IPropertyMetadata>, IMetadatumResolver { }
+    public interface IPropertyMetadatumResolver : IMetadatumResolver<IPropertyMetadata>, IMetadatumResolver { }
 
-    public interface IPropertyMetadatumResolver<TMetadatum> : IMetadatumResolver<IPropertyMetadata, TMetadatum>, IScopedPropertyMetadatumResolver where TMetadatum : IMetadatum { }
+    public interface IPropertyMetadatumResolver<TMetadatum> : IMetadatumResolver<IPropertyMetadata, TMetadatum>, IPropertyMetadatumResolver where TMetadatum : IMetadatum { }
 }
