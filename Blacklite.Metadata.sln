@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.22609.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7DF82F0F-D917-48A6-A922-52C4E4E4CFB6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7DF82F0F-D917-48A6-A922-52C4E4E4CFB6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EB6026D6-1AB1-45E5-8473-25A6376C1005}"
 EndProject
@@ -61,13 +61,13 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blacklite.Framework.Metadat
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blacklite.Framework.Multitenancy.Metadata", "src\Blacklite.Framework.Multitenancy.Metadata\Blacklite.Framework.Multitenancy.Metadata.kproj", "{33FAFE00-E022-4903-86B1-6DBF1200B8C9}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Metadata.Lifecycles.Tests", "tests\Metadata.Lifecycles.Tests\Metadata.Lifecycles.Tests.kproj", "{A309E286-A40A-42DB-BE5E-06A5AE6DE862}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Metadata.Lifecycles.Tests", "test\Metadata.Lifecycles.Tests\Metadata.Lifecycles.Tests.kproj", "{A309E286-A40A-42DB-BE5E-06A5AE6DE862}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Metadata.Mvc.Tests", "tests\Metadata.Mvc.Tests\Metadata.Mvc.Tests.kproj", "{14B86FD4-E665-4B61-A8ED-DBEB0B244C33}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Metadata.Mvc.Tests", "test\Metadata.Mvc.Tests\Metadata.Mvc.Tests.kproj", "{14B86FD4-E665-4B61-A8ED-DBEB0B244C33}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Metadata.Storage.Tests", "tests\Metadata.Storage.Tests\Metadata.Storage.Tests.kproj", "{64813C37-3559-4DB0-9CC7-F2297D61F619}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Metadata.Storage.Tests", "test\Metadata.Storage.Tests\Metadata.Storage.Tests.kproj", "{64813C37-3559-4DB0-9CC7-F2297D61F619}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Metadata.Tests", "tests\Metadata.Tests\Metadata.Tests.kproj", "{292D61B2-15FE-4250-BDAD-05BF5ECF7B89}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Metadata.Tests", "test\Metadata.Tests\Metadata.Tests.kproj", "{292D61B2-15FE-4250-BDAD-05BF5ECF7B89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
