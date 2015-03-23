@@ -3,8 +3,8 @@
     "dependencies": {
         "Microsoft.AspNet.Mvc": "6.0.0-beta3",
         "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-beta3",
-        "Blacklite.Framework.Metadata": "1.0.0-beta-*",
-        "Blacklite.Framework.Metadata.Modeling": "1.0.0-beta-*"
+        "Blacklite.Framework.Metadata": "1.0.0-*",
+        "Blacklite.Framework.Metadata.Modeling": "1.0.0-*"
     },
 
     "compilationOptions": {
@@ -21,7 +21,7 @@
         },
         "aspnetcore50": {
             "dependencies": {
-                "System.Runtime": "4.0.20-beta-*"
+                "System.Runtime": "4.0.20-*"
             }
         }
     }

@@ -1,7 +1,7 @@
 ﻿{
     "version": "1.0.0-*",
     "dependencies": {
-        "Blacklite.Framework.Metadata": "1.0.0-beta-*"
+        "Blacklite.Framework.Metadata": "1.0.0-*"
     },
 	
 	"compilationOptions": {
@@ -27,8 +27,8 @@
         },
         "aspnetcore50": {
             "dependencies": {
-                "System.Runtime": "4.0.20-beta-*",
-                "System.Collections.Concurrent": "4.0.0-beta-*"
+                "System.Runtime": "4.0.20-*",
+                "System.Collections.Concurrent": "4.0.0-*"
             }
         }
     }
