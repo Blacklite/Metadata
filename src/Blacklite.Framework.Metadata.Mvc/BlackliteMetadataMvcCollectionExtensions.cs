@@ -13,7 +13,7 @@ namespace Microsoft.Framework.DependencyInjection
     {
         public static IServiceCollection AddMetadataMvc(
             [NotNull] this IServiceCollection services,
-            IConfiguration configuration = null)
+            )
         {
             services.AddMetadataModeling()
                     .TryAddImplementation(BlackliteMetadataMvcServices.GetMetadataMvc(configuration));

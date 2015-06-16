@@ -6,15 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Blacklite.Framework.Metadata.Lifecycles
+namespace Blacklite.Framework.Metadata.Lifetimes
 {
-    public static class MetadataLifecyclesServices
+    public static class MetadataLifetimesServices
     {
-        public static IEnumerable<IServiceDescriptor> GetMetadataLifecycles(IConfiguration configuration = null)
+        public static IEnumerable<ServiceDescriptor> GetMetadataLifetimes()
         {
-            var describe = new ServiceDescriber(configuration);
-
-            yield return describe.Singleton<IPropertyMetadataProvider, LifecycleMetadataPropertyProvider>();
+            yield return describe.Singleton<IPropertyMetadataProvider, LifetimeMetadataPropertyProvider>();
         }
     }
 }

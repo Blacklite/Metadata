@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Metadata.Lifecycles.Tests")]
+[assembly: InternalsVisibleTo("Metadata.Lifetimes.Tests")]

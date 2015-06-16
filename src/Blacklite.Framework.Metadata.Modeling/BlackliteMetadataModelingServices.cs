@@ -11,10 +11,8 @@ namespace Blacklite.Framework.Metadata.Modeling
 {
     public static class BlackliteMetadataMvcServices
     {
-        public static IEnumerable<IServiceDescriptor> GetMetadataModeling(IConfiguration configuration = null)
+        public static IEnumerable<ServiceDescriptor> GetMetadataModeling()
         {
-            var describe = new ServiceDescriber(configuration);
-
             yield return describe.Transient<IApplicationTypeMetadatumResolver, DisplayNameTypeMetadatumResolver>();
             yield return describe.Transient<IApplicationTypeMetadatumResolver, DescriptionTypeMetadatumResolver>();
             yield return describe.Transient<IApplicationTypeMetadatumResolver, ShortNameTypeMetadatumResolver>();

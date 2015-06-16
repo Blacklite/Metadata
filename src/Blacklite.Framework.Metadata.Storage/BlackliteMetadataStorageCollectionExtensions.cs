@@ -12,7 +12,7 @@ namespace Microsoft.Framework.DependencyInjection
     {
         public static IServiceCollection AddInMemoryMetadataStore(
             [NotNull] this IServiceCollection services,
-            IConfiguration configuration = null)
+            )
         {
             ConfigureDefaultServices(services, configuration);
             services.TryAdd(BlackliteMetadataStorageServices.GetInMemoryMetadataStore(configuration));
@@ -21,7 +21,7 @@ namespace Microsoft.Framework.DependencyInjection
 
         public static IServiceCollection AddMetadataStorage(
             [NotNull] this IServiceCollection services,
-            IConfiguration configuration = null)
+            )
         {
             services.TryAdd(BlackliteMetadataStorageServices.GetMetadataStorage(configuration));
             return services;

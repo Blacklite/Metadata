@@ -14,13 +14,11 @@ namespace Blacklite.Framework.Metadata.Mvc
 {
     public static class BlackliteMetadataMvcServices
     {
-        public static IEnumerable<IServiceDescriptor> GetMetadataMvc(IConfiguration configuration = null)
+        public static IEnumerable<ServiceDescriptor> GetMetadataMvc()
         {
-            var describe = new ServiceDescriber(configuration);
-
             yield return describe.Scoped<IModelMetadataProvider, BlackliteMvcModelMetadataProvider>();
             yield return describe.Transient<IApplicationPropertyMetadatumResolver, HiddenInputPropertyMetadatumResolver>();
-            
+
             // Tag Helper services
             yield return describe.Transient<IConfigureOptions<ControlTagHelperOptions>, ControlTagHelperOptionsSetup>();
             yield return describe.Transient<IControlGenerator, DefaultControlGenerator>();

@@ -1,6 +1,6 @@
 ﻿using Blacklite;
 using Blacklite.Framework;
-using Blacklite.Framework.Metadata.Lifecycles;
+using Blacklite.Framework.Metadata.Lifetimes;
 using Microsoft.Framework.ConfigurationModel;
 using Microsoft.Framework.DependencyInjection;
 using System;
@@ -8,14 +8,14 @@ using System.Collections.Generic;
 
 namespace Microsoft.Framework.DependencyInjection
 {
-    public static class MetadataLifecyclesCollectionExtensions
+    public static class MetadataLifetimesCollectionExtensions
     {
-        public static IServiceCollection AddMetadataLifecycles(
+        public static IServiceCollection AddMetadataLifetimes(
             [NotNull] this IServiceCollection services,
-            IConfiguration configuration = null)
+            )
         {
             ConfigureDefaultServices(services, configuration);
-            services.Add(MetadataLifecyclesServices.GetMetadataLifecycles(configuration));
+            services.Add(MetadataLifetimesServices.GetMetadataLifetimes(configuration));
             return services;
         }
 

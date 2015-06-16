@@ -11,10 +11,8 @@ namespace Blacklite.Framework.Metadata
 {
     public static class BlackliteMetadataServices
     {
-        public static IEnumerable<IServiceDescriptor> GetMetadata(IConfiguration configuration = null)
+        public static IEnumerable<ServiceDescriptor> GetMetadata()
         {
-            var describe = new ServiceDescriber(configuration);
-
             yield return describe.Singleton<IApplicationMetadataProvider, ApplicationMetadataProvider>();
             yield return describe.Singleton<IPropertyMetadataProvider, PropertyMetadataProvider>();
             yield return describe.Scoped<IMetadataProvider, MetadataProvider>();
@@ -23,19 +21,15 @@ namespace Blacklite.Framework.Metadata
             yield return describe.Singleton<IMetadatumResolverProvider, MetadatumResolverProvider>();
         }
 
-        public static IEnumerable<IServiceDescriptor> GetPropertyDescriptors(IConfiguration configuration = null)
+        public static IEnumerable<ServiceDescriptor> GetPropertyDescriptors()
         {
-            var describe = new ServiceDescriber(configuration);
-
             yield return describe.Singleton<IPropertyDescriptor, ReflectionPropertyDescriptor>();
             yield return describe.Transient<IMetadatumResolverProviderCollector, MetadatumResolverProviderCollector>();
             yield return describe.Transient<IMetadatumResolverProviderCollector, ApplicationMetadatumResolverProviderCollector>();
         }
 
-        public static IEnumerable<IServiceDescriptor> GetScopedMetadata(IConfiguration configuration = null)
+        public static IEnumerable<ServiceDescriptor> GetScopedMetadata()
         {
-            var describe = new ServiceDescriber(configuration);
-
             yield return describe.Scoped<IScopedMetadataContainer, ScopedMetadataContainer>();
             yield return describe.Singleton<ITypeMetadatumResolver, ScopedMetadataTypeMetadatumResolver>();
             yield return describe.Singleton<IPropertyMetadatumResolver, ScopedMetadataPropertyMetadatumResolver>();

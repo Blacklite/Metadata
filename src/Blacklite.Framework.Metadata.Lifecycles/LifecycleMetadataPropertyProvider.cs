@@ -9,16 +9,16 @@ using System.Reactive.Linq;
 using Blacklite.Framework.GlobalEvents;
 using Blacklite.Framework.Events;
 
-namespace Blacklite.Framework.Metadata.Lifecycles
+namespace Blacklite.Framework.Metadata.Lifetimes
 {
-    class LifecycleMetadataPropertyProvider : PropertyMetadataProvider
+    class LifetimeMetadataPropertyProvider : PropertyMetadataProvider
     {
         private readonly ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>> _describerCache = new ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>>();
         private readonly Func<IEnumerable<IPropertyDescriptor>> _propertyDescriptorsFunc;
         private IEnumerable<IPropertyDescriptor> _propertyDescriptors;
         private readonly IDisposable _disposable;
 
-        public LifecycleMetadataPropertyProvider(
+        public LifetimeMetadataPropertyProvider(
             IServiceProvider serviceProvider,
             Func<IEnumerable<IPropertyDescriptor>> propertyDescriptorsFunc,
             IEventObservable<IGlobalEvent> eventObservable,

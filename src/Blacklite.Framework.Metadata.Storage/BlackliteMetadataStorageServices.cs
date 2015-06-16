@@ -11,16 +11,14 @@ namespace Blacklite.Framework.Metadata.Storage
 {
     public static class BlackliteMetadataStorageServices
     {
-        public static IEnumerable<IServiceDescriptor> GetMetadataStorage(IConfiguration configuration = null)
+        public static IEnumerable<ServiceDescriptor> GetMetadataStorage()
         {
-            var describe = new ServiceDescriber(configuration);
             yield return describe.Singleton<IApplicationTypeMetadatumResolver, MetadataStorageTypeMetadatumResolver>();
             yield return describe.Singleton<IApplicationPropertyMetadatumResolver, MetadataStoragePropertyMetadatumResolver>();
         }
 
-        public static IEnumerable<IServiceDescriptor> GetInMemoryMetadataStore(IConfiguration configuration = null)
+        public static IEnumerable<ServiceDescriptor> GetInMemoryMetadataStore()
         {
-            var describe = new ServiceDescriber(configuration);
             yield return describe.Singleton<IMetadataStorageContainer, InMemoryMetadataStorageContainer>();
         }
     }

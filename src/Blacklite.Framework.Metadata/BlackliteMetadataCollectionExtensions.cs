@@ -12,7 +12,7 @@ namespace Microsoft.Framework.DependencyInjection
     {
         public static IServiceCollection AddMetadata(
             [NotNull] this IServiceCollection services,
-            IConfiguration configuration = null)
+            )
         {
             services.TryAdd(BlackliteMetadataServices.GetMetadata(configuration));
             services.TryAddImplementation(BlackliteMetadataServices.GetPropertyDescriptors(configuration));
@@ -21,7 +21,7 @@ namespace Microsoft.Framework.DependencyInjection
 
         public static IServiceCollection AddScopedMetadata(
             [NotNull] this IServiceCollection services,
-            IConfiguration configuration = null)
+            )
         {
             services.AddMetadata()
                     .TryAddImplementation(BlackliteMetadataServices.GetScopedMetadata(configuration));

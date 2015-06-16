@@ -9,16 +9,10 @@
     },
 
     "frameworks": {
-        "aspnet50": {
-            "frameworkAssemblies": {
-                "System.Runtime": "4.0.10.0"
-            },
+        "dnx451": { },
+        "dnxcore50": {
             "dependencies": {
-            }
-        },
-        "aspnetcore50": {
-            "dependencies": {
-                "System.Runtime": "4.0.20-*"
+                "System.Runtime": "4.0.20-beta-*"
             }
         }
     }
