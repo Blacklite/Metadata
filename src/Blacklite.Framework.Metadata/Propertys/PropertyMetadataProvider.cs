@@ -16,7 +16,7 @@ namespace Blacklite.Framework.Metadata.Properties
 
     public class PropertyMetadataProvider : IPropertyMetadataProvider
     {
-        private readonly ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>> _describerCache = new ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>>();
+        private readonly ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>> _ServiceDescriptorrCache = new ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>>();
         private readonly IEnumerable<IPropertyDescriptor> _propertyDescriptors;
         private readonly IMetadatumResolverProvider _metadatumResolverProvider;
         private readonly IServiceProvider _serviceProvider;
@@ -34,11 +34,11 @@ namespace Blacklite.Framework.Metadata.Properties
                        .Select(x => x.OrderByDescending(z => z.Order).First());
 
         public IEnumerable<IPropertyMetadata> GetApplicationProperties(IApplicationTypeMetadata parentMetadata) =>
-            _describerCache.GetOrAdd(parentMetadata.Type, type => SelectPropertyDescriber(type, Descriptors))
+            _ServiceDescriptorrCache.GetOrAdd(parentMetadata.Type, type => SelectPropertyDescriber(type, Descriptors))
                     .Select(x => new ApplicationPropertyMetadata(parentMetadata, x, _serviceProvider, _metadatumResolverProvider));
 
         public IEnumerable<IPropertyMetadata> GetProperties(ITypeMetadata fallbackTypeMetadata, ITypeMetadata parentMetadata, string key, IServiceProvider serviceProvider) =>
-            _describerCache.GetOrAdd(parentMetadata.Type, type => SelectPropertyDescriber(type, Descriptors))
+            _ServiceDescriptorrCache.GetOrAdd(parentMetadata.Type, type => SelectPropertyDescriber(type, Descriptors))
                     .Select(x => new PropertyMetadata(fallbackTypeMetadata.Properties.Single(z => z.Name == x.Name), key, parentMetadata, serviceProvider, _metadatumResolverProvider));
 
         protected virtual IEnumerable<IPropertyDescriptor> Descriptors { get { return _propertyDescriptors; } }

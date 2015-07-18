@@ -1,6 +1,6 @@
 ﻿{
-    "projects": [ "src", "../Common/src", "../Multitenancy/src" ],
+    "projects": [ "src", "../Common/src", "../Multitenancy/src", "D:/Development/aspnet/Mvc/src" ],
     "sdk": {
-        "version": "1.0.0-beta5-12077"
+        "version": "1.0.0-beta5"
     }
 }

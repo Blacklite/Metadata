@@ -13,7 +13,7 @@ namespace Blacklite.Framework.Metadata.Lifetimes
 {
     class LifetimeMetadataPropertyProvider : PropertyMetadataProvider
     {
-        private readonly ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>> _describerCache = new ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>>();
+        private readonly ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>> _ServiceDescriptorrCache = new ConcurrentDictionary<Type, IEnumerable<IPropertyDescriber>>();
         private readonly Func<IEnumerable<IPropertyDescriptor>> _propertyDescriptorsFunc;
         private IEnumerable<IPropertyDescriptor> _propertyDescriptors;
         private readonly IDisposable _disposable;
@@ -39,7 +39,7 @@ namespace Blacklite.Framework.Metadata.Lifetimes
             // If property descriptors are runtime based, this lets us clear them
             // this prepares us for the possibility of multitenancy
             _propertyDescriptors = null;
-            _describerCache.Clear();
+            _ServiceDescriptorrCache.Clear();
         }
     }
 }

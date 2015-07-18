@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Razor.Runtime.TagHelpers;
 using Microsoft.Framework.OptionsModel;
@@ -17,17 +17,20 @@ namespace Blacklite.Framework.Metadata.TagHelpers
         private const string HelpClassAttributeName = "help-class";
         private const string HorizontalAttributeName = "horizontal";
 
-        [Activate]
+        public ControlTagHelper(IOptions<ControlTagHelperOptions> options, IControlGenerator generator) {
+            _options = options;
+            Generator = generator;
+        }
+
         private IOptions<ControlTagHelperOptions> _options { get; set; }
 
         protected internal ControlTagHelperOptions Options { get { return _options.Options; } }
 
         // Protected to ensure subclasses are correctly activated. Internal for ease of use when testing.
-        [Activate]
+        [ViewContext]
         protected internal ViewContext ViewContext { get; set; }
 
         // Protected to ensure subclasses are correctly activated. Internal for ease of use when testing.
-        [Activate]
         protected internal IControlGenerator Generator { get; set; }
 
         /// <summary>

@@ -1,5 +1,4 @@
-﻿using Blacklite.Framework.Metadata.Properties;
-using Microsoft.Framework.ConfigurationModel;
+using Blacklite.Framework.Metadata.Properties;
 using Microsoft.Framework.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ namespace Blacklite.Framework.Metadata.Lifetimes
     {
         public static IEnumerable<ServiceDescriptor> GetMetadataLifetimes()
         {
-            yield return describe.Singleton<IPropertyMetadataProvider, LifetimeMetadataPropertyProvider>();
+            yield return ServiceDescriptor.Singleton<IPropertyMetadataProvider, LifetimeMetadataPropertyProvider>();
         }
     }
 }

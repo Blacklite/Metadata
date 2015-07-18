@@ -9,7 +9,11 @@
     },
 
     "frameworks": {
-        "dnx451": { },
+        "dnx451": {
+            "frameworkAssemblies": {
+                "System.ComponentModel.DataAnnotations": "4.0.0.0"
+            }
+        },
         "dnxcore50": {
             "dependencies": {
                 "System.Runtime": "4.0.20-beta-*",

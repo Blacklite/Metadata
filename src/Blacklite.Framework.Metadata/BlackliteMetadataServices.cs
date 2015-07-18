@@ -1,6 +1,5 @@
-﻿using Blacklite.Framework.Metadata.Metadatums.Resolvers;
+using Blacklite.Framework.Metadata.Metadatums.Resolvers;
 using Blacklite.Framework.Metadata.Properties;
-using Microsoft.Framework.ConfigurationModel;
 using Microsoft.Framework.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -13,26 +12,26 @@ namespace Blacklite.Framework.Metadata
     {
         public static IEnumerable<ServiceDescriptor> GetMetadata()
         {
-            yield return describe.Singleton<IApplicationMetadataProvider, ApplicationMetadataProvider>();
-            yield return describe.Singleton<IPropertyMetadataProvider, PropertyMetadataProvider>();
-            yield return describe.Scoped<IMetadataProvider, MetadataProvider>();
-            yield return describe.Scoped(typeof(ITypeMetadata<>), typeof(TypeMetadata<>));
-            yield return describe.Singleton<ITypeMetadataFactory, TypeMetadataFactory>();
-            yield return describe.Singleton<IMetadatumResolverProvider, MetadatumResolverProvider>();
+            yield return ServiceDescriptor.Singleton<IApplicationMetadataProvider, ApplicationMetadataProvider>();
+            yield return ServiceDescriptor.Singleton<IPropertyMetadataProvider, PropertyMetadataProvider>();
+            yield return ServiceDescriptor.Scoped<IMetadataProvider, MetadataProvider>();
+            yield return ServiceDescriptor.Scoped(typeof(ITypeMetadata<>), typeof(TypeMetadata<>));
+            yield return ServiceDescriptor.Singleton<ITypeMetadataFactory, TypeMetadataFactory>();
+            yield return ServiceDescriptor.Singleton<IMetadatumResolverProvider, MetadatumResolverProvider>();
         }
 
         public static IEnumerable<ServiceDescriptor> GetPropertyDescriptors()
         {
-            yield return describe.Singleton<IPropertyDescriptor, ReflectionPropertyDescriptor>();
-            yield return describe.Transient<IMetadatumResolverProviderCollector, MetadatumResolverProviderCollector>();
-            yield return describe.Transient<IMetadatumResolverProviderCollector, ApplicationMetadatumResolverProviderCollector>();
+            yield return ServiceDescriptor.Singleton<IPropertyDescriptor, ReflectionPropertyDescriptor>();
+            yield return ServiceDescriptor.Transient<IMetadatumResolverProviderCollector, MetadatumResolverProviderCollector>();
+            yield return ServiceDescriptor.Transient<IMetadatumResolverProviderCollector, ApplicationMetadatumResolverProviderCollector>();
         }
 
         public static IEnumerable<ServiceDescriptor> GetScopedMetadata()
         {
-            yield return describe.Scoped<IScopedMetadataContainer, ScopedMetadataContainer>();
-            yield return describe.Singleton<ITypeMetadatumResolver, ScopedMetadataTypeMetadatumResolver>();
-            yield return describe.Singleton<IPropertyMetadatumResolver, ScopedMetadataPropertyMetadatumResolver>();
+            yield return ServiceDescriptor.Scoped<IScopedMetadataContainer, ScopedMetadataContainer>();
+            yield return ServiceDescriptor.Singleton<ITypeMetadatumResolver, ScopedMetadataTypeMetadatumResolver>();
+            yield return ServiceDescriptor.Singleton<IPropertyMetadatumResolver, ScopedMetadataPropertyMetadatumResolver>();
         }
     }
 }

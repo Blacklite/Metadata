@@ -1,4 +1,4 @@
-﻿using Blacklite.Framework.Metadata.Modeling.Metadatums;
+using Blacklite.Framework.Metadata.Modeling.Metadatums;
 using Microsoft.AspNet.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
@@ -7,224 +7,469 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.AspNet.Mvc;
 using Blacklite.Framework.Metadata.Mvc.Metadatums;
+using Microsoft.AspNet.Mvc.ModelBinding.Metadata;
 
 namespace Blacklite.Framework.Metadata.Mvc
 {
-    class BlackliteMvcModelMetadata : ModelMetadata
+    class BlackliteMvcModelMetadata : DefaultModelMetadata
     {
         private static readonly string HtmlName = DataType.Html.ToString();
         private IMetadata _metadata;
         private IMetadataContainer _metadataContainer;
 
         public BlackliteMvcModelMetadata(
-            IPropertyMetadata metadata,
-            IScopedMetadataContainer metadataContainer,
-            IModelMetadataProvider provider,
-            Func<object> modelAccessor)
-            : this(metadata, metadataContainer, provider, metadata.ParentMetadata.Type, modelAccessor, metadata.PropertyType, metadata.Name)
-        {
-        }
-
-        public BlackliteMvcModelMetadata(
-            ITypeMetadata metadata,
-            IScopedMetadataContainer metadataContainer,
-            IModelMetadataProvider provider,
-            Func<object> modelAccessor)
-            : this(metadata, metadataContainer, provider, null, modelAccessor, metadata.Type, null)
-        {
-        }
-
-
-        public BlackliteMvcModelMetadata(
             IMetadata metadata,
             IScopedMetadataContainer metadataContainer,
             IModelMetadataProvider provider,
-            Type containerType,
-            Func<object> modelAccessor,
-            Type modelType,
-            string propertyName)
-            : base(provider, containerType, modelAccessor, modelType, propertyName)
+            ICompositeMetadataDetailsProvider detailsProvider,
+            DefaultMetadataDetails details)
+            : base(provider, detailsProvider, details)
         {
             _metadata = metadata;
             _metadataContainer = metadataContainer;
-            ConvertEmptyStringToNull = true;
-            NullDisplayText = "(empty)";
         }
+
         public IMetadata Metadata { get { return _metadata; } }
 
+        /// <summary>
+        /// Gets the <see cref="Metadata.DisplayMetadata"/> for the current instance.
+        /// </summary>
+        /// <remarks>
+        /// Accessing this property will populate the <see cref="Metadata.DisplayMetadata"/> if necessary.
+        /// </remarks>
+        public DisplayMetadata DisplayMetadata
+        {
+            get
+            {
+                if (_details.DisplayMetadata == null)
+                {
+                    var context = new DisplayMetadataProviderContext(Identity, _details.ModelAttributes);
+                    _detailsProvider.GetDisplayMetadata(context);
+                    _details.DisplayMetadata = context.DisplayMetadata;
+                }
+
+                return _details.DisplayMetadata;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Metadata.ValidationMetadata"/> for the current instance.
+        /// </summary>
+        /// <remarks>
+        /// Accessing this property will populate the <see cref="Metadata.ValidationMetadata"/> if necessary.
+        /// </remarks>
+        public ValidationMetadata ValidationMetadata
+        {
+            get
+            {
+                if (_details.ValidationMetadata == null)
+                {
+                    var context = new ValidationMetadataProviderContext(Identity, _details.ModelAttributes);
+                    _detailsProvider.GetValidationMetadata(context);
+                    _details.ValidationMetadata = context.ValidationMetadata;
+                }
+
+                return _details.ValidationMetadata;
+            }
+        }
+
+        /// <inheritdoc />
+        public override IReadOnlyDictionary<object, object> AdditionalValues
+        {
+            get
+            {
+                if (_additionalValues == null)
+                {
+                    _additionalValues = new ReadOnlyDictionary<object, object>(DisplayMetadata.AdditionalValues);
+                }
+
+                return _additionalValues;
+            }
+        }
+
+        /// <inheritdoc />
+        public override BindingSource BindingSource
+        {
+            get
+            {
+                return BindingMetadata.BindingSource;
+            }
+        }
+
+        /// <inheritdoc />
+        public override string BinderModelName
+        {
+            get
+            {
+                return BindingMetadata.BinderModelName;
+            }
+        }
+
+        /// <inheritdoc />
+        public override Type BinderType
+        {
+            get
+            {
+                return BindingMetadata.BinderType;
+            }
+        }
+
+        /// <inheritdoc />
+        public override bool ConvertEmptyStringToNull
+        {
+            get
+            {
+                return DisplayMetadata.ConvertEmptyStringToNull;
+            }
+        }
+
+        /// <inheritdoc />
         public override string DataTypeName
         {
             get
             {
-                return _metadata.Get<InfoType>()?.Name ?? string.Empty;
-            }
-
-            set
-            {
-                _metadataContainer.Save(_metadata, new InfoType(value));
+                return DisplayMetadata.DataTypeName;
             }
         }
 
+        /// <inheritdoc />
         public override string Description
         {
             get
             {
-                return _metadata.Get<Description>();
-            }
+                if (DisplayMetadata.Description == null)
+                {
+                    return null;
+                }
 
-            set
-            {
-                _metadataContainer.Save(_metadata, new Description(value));
+                return DisplayMetadata.Description();
             }
         }
 
+        /// <inheritdoc />
         public override string DisplayFormatString
         {
             get
             {
-                return _metadata.Get<DisplayFormat>()?.Format;
-            }
-
-            set
-            {
-                _metadataContainer.Save(_metadata, new DisplayFormat(value, _metadata.Get<DisplayFormat>().HtmlEncode));
+                return DisplayMetadata.DisplayFormatString;
             }
         }
 
+        /// <inheritdoc />
         public override string DisplayName
         {
             get
             {
-                return _metadata.Get<DisplayName>();
-            }
+                if (DisplayMetadata.DisplayName == null)
+                {
+                    return null;
+                }
 
-            set
-            {
-                _metadataContainer.Save(_metadata, new DisplayName(value));
+                return DisplayMetadata.DisplayName();
             }
         }
 
+        /// <inheritdoc />
         public override string EditFormatString
         {
             get
             {
-                return _metadata.Get<EditFormat>()?.Format;
-            }
-
-            set
-            {
-                _metadataContainer.Save(_metadata, new EditFormat(value, _metadata.Get<EditFormat>().HtmlEncode));
+                return DisplayMetadata.EditFormatString;
             }
         }
 
+        /// <inheritdoc />
+        public override ModelMetadata ElementMetadata
+        {
+            get
+            {
+                if (!_haveCalculatedElementMetadata)
+                {
+                    _haveCalculatedElementMetadata = true;
+                    if (!IsCollectionType)
+                    {
+                        // Short-circuit checks below. If not IsCollectionType, ElementMetadata is null.
+                        // For example, as in IsCollectionType, do not consider strings collections.
+                        return null;
+                    }
+
+                    Type elementType = null;
+                    if (ModelType.IsArray)
+                    {
+                        elementType = ModelType.GetElementType();
+                    }
+                    else
+                    {
+                        elementType = ClosedGenericMatcher.ExtractGenericInterface(ModelType, typeof(IEnumerable<>))
+                            ?.GenericTypeArguments[0];
+                        if (elementType == null && typeof(IEnumerable).IsAssignableFrom(ModelType))
+                        {
+                            // ModelType implements IEnumerable but not IEnumerable<T>.
+                            elementType = typeof(object);
+                        }
+                    }
+
+                    Debug.Assert(
+                        elementType != null,
+                        $"Unable to find element type for '{ ModelType.FullName }' though IsCollectionType is true.");
+
+                    // Success
+                    _elementMetadata = _provider.GetMetadataForType(elementType);
+                }
+
+                return _elementMetadata;
+            }
+        }
+
+        /// <inheritdoc />
+        public override IEnumerable<KeyValuePair<string, string>> EnumDisplayNamesAndValues
+        {
+            get
+            {
+                return DisplayMetadata.EnumDisplayNamesAndValues;
+            }
+        }
+
+        /// <inheritdoc />
+        public override IReadOnlyDictionary<string, string> EnumNamesAndValues
+        {
+            get
+            {
+                return DisplayMetadata.EnumNamesAndValues;
+            }
+        }
+
+        /// <inheritdoc />
         public override bool HasNonDefaultEditFormat
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(_metadata.Get<EditFormat>().Format);
-            }
-
-            set
-            {
-                base.HasNonDefaultEditFormat = value;
+                return DisplayMetadata.HasNonDefaultEditFormat;
             }
         }
 
-        public override bool HtmlEncode
-        {
-            get
-            {
-                return IsReadOnly ? _metadata.Get<DisplayFormat>().HtmlEncode : _metadata.Get<EditFormat>().HtmlEncode;
-            }
-
-            set
-            {
-                if (IsReadOnly)
-                {
-                    _metadataContainer.Save(_metadata, new DisplayFormat(_metadata.Get<DisplayFormat>().Format, value));
-                }
-                else
-                {
-                    _metadataContainer.Save(_metadata, new EditFormat(_metadata.Get<EditFormat>().Format, value));
-                }
-            }
-        }
-
+        /// <inheritdoc />
         public override bool HideSurroundingHtml
         {
             get
             {
-                return _metadata.Get<HiddenInput>();
-            }
-
-            set
-            {
-                _metadataContainer.Save(_metadata, new HiddenInput(value));
+                return DisplayMetadata.HideSurroundingHtml;
             }
         }
 
-        public override int Order
+        /// <inheritdoc />
+        public override bool HtmlEncode
         {
             get
             {
-                return base.Order;
-            }
-
-            set
-            {
-                _metadataContainer.Save(_metadata, new Order(value));
+                return DisplayMetadata.HtmlEncode;
             }
         }
 
+        /// <inheritdoc />
+        public override bool IsBindingAllowed
+        {
+            get
+            {
+                if (MetadataKind == ModelMetadataKind.Property)
+                {
+                    return BindingMetadata.IsBindingAllowed;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+        /// <inheritdoc />
+        public override bool IsBindingRequired
+        {
+            get
+            {
+                if (MetadataKind == ModelMetadataKind.Property)
+                {
+                    return BindingMetadata.IsBindingRequired;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <inheritdoc />
+        public override bool IsEnum
+        {
+            get
+            {
+                return DisplayMetadata.IsEnum;
+            }
+        }
+
+        /// <inheritdoc />
+        public override bool IsFlagsEnum
+        {
+            get
+            {
+                return DisplayMetadata.IsFlagsEnum;
+            }
+        }
+
+        /// <inheritdoc />
         public override bool IsReadOnly
         {
             get
             {
-                return _metadata.Get<ReadOnly>();
-            }
+                if (!_isReadOnly.HasValue)
+                {
+                    if (BindingMetadata.IsReadOnly.HasValue)
+                    {
+                        _isReadOnly = BindingMetadata.IsReadOnly;
+                    }
+                    else if (MetadataKind == ModelMetadataKind.Type)
+                    {
+                        _isReadOnly = false;
+                    }
+                    else
+                    {
+                        _isReadOnly = _details.PropertySetter == null;
+                    }
+                }
 
-            set
-            {
-                _metadataContainer.Save(_metadata, new ReadOnly(value));
+                return _isReadOnly.Value;
             }
         }
 
+        /// <inheritdoc />
         public override bool IsRequired
         {
             get
             {
-                return _metadata.Get<Required>();
-            }
+                if (!_isRequired.HasValue)
+                {
+                    if (ValidationMetadata.IsRequired.HasValue)
+                    {
+                        _isRequired = ValidationMetadata.IsRequired;
+                    }
+                    else
+                    {
+                        _isRequired = !TypeHelper.AllowsNullValue(ModelType);
+                    }
+                }
 
-            set
-            {
-                _metadataContainer.Save(_metadata, new Required(value));
+                return _isRequired.Value;
             }
         }
 
+        /// <inheritdoc />
+        public override string NullDisplayText
+        {
+            get
+            {
+                return DisplayMetadata.NullDisplayText;
+            }
+        }
+
+        /// <inheritdoc />
+        public override int Order
+        {
+            get
+            {
+                return DisplayMetadata.Order;
+            }
+        }
+
+        /// <inheritdoc />
+        public override ModelPropertyCollection Properties
+        {
+            get
+            {
+                if (_properties == null)
+                {
+                    var properties = _provider.GetMetadataForProperties(ModelType);
+                    properties = properties.OrderBy(p => p.Order);
+                    _properties = new ModelPropertyCollection(properties);
+                }
+
+                return _properties;
+            }
+        }
+
+        /// <inheritdoc />
+        public override IPropertyBindingPredicateProvider PropertyBindingPredicateProvider
+        {
+            get
+            {
+                return BindingMetadata.PropertyBindingPredicateProvider;
+            }
+        }
+
+        /// <inheritdoc />
         public override bool ShowForDisplay
         {
             get
             {
-                return _metadata.Get<ShowForDisplay>();
-            }
-
-            set
-            {
-                _metadataContainer.Save(_metadata, new ShowForDisplay(value));
+                return DisplayMetadata.ShowForDisplay;
             }
         }
 
+        /// <inheritdoc />
         public override bool ShowForEdit
         {
             get
             {
-                return _metadata.Get<ShowForEdit>();
+                return DisplayMetadata.ShowForEdit;
             }
+        }
 
-            set
+        /// <inheritdoc />
+        public override string SimpleDisplayProperty
+        {
+            get
             {
-                _metadataContainer.Save(_metadata, new ShowForEdit(value));
+                return DisplayMetadata.SimpleDisplayProperty;
+            }
+        }
+
+        /// <inheritdoc />
+        public override string TemplateHint
+        {
+            get
+            {
+                return DisplayMetadata.TemplateHint;
+            }
+        }
+
+        /// <inheritdoc />
+        public override IReadOnlyList<object> ValidatorMetadata
+        {
+            get
+            {
+                if (_validatorMetadata == null)
+                {
+                    _validatorMetadata = new ReadOnlyCollection<object>(ValidationMetadata.ValidatorMetadata);
+                }
+
+                return _validatorMetadata;
+            }
+        }
+
+        /// <inheritdoc />
+        public override Func<object, object> PropertyGetter
+        {
+            get
+            {
+                return _details.PropertyGetter;
+            }
+        }
+
+        /// <inheritdoc />
+        public override Action<object, object> PropertySetter
+        {
+            get
+            {
+                return _details.PropertySetter;
             }
         }
     }
